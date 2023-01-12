@@ -1,0 +1,24 @@
+{
+  "name": "api552",
+  "version": "1.0.0",
+  "description": "Backend API for G552",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthieuDeroir/api-G552.git"
+  },
+  "author": "Matthieu Deroir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthieuDeroir/api-G552/issues"
+  },
+  "homepage": "https://github.com/MatthieuDeroir/api-G552#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.4"
+  }
+}
