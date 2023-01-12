@@ -3,8 +3,12 @@ const db = require('./config/db');
 const app = express()
 
 const userRoutes = require('./routes/userRoutes');
+const mediaRoutes = require('./routes/mediaRoutes');
+const eventmediaRoutes = require('./routes/eventmediaRoutes');
 
 app.use('/users', userRoutes);
+app.use('/medias', mediaRoutes)
+app.use('/eventmedias', eventmediaRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
