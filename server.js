@@ -3,24 +3,30 @@ const express = require('express')
 const db = require('./Database/db');
 const app = express()
 const config = require('./config');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serial port
 const SerialPortConnection = require('./SerialPorts/serialPort');
 const sp = new SerialPortConnection();
 
-// Middleware
+// Routes
 const userRoutes = require('./Routes/userRoutes');
 const mediaRoutes = require('./Routes/mediaRoutes');
 const eventmediaRoutes = require('./Routes/eventmediaRoutes');
-// const fileRoutes = require('./Routes/fileRoutes');
 const eventRoutes = require('./Routes/eventRoutes');
+const macroRoutes = require('./Routes/macroRoutes');
 
-// Routes
 app.use('/users', userRoutes);
-// app.use('/files', fileRoutes);
 app.use('/medias', mediaRoutes);
 app.use('/events', eventRoutes);
 app.use('/eventmedias', eventmediaRoutes);
+app.use('/macro', macroRoutes);
 
 
 app.get('/', (req, res) => {

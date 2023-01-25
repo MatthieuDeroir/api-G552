@@ -1,0 +1,17 @@
+const express = require('express');
+const MacroController = require('../Controllers/macroController');
+
+const router = express.Router();
+const macroController = new MacroController();
+
+router.post('/', macroController.create);
+router.put('/:id', macroController.update);
+router.get('/:id', macroController.getById);
+router.get('/user/:id', macroController.getByUserId);
+router.get('/:id', macroController.getById);
+router.delete('/:id', macroController.delete);
+
+module.exports = router;
+
+
+

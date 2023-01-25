@@ -7,14 +7,45 @@ class EventMedia {
 
     createTable() {
         const createTable = `
-        CREATE TABLE IF NOT EXISTS event_media (
-            event_id INTEGER,
-            media_id INTEGER,
-            duration INTEGER,
-            PRIMARY KEY (event_id, media_id),
-            FOREIGN KEY (event_id) REFERENCES events (id),
-            FOREIGN KEY (media_id) REFERENCES media (id)
-        )
+            CREATE TABLE IF NOT EXISTS event_media
+            (
+                event_id
+                INTEGER,
+                media_id
+                INTEGER,
+                user_id
+                INTEGER,
+                duration
+                INTEGER,
+                PRIMARY
+                KEY
+            (
+                event_id,
+                media_id,
+                user_id
+            ),
+                FOREIGN KEY
+            (
+                event_id
+            ) REFERENCES events
+            (
+                id
+            ),
+                FOREIGN KEY
+            (
+                media_id
+            ) REFERENCES media
+            (
+                id
+            ),
+                FOREIGN KEY
+            (
+                user_id
+            ) REFERENCES users
+            (
+                id
+            )
+                )
         `;
         db.run(createTable);
     }
@@ -46,6 +77,7 @@ class EventMedia {
                     reject(err);
                 } else {
                     resolve(medias);
+
                 }
             });
         });

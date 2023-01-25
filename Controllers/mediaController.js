@@ -1,4 +1,5 @@
 const Media = require('../Models/mediaModel')
+const fs = require('fs')
 const multer = require('multer');
 
 
@@ -78,13 +79,21 @@ class MediaController {
     }
 
     delete= (req, res) => {
-        this.media.delete(req.params.id)
-            .then(() => {
-                res.status(204).json();
-            })
-            .catch((err) => {
-                res.status(500).json({message: err});
-            });
+        const fileName = req.params.fileName;
+        const filePath = 'uploads/' + fileName;
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                return res.status(500).json({ error: err });
+            } else {
+                this.media.delete(req.params.id)
+                    .then(() => {
+                        res.status(204).json({ message: 'File deleted successfully' });
+                    })
+                    .catch((err) => {
+                        res.status(500).json({message: err});
+                    });
+            }
+        });
     }
 }
 
