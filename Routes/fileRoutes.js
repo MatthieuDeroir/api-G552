@@ -1,9 +1,9 @@
 const express = require('express');
-const MediaController = require('../controllers/fileController');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const FileController = require('../Controllers/fileController');
 
 const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
 const fileController = new FileController();
 
 router.post('/', upload.single('file'), fileController.create);

@@ -1,31 +1,26 @@
-const db = require('../database/db');
-const fs = require('fs')
+const db = require('../Database/db');
 
-class Media {
+class Event {
     constructor() {
         this.createTable();
     }
 
     createTable() {
         const createTable = `
-        CREATE TABLE IF NOT EXISTS media (
+        CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY,
-            user_id INTEGER,
             name TEXT,
-            path TEXT,
-            type TEXT,
-            size INTEGER,
-            uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            category TEXT
         )
         `;
         db.run(createTable);
     }
 
-    create(media) {
+    create(event) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO media (user_id, name, path, type, size) VALUES (?, ?, ?, ?, ?)`,
-                [media.user_id, media.name, media.path, media.type, media.size],
+                `INSERT INTO events (name, category) VALUES (?, ?)`,
+                [event.name, event.category],
                 (err) => {
                     if (err) {
                         reject(err);
@@ -37,16 +32,16 @@ class Media {
         });
     }
 
-    update(media) {
+    update(event) {
         return new Promise((resolve, reject) => {
             db.run(
-                `UPDATE media SET name = ?, path = ?, type = ?, size = ? WHERE id = ?`,
-                [media.name, media.path, media.type, media.size, media.id],
+                `UPDATE events SET name = ?, category = ? WHERE id = ?`,
+                [event.name, event.category, event.id],
                 (err) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(this.getById(media.id));
+                        resolve(this.getById(event.id));
                     }
                 }
             );
@@ -55,11 +50,11 @@ class Media {
 
     getAll() {
         return new Promise((resolve, reject) => {
-            db.all(`SELECT * FROM media`, (err, media) => {
+            db.all(`SELECT * FROM events`, (err, events) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(media);
+                    resolve(events);
                 }
             });
         });
@@ -67,35 +62,26 @@ class Media {
 
     getById(id) {
         return new Promise((resolve, reject) => {
-            db.get(`SELECT * FROM media WHERE id = ?`, [id], (err, media) => {
+            db.get(`SELECT * FROM events WHERE id = ?`, [id], (err, event) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(media);
+                    resolve(event);
                 }
             });
         });
     }
-
     delete(id) {
         return new Promise((resolve, reject) => {
-            db.run(`DELETE FROM media WHERE id = ?`, [id], (err) => {
+            db.run(`DELETE FROM events WHERE id = ?`, [id], (err) => {
                 if (err) {
                     reject(err);
                 } else {
-// Also delete the file from the file system
-                    fs.unlink("./uploads/${id}", (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
+                    resolve();
                 }
             });
         });
     }
 }
 
-module.exports = Media;
-
+module.exports = Event

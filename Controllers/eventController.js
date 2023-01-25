@@ -1,13 +1,13 @@
-const Media = require('../models/mediaModel')
-class MediaController {
+const Event = require('../Models/eventModel')
+class EventController {
     constructor() {
-        this.media = new Media();
+        this.event = new Event();
     }
 
     create = (req, res) => {
-        this.media.create(req.body)
-            .then((media) => {
-                res.status(201).json(media);
+        this.event.create(req.body)
+            .then((event) => {
+                res.status(201).json(event);
             })
             .catch((err) => {
                 res.status(500).json({message: err});
@@ -15,9 +15,9 @@ class MediaController {
     }
 
     update = (req, res) => {
-        this.media.update(req.body)
-            .then((media) => {
-                res.status(200).json(media);
+        this.event.update(req.body)
+            .then((event) => {
+                res.status(200).json(event);
             })
             .catch((err) => {
                 res.status(500).json({message: err});
@@ -25,9 +25,9 @@ class MediaController {
     }
 
     getAll= (req, res) => {
-        this.media.getAll()
-            .then((medias) => {
-                res.status(200).json(medias);
+        this.event.getAll()
+            .then((events) => {
+                res.status(200).json(events);
             })
             .catch((err) => {
                 res.status(500).json({message: err});
@@ -35,12 +35,12 @@ class MediaController {
     }
 
     getById= (req, res) => {
-        this.media.getById(req.params.id)
-            .then((media) => {
-                if (media) {
-                    res.status(200).json(media);
+        this.event.getById(req.params.id)
+            .then((event) => {
+                if (event) {
+                    res.status(200).json(event);
                 } else {
-                    res.status(404).json({message: 'Media not found'});
+                    res.status(404).json({message: 'Event not found'});
                 }
             })
             .catch((err) => {
@@ -49,7 +49,7 @@ class MediaController {
     }
 
     delete= (req, res) => {
-        this.media.delete(req.params.id)
+        this.event.delete(req.params.id)
             .then(() => {
                 res.status(204).json();
             })
@@ -59,4 +59,4 @@ class MediaController {
     }
 }
 
-module.exports = MediaController;
+module.exports = EventController;

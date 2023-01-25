@@ -1,4 +1,4 @@
-const EventMedia = require('../models/eventmediaModel')
+const EventMedia = require('../Models/eventmediaModel')
 
 class EventMediaController {
     constructor() {

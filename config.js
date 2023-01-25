@@ -1,4 +1,7 @@
 const config = {
     ip: 'localhost',
-    port: 4000
+    portAPI: 4000,
+    portWS: 8080,
 }
+
+module.exports = config;

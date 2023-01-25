@@ -1,5 +1,5 @@
 const express = require('express');
-const MediaController = require('../controllers/mediaController');
+const MediaController = require('../Controllers/mediaController');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 

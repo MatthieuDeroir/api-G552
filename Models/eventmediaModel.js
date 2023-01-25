@@ -1,4 +1,4 @@
-const db = require('../database/db');
+const db = require('../Database/db');
 
 class EventMedia {
     constructor() {
@@ -7,21 +7,14 @@ class EventMedia {
 
     createTable() {
         const createTable = `
-            CREATE TABLE IF NOT EXISTS event_media
-            (
-                id
-                INTEGER
-                PRIMARY
-                KEY,
-                event_id
-                INTEGER,
-                media_id
-                INTEGER,
-                duration
-                INTEGER
-                FOREIGN
-                KEY
-            (
+        CREATE TABLE IF NOT EXISTS event_media (
+            event_id INTEGER,
+            media_id INTEGER,
+            duration INTEGER,
+            PRIMARY KEY (event_id, media_id),
+            FOREIGN KEY (event_id) REFERENCES events (id),
+            FOREIGN KEY (media_id) REFERENCES media (id)
+        )
         `;
         db.run(createTable);
     }
@@ -29,7 +22,7 @@ class EventMedia {
     create(eventId, mediaId, duration) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO event_media (event_id, media_id)
+                `INSERT INTO event_media (event_id, media_id, duration)
                  VALUES (?, ?, ?)`,
                 [eventId, mediaId, duration],
                 (err) => {
