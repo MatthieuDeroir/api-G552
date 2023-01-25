@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../database/db');
 const bcrypt = require('bcrypt');
 
 class User {
@@ -63,6 +63,7 @@ class User {
     }
 
     getAll() {
+        console.log('getAll')
         return new Promise((resolve, reject) => {
             db.all(`SELECT * FROM users`, (err, users) => {
                 if (err) {

@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../database/db');
 
 class Event {
     constructor() {
@@ -84,4 +84,4 @@ class Event {
     }
 }
 
-module.export = Event
+module.exports = Event

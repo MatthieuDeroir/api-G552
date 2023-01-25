@@ -4,7 +4,7 @@ class MediaController {
         this.media = new Media();
     }
 
-    create(req, res) {
+    create = (req, res) => {
         this.media.create(req.body)
             .then((media) => {
                 res.status(201).json(media);
@@ -14,7 +14,7 @@ class MediaController {
             });
     }
 
-    update(req, res) {
+    update = (req, res) => {
         this.media.update(req.body)
             .then((media) => {
                 res.status(200).json(media);
@@ -24,7 +24,7 @@ class MediaController {
             });
     }
 
-    getAll(req, res) {
+    getAll= (req, res) => {
         this.media.getAll()
             .then((medias) => {
                 res.status(200).json(medias);
@@ -34,7 +34,7 @@ class MediaController {
             });
     }
 
-    getById(req, res) {
+    getById= (req, res) => {
         this.media.getById(req.params.id)
             .then((media) => {
                 if (media) {
@@ -48,7 +48,7 @@ class MediaController {
             });
     }
 
-    delete(req, res) {
+    delete= (req, res) => {
         this.media.delete(req.params.id)
             .then(() => {
                 res.status(204).json();

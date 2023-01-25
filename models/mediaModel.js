@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../database/db');
 const fs = require('fs')
 
 class Media {

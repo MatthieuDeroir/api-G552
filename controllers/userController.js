@@ -5,7 +5,7 @@ class UserController {
         this.user = new User();
     }
 
-    create(req, res) {
+    create = (req, res) => {
         this.user.create(req.body)
             .then((user) => {
                 res.status(201).json(user);
@@ -15,7 +15,7 @@ class UserController {
             });
     }
 
-    update(req, res) {
+    update = (req, res) => {
         this.user.update(req.body)
             .then((user) => {
                 res.status(200).json(user);
@@ -25,8 +25,8 @@ class UserController {
             });
     }
 
-    getAll(req, res) {
-        console.log('user')
+    getAll = (req, res) => {
+        console.log(this.user)
         this.user.getAll()
             .then((users) => {
                 res.status(200).json(users);
@@ -36,7 +36,7 @@ class UserController {
             });
     }
 
-    getById(req, res) {
+    getById = (req, res) => {
         this.user.getById(req.params.id)
             .then((user) => {
                 if (user) {
@@ -50,7 +50,7 @@ class UserController {
             });
     }
 
-    delete(req, res) {
+    delete = (req, res) => {
         this.user.delete(req.params.id)
             .then(() => {
                 res.status(204).json();
