@@ -80,8 +80,8 @@ class SerialPortConnection {
                     dataBits: 8,
                     parity: 'none',
                     stopBits: 1,
-                    // flowControl: 'none',
-                    // handshake:'none',
+                    flowControl: 'none',
+                    handshake:'none',
                     path:`/dev/${device.DevicePortName}`
                 };
                 let port = new SerialPort(options, (err) => {

@@ -38,10 +38,10 @@ const verifyRoles = (req, res, next) => {
     next();
 }
 
-const signUpVerification = {
+const signUpCheck = {
     checkDuplicateUsername,
     checkPasswordRequirements,
     verifyRoles
 }
 
-module.exports = signUpVerification;
+module.exports = signUpCheck;
