@@ -85,7 +85,7 @@ class Media {
         return new Promise((resolve, reject) => {
             db.run(
                 `UPDATE media
-                 SET name = ?,
+                 SET username = ?,
                      path = ?,
                      type = ?,
                      size = ?
