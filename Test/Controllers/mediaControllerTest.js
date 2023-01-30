@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const MediaController = require('path/to/MediaController');
+const MediaController = require('../.././Controllers/mediaController');
 const sinon = require('sinon');
 const multer = require('multer');
 const storage = multer.memoryStorage();

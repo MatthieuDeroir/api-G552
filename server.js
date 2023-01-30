@@ -31,11 +31,11 @@ app.use('/macro', macroRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
-})
+});
 
 app.listen(config.portAPI, () => {
     console.log(`API Server started on ${config.ip}:${config.portAPI}`)
-})
+});
 
 // Websocket
 const server = require('http').Server(app)
@@ -55,11 +55,5 @@ desk.on('connection', (socket) => {
         console.log(`Received frame from desk`);
         console.log(data);
     });
-})
-
-
-
-app.get('/ws/desk', (req, res) => {
 });
-
 

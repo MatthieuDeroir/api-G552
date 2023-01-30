@@ -1,4 +1,5 @@
 const db = require('../Database/db');
+const crypto = require('crypto');
 const fs = require('fs')
 
 class Media {
@@ -55,10 +56,10 @@ class Media {
     //     });
     // }
 
-    create(file, body) {
-        const originalFileName = file.originalname;
+    create(file) {
+        const originalFileName = file.name;
         const hash = crypto.createHash('sha256');
-        hash.update(file.originalname + Date.now());
+        hash.update(file.name + Date.now());
         const fileName = hash.digest('hex');
         const lastModified = file.lastModified;
         const size = file.size;

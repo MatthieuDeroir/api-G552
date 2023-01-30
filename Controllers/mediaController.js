@@ -18,12 +18,11 @@ class MediaController {
     }
 
     create = (req, res) => {
-        this.upload.single('file')(req, res, (err) => {
+        this.upload.single('file')(req.file, res, (err) => {
             if (err) {
                 res.status(500).json({message: err});
             } else {
-                const file = req.file;
-                this.media.create(req.body, file)
+                this.media.create(req.file)
                     .then((media) => {
                         res.status(201).json(media);
                     })
