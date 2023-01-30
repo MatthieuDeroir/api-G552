@@ -40,22 +40,6 @@ class Media {
         db.run(createTable);
     }
 
-    // create(media) {
-    //     return new Promise((resolve, reject) => {
-    //         db.run(
-    //             `INSERT INTO media (user_id, name, path, type, size) VALUES (?, ?, ?, ?, ?)`,
-    //             [media.user_id, media.name, media.path, media.type, media.size],
-    //             (err) => {
-    //                 if (err) {
-    //                     reject(err);
-    //                 } else {
-    //                     resolve(this.getById(this.lastID));
-    //                 }
-    //             }
-    //         );
-    //     });
-    // }
-
     create(file) {
         console.log(file);
         const originalFileName = file.originalname;
@@ -150,6 +134,8 @@ class Media {
                 (err) => {
                     if (err) {
                         reject(err);
+                    } else {
+                        resolve();
                     }
                 }
             );

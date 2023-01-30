@@ -36,7 +36,7 @@ class Macro {
                 FOREIGN KEY
                     (
                      button_id
-                        ) REFERENCES buttons
+                        ) REFERENCES button
                     (
                      id
                         )
