@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serial port
-const SerialPortConnection = require('./SerialPorts/serialPort');
+const SerialPortConnection = require('./SerialPorts/serialPortConnection');
 const sp = new SerialPortConnection();
 
 // Routes

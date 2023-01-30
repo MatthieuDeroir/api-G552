@@ -4,7 +4,6 @@ class Button {
     constructor() {
         this.createTable();
     }
-
     createTable() {
         const createTable = `
             CREATE TABLE IF NOT EXISTS button
