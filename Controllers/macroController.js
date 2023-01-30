@@ -1,5 +1,4 @@
 const Macro = require("../Models/macroModel");
-const fs = require("fs");
 
 class MacroController {
     constructor() {

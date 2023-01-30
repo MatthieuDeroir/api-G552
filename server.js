@@ -21,12 +21,14 @@ const mediaRoutes = require('./Routes/mediaRoutes');
 const eventmediaRoutes = require('./Routes/eventmediaRoutes');
 const eventRoutes = require('./Routes/eventRoutes');
 const macroRoutes = require('./Routes/macroRoutes');
+const buttonRoutes = require('./Routes/buttonRoutes');
 
 app.use('/users', userRoutes);
 app.use('/medias', mediaRoutes);
 app.use('/events', eventRoutes);
 app.use('/eventmedias', eventmediaRoutes);
-app.use('/macro', macroRoutes);
+app.use('/macros', macroRoutes);
+app.use('/buttons', buttonRoutes);
 
 
 app.get('/', (req, res) => {
