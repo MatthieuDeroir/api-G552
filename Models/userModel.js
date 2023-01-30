@@ -19,7 +19,6 @@ class User {
     }
 
     create(user) {
-
         return new Promise((resolve, reject) => {
             bcrypt.hash(user.password, 10, (err, hash) => {
                 if (err) {

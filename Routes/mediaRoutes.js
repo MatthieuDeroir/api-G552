@@ -1,7 +1,5 @@
 const express = require('express');
 const MediaController = require('../Controllers/mediaController');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 const mediaController = new MediaController();

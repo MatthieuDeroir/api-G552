@@ -4,4 +4,6 @@ const config = {
     portWS: 8080,
 }
 
+const path = require('path');
+
 module.exports = config;
