@@ -152,14 +152,7 @@ class Media {
           if (err) {
             reject(err);
           } else {
-            // Also delete the file from the file system
-            fs.unlink("./uploads/${id}", (err) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve();
-              }
-            });
+            resolve();
           }
         }
       );

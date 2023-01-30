@@ -6,6 +6,7 @@ class EventMediaController {
     }
 
     create = (req, res) => {
+        console.log(req.body);
         this.eventmedia.create(req.body)
             .then((eventmedia) => {
                 res.status(201).json(eventmedia);

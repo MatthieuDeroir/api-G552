@@ -85,25 +85,36 @@ class MediaController {
         res.status(500).json({ message: err });
       });
   };
-
   delete = (req, res) => {
-    console.log(req)
-    const fileName = req.params.fileName;
-    const filePath = "uploads/" + fileName;
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        return res.status(500).json({ error: err });
-      } else {
-        this.media
-          .delete(req.params.id)
-          .then(() => {
-            res.status(204).json({ message: "File deleted successfully" });
-          })
-          .catch((err) => {
-            res.status(500).json({ message: err });
-          });
-      }
-    });
+    console.log(req.params.id);
+    this.media
+      .getById(req.params.id)
+      .then((file) => {
+        const filePath = file.path;
+        console.log(filePath);
+        fs.unlink("../G552_frontend/public/" + filePath, (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err });
+          } else {
+            this.media
+              .delete(req.params.id)
+              .then(() => {
+                console.log("delete OK");
+                return res
+                  .status(204)
+                  .json({ message: "File deleted successfully" });
+              })
+              .catch((err) => {
+                console.log(err);
+                return res.status(500).json({ message: err });
+              });
+          }
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
   };
 }
 
