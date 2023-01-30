@@ -7,12 +7,13 @@ class Event {
 
     createTable() {
         const createTable = `
-        CREATE TABLE IF NOT EXISTS events (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            
-            category TEXT
-        )
+            CREATE TABLE IF NOT EXISTS events
+            (
+                id       INTEGER PRIMARY KEY,
+                name     TEXT,
+
+                category TEXT
+            )
         `;
         db.run(createTable);
     }
