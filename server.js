@@ -47,6 +47,7 @@ server.listen(config.portWS, () => {
 });
 
 
+
 desk.on('connection', (socket) => {
     socket.on('connect', (data) => {
         console.log(`Connected to desk socket`);

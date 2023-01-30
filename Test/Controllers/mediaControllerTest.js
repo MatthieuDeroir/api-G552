@@ -1,4 +1,7 @@
 const expect = require('chai').expect;
+const assert = require('chai').assert;
+const describe = require('mocha').describe;
+const it = require('mocha').it;
 const MediaController = require('../.././Controllers/mediaController');
 const sinon = require('sinon');
 const multer = require('multer');

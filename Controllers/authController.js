@@ -1,6 +1,8 @@
 const User = require('../Models/userModel');
 const bcrypt = require('bcrypt');
-const verification = require('../Middlewares/signUpVerification');
+const verification = require('../Middlewares/signUpCheck');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 const signUp = async (req, res) => {
     const folderName = `../frontend/public/medias/${req.body.username}`;
@@ -17,6 +19,13 @@ const signUp = async (req, res) => {
         const salt = bcrypt.genSaltSync(10);
         user.password = bcrypt.hashSync(user.password, salt);
         const newUser = new User();
+
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName);
+        } else {
+            res.status(401).json({ message: 'Folder already exists' });
+        }
+
         const createdUser = await newUser.create()
             .then((user) => {
                 res.status(201).json(createdUser);
@@ -55,7 +64,14 @@ const signIn = async (req, res) => {
                     message: "Invalid Password!"
                 });
             }
-            res.status(200).json(foundUser);
+            const secret = process.env.JWT_SECRET;
+            const accessToken = jwt.sign({ id: foundUser.id }, secret, {
+                expiresIn: 8 * 60 * 60  // expires in 8 hours (8 * 60 * 60 s)
+            });
+            res.status(200).send({
+                accessToken: accessToken,
+                user: foundUser
+            });
         }
     }   catch (err) {
         res.status(500).json({ message: err });
