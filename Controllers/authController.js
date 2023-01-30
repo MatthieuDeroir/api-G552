@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
         if (!fs.existsSync(folderName)) {
             fs.mkdirSync(folderName);
         } else {
-            res.status(401).json({ message: 'Folder already exists' });
+            res.status(418).json({ message: 'Folder already exists' });
         }
 
         const createdUser = await newUser.create()

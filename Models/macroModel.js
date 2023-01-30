@@ -13,7 +13,7 @@ class Macro {
                     INTEGER
                     PRIMARY
                         KEY,
-                buttonNumber
+                button_id
                     INTEGER,
                 event_id
                     INTEGER,
@@ -32,17 +32,24 @@ class Macro {
                         ) REFERENCES events
                     (
                      id
+                        ),
+                FOREIGN KEY
+                    (
+                     button_id
+                        ) REFERENCES buttons
+                    (
+                     id
                         )
             )
         `;
         db.run(createTable);
     }
-    create(buttonNumber, eventId, userId) {
+    create(button_id, eventId, userId) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO macro (buttonNumber, event_id, user_id)
+                `INSERT INTO macro (button_id, event_id, user_id)
                  VALUES (?, ?, ?)`,
-                [buttonNumber, eventId, userId],
+                [button_id, eventId, userId],
                 (err) => {
                     if (err) {
                         reject(err);
@@ -79,11 +86,11 @@ class Macro {
 
 
 
-    update(id, buttonNumber, eventId, userId) {
+    update(id, button_id, eventId, userId) {
         return new Promise((resolve, reject) => {
             db.run(
-                `UPDATE macro SET buttonNumber = ?, event_id = ?, user_id = ? WHERE id = ?`,
-                [buttonNumber, eventId, userId, id],
+                `UPDATE macro SET button_id = ?, event_id = ?, user_id = ? WHERE id = ?`,
+                [button_id, eventId, userId, id],
                 (err) => {
                     if (err) {
                         reject(err);

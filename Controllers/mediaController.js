@@ -2,7 +2,6 @@ const Media = require('../Models/mediaModel')
 const fs = require('fs')
 const multer = require('multer');
 
-
 class MediaController {
     constructor() {
         this.media = new Media();
@@ -14,7 +13,7 @@ class MediaController {
                 cb(null, file.originalname);
             }
         });
-        this.upload = multer({ storage: this.storage });
+        this.upload = multer({storage: this.storage});
     }
 
     create = (req, res) => {
@@ -33,16 +32,6 @@ class MediaController {
         });
     }
 
-    // create = (req, res) => {
-    //     this.media.create(req.body)
-    //         .then((media) => {
-    //             res.status(201).json(media);
-    //         })
-    //         .catch((err) => {
-    //             res.status(500).json({message: err});
-    //         });
-    // }
-
     update = (req, res) => {
         this.media.update(req.body)
             .then((media) => {
@@ -53,7 +42,7 @@ class MediaController {
             });
     }
 
-    getAll= (req, res) => {
+    getAll = (req, res) => {
         this.media.getAll()
             .then((medias) => {
                 res.status(200).json(medias);
@@ -63,7 +52,7 @@ class MediaController {
             });
     }
 
-    getById= (req, res) => {
+    getById = (req, res) => {
         this.media.getById(req.params.id)
             .then((media) => {
                 if (media) {
@@ -77,16 +66,16 @@ class MediaController {
             });
     }
 
-    delete= (req, res) => {
+    delete = (req, res) => {
         const fileName = req.params.fileName;
         const filePath = 'uploads/' + fileName;
         fs.unlink(filePath, (err) => {
             if (err) {
-                return res.status(500).json({ error: err });
+                return res.status(500).json({error: err});
             } else {
                 this.media.delete(req.params.id)
                     .then(() => {
-                        res.status(204).json({ message: 'File deleted successfully' });
+                        res.status(204).json({message: 'File deleted successfully'});
                     })
                     .catch((err) => {
                         res.status(500).json({message: err});
