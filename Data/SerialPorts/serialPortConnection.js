@@ -7,7 +7,7 @@ let Closing = false;
 
 class SerialPortConnection {
     constructor() {
-        console.log('Serial Port Initialization');
+        // console.log('Serial Port Initialization');
         // this.Init();
     }
     Init() {

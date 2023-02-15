@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serial port
-const SerialPortConnection = require('./SerialPorts/serialPortConnection');
+const SerialPortConnection = require('./Data/SerialPorts/serialPortConnection');
 const sp = new SerialPortConnection();
 
 // Routes
@@ -58,5 +58,13 @@ desk.on('connection', (socket) => {
         console.log(`Received frame from desk`);
         console.log(data);
     });
+    socket.on('message', (data) => {
+        console.log(`Received message from desk`);
+        console.log(data);
+    });
+    socket.on('disconnect', () => {
+        console.log(`Disconnected from desk socket`);
+    });
+
 });
 

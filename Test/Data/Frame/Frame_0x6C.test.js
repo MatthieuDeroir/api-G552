@@ -1,0 +1,32 @@
+const Frame_0x6C = require('../../../Data/Frame/Frame_0x6C');
+
+test('Frame_0x6C.build returns a valid object', () => {
+    const message = [
+        0x00, 0x02, 0x11, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x31, 0x32, 0x33, 0x00, 0x31,
+    ];
+
+    const expected = {
+        insertType: 'DirectConsoleData',
+        Chrono: '0.00.0',
+        Home_Points: 1,
+        Guest_Points: 2,
+        Home_SetsWon: 3,
+        Guest_SetsWon: 0,
+        Chrono_Status: true,
+        LED: false,
+        Clock_Display: false,
+        Chrono_Display: true,
+        Home_PointsInSet: [1, 2, 3],
+        Guest_PointsInSet: [0, 0, 0],
+        Home_Service: 0,
+        Guest_Service: 0,
+        Home_Winner: false,
+        Guest_Winner: false,
+    };
+
+    const result = Frame_0x6C.build(message);
+
+    expect(result).toEqual(expected);
+});

@@ -1,9 +1,15 @@
+const path = require('path');
+
+
 const config = {
     ip: 'localhost',
     portAPI: 4000,
     portWS: 8080,
+
+    // WebSockets config
+
+
 }
 
-const path = require('path');
 
 module.exports = config;

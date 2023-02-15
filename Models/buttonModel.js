@@ -1,8 +1,10 @@
 const db = require('../Database/db');
 
+
 class Button {
     constructor() {
         this.createTable();
+
     }
     createTable() {
         const createTable = `
