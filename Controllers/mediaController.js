@@ -86,7 +86,6 @@ class MediaController {
       });
   };
   delete = (req, res) => {
-    console.log(req.params.id);
     this.media
       .getById(req.params.id)
       .then((file) => {

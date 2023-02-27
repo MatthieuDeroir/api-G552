@@ -7,7 +7,7 @@ class EventMediaController {
 
     create = (req, res) => {
         console.log(req.body);
-        this.eventmedia.create(req.body)
+        this.eventmedia.create(req.body.mediaId, req.body.eventId, req.body.duration)
             .then((eventmedia) => {
                 res.status(201).json(eventmedia);
             })
@@ -17,6 +17,7 @@ class EventMediaController {
     }
 
     getAllByEvent = (req, res) => {
+        console.log(req.params);
         this.eventmedia.getAllByEvent(req.params.eventId)
             .then((eventmedias) => {
                 res.status(200).json(eventmedias);
@@ -27,15 +28,30 @@ class EventMediaController {
     }
 
     getAllByMedia = (req, res) => {
-        this.eventmedia.getAllByMedia(req.params.media_id)
+        console.log(req.params);
+        this.eventmedia.getAllByMedia(req.params.mediaId)
             .then((eventmedias) => {
+                console.log(eventmedias);
                 res.status(200).json(eventmedias);
             })
             .catch((err) => {
                 res.status(500).json({message: err});
             });
     }
-
+    
+    deleteAllByMedia = (req, res) => {
+        console.log(req.params.mediaId);
+        this.eventmedia.deleteAllByMedia(req.params.mediaId)
+            .then(() => {
+                res.status(204).json();
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    message:
+                    err
+                });
+            });
+    }
 
     delete = (req, res) => {
         this.eventmedia.delete(req.params.id)

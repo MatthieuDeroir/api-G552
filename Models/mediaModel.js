@@ -77,6 +77,7 @@ class Media {
         [originalFileName, fileName, lastModified, size, path, format, type],
         function (err) {
           if (err) {
+            console.log(err);
             reject(err);
           } else {
             resolve(this.lastID);

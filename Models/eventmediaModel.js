@@ -1,12 +1,12 @@
-const db = require('../Database/db');
+const db = require("../Database/db");
 
 class EventMedia {
-    constructor() {
-        this.createTable();
-    }
+  constructor() {
+    this.createTable();
+  }
 
-    createTable() {
-        const createTable = `
+  createTable() {
+    const createTable = `
             CREATE TABLE IF NOT EXISTS event_media
             (
                 event_id
@@ -47,73 +47,96 @@ class EventMedia {
             )
                 )
         `;
-        db.run(createTable);
-    }
+    db.run(createTable);
+  }
 
-    create(eventId, mediaId, duration) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                `INSERT INTO event_media (event_id, media_id, duration)
+  create(eventId, mediaId, duration) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO event_media (event_id, media_id, duration)
                  VALUES (?, ?, ?)`,
-                [eventId, mediaId, duration],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            );
-        });
-    }
+        [eventId, mediaId, duration],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
 
-    getAllByEvent(eventId) {
-        return new Promise((resolve, reject) => {
-            db.all(`SELECT media.*
+  getAllByEvent(eventId) {
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT media.*
                     FROM event_media
                              JOIN media ON event_media.media_id = media.id
-                    WHERE event_media.event_id = ?`, [eventId], (err, medias) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(medias);
+                    WHERE event_media.event_id = ?`,
+        [eventId],
+        (err, medias) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(medias);
+          }
+        }
+      );
+    });
+  }
 
-                }
-            });
-        });
-    }
+  getAllByMedia(mediaId) {
+    console.log(mediaId);
+    return new Promise((resolve, reject) => {
+      db.all(
+        "SELECT * FROM event_media WHERE media_id = ?",
+        [mediaId],
+        (err, events) => {
+          if (err) {
+            reject(err);
+          } else {
+            console.log(events);
+            resolve(events);
+          }
+        }
+      );
+    });
+  }
 
-    getAllByMedia(mediaId) {
-        return new Promise((resolve, reject) => {
-            db.all("SELECT * FROM event_media WHERE media_id = ?", [mediaId], (err, events) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(events);
-                }
-            });
-        });
-    }
-
-    delete(eventId, mediaId) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                `DELETE
+  deleteAllByMedia(mediaId) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE FROM event_media WHERE media_id = ?`,
+        [mediaId],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+  delete(eventId, mediaId) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE
                  FROM event_media
                  WHERE event_id = ?
                    AND media_id = ?`,
-                [eventId, mediaId],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            );
-        });
-    }
+        [eventId, mediaId],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
 }
-
 
 module.exports = EventMedia;
