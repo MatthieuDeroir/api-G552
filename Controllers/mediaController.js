@@ -7,13 +7,14 @@ class MediaController {
   constructor() {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, "../G552_frontend/public/medias");
+        const username = req.params.user;
+        const userFolder = `../G552_frontend/public/medias/${username}`;
+        cb(null, userFolder);
       },
       filename: (req, file, cb) => {
         const hash = crypto.createHash("sha256");
         hash.update(file.name + Date.now().toString());
         const fileName = hash.digest("hex");
-        console.log(fileName);
         cb(null, fileName + "." + file.mimetype.split("/")[1]);
         file.filename = fileName;
       },
@@ -25,10 +26,12 @@ class MediaController {
   create = (req, res) => {
     this.upload.single("file")(req, res, (err) => {
       if (err) {
+        console.log(err);
         res.status(500).json({ message: err });
       } else {
+        const username = req.params.user;
         this.media
-          .create(req.file)
+          .create(req.file, username)
           .then((media) => {
             res.status(201).json(media);
           })
@@ -38,16 +41,6 @@ class MediaController {
       }
     });
   };
-
-  // create = (req, res) => {
-  //     this.media.create(req.body)
-  //         .then((media) => {
-  //             res.status(201).json(media);
-  //         })
-  //         .catch((err) => {
-  //             res.status(500).json({message: err});
-  //         });
-  // }
 
   update = (req, res) => {
     this.media
@@ -85,6 +78,23 @@ class MediaController {
         res.status(500).json({ message: err });
       });
   };
+
+  getByUsername = (req, res) => {
+    console.log(req.params.user);
+    this.media
+      .getByUsername(req.params.user)
+      .then((media) => {
+        if (media) {
+          res.status(200).json(media);
+        } else {
+          res.status(404).json({ message: "Media not found" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  };
+
   delete = (req, res) => {
     this.media
       .getById(req.params.id)

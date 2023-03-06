@@ -5,11 +5,13 @@ class EventController {
     }
 
     create = (req, res) => {
+        console.log(req.body);
         this.event.create(req.body)
             .then((event) => {
                 res.status(201).json(event);
             })
             .catch((err) => {
+                console.log(err);
                 res.status(500).json({message: err});
             });
     }
@@ -33,7 +35,15 @@ class EventController {
                 res.status(500).json({message: err});
             });
     }
-
+    getByUserId= (req, res) => {
+        this.event.getByUserId(req.params.id)
+            .then((events) => {
+                res.status(200).json(events);
+            })
+            .catch((err) => {
+                res.status(500).json({message: err});
+            });
+    }
     getById= (req, res) => {
         this.event.getById(req.params.id)
             .then((event) => {
