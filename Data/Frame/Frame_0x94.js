@@ -15,7 +15,7 @@ class Frame_0x94 {
         GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
         // Home Team Fouls
-        GSI.Home_Team_Fouls= Tools.TeamFouls(_message[2], _message[8]);
+        GSI.Home_Team_Fouls = Tools.TeamFouls(_message[2], _message[8]);
 
         // Guest Team Fouls
         GSI.Guest_Team_Fouls = Tools.TeamFouls(_message[3], _message[11]);

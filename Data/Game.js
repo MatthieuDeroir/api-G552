@@ -84,7 +84,7 @@ class Game {
     }
 
     static isValid(_message) {
-        return _message[0] === 0xF8 && _message[51] === 0x0D;
+        return _message[0] === 0xF8 && _message[53] === 0x0D;
     }
 
     static select = (_message) => {

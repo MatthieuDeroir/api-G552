@@ -45,7 +45,7 @@ const io = require('socket.io')(server);
 const desk = io.of('/ws/desk');
 
 server.listen(config.portWS, () => {
-    console.log(`WS Server started on ${config.ip}:${config.portWS}`);
+    console.log(`WebSocket Server started on ${config.ip}:${config.portWS}`);
 });
 
 desk.on('connection', (socket) => {
