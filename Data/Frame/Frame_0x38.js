@@ -1,8 +1,9 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
 const LED = require("../Utils/Enums/eLED");
+const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 
 /*
-    * 0x38 : Basketball Home Individual Points
+    * 0x37 : Basketball Home Individual Points
  */
 
 class Frame_0x38 {
@@ -12,88 +13,37 @@ class Frame_0x38 {
         };
 
         // Chrono
-
-        if (_message.slice(4, 8).includes(0x20)) {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + "." + nBytesToNumber(_message[6]);
-        } else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + ":" + nBytesToNumber(_message[6], _message[7]);
-        }
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7])
 
         // Home Individual Points
+        GSI.Home_IndiviualPoints = Tools.IndividualPoints(_message);
 
-        GSI.Home_IndiviualPoints = new Array(16);
+        // Timer Status
+        let Timer = Tools.sTimerStartStop(_message[20])
+        GSI.Timer_Status = Timer.Status;
+        GSI.Timer_LED = Timer.LED;
 
-        // G14, G15, G16
-        GSI.Home_IndiviualPoints[13] = nBytesToNumber(_message[11], _message[12]);
-        GSI.Home_IndiviualPoints[14] = nBytesToNumber(_message[13], _message[14]);
-        GSI.Home_IndiviualPoints[15] = nBytesToNumber(_message[15], _message[16]);
+        // Clock Display / Chrono Display
+        let Display = Tools.ClockTimerDisplay(_message[21]);
+        GSI.Clock_Display = Display.Clock;
+        GSI.Chrono_Display = Display.Chrono;
 
-        // G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, G11, G12, G13
-        for (let i = 0; i < 13; i++) {
-            GSI.Home_IndiviualPoints[i] = nBytesToNumber(_message[22 + 2 * i], _message[23 + 2 * i]);
-        }
-
-        // Chrono Status
-        if (_message[20] === 0x30) {
-            GSI.Chrono_Status = true;
-            GSI.LED = false;
-        } else if (_message[20] === 0x31) {
-            GSI.Chrono_Status = false;
-            GSI.LED = false;
-        } else if (_message[20] === 0x32) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[20] === 0x33) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
-
-        if (_message[21] === 0x31) {
-            GSI.Clock_Display = true;
-            GSI.Chrono_Display = false;
-        } else {
-            GSI.Clock_Display = false;
-            GSI.Chrono_Display = true;
-        }
-
-        // 24s timer
+        // 24s timer digits
         GSI.Timer24s_Digit1 = nBytesToNumber(_message[48]);
         GSI.Timer24s_Digit2 = nBytesToNumber(_message[49]);
 
-        if (_message[50] !== 0x31) {
-            GSI.Horn24s_Status = false;
-        } else if (_message[50] === 0x31) {
-            GSI.Horn24s_Status = true;
-        }
+        // 24s Horn
+        GSI.Horn24s_Status = Tools.Horn(_message[50]);
 
-        if (_message[51] === 0x30) {
-            GSI.Timer24s_Status = true;
-            GSI.LED = false;
-        } else if (_message[51] === 0x31) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = false;
-        } else if (_message[51] === 0x32) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[51] === 0x33) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        // 24s Timer status and LEDs
+        let sTimer = Tools.sTimerStartStop(_message[51]);
+        GSI.Timer24s_Status = sTimer.Status;
+        GSI.Timer24s_LED = sTimer.LED;
 
-        if (_message[52] === 0x30) {
-            GSI.Display_Status = false;
-            GSI.Display_LED_Mode = LED.eMode.Off;
-        } else if (_message[52] === 0x31) {
-            GSI.Display_Status = true;
-            GSI.Display_LED_Mode = LED.eMode.Fix;
-        } else if (_message[52] === 0x32) {
-            GSI.Display_Status = true;
-            GSI.Display_LED_Mode = LED.eMode.Blink;
-        }
+        // Display Status and LEDs
+        let sDisplay = Tools.sDisplay(_message[52]);
+        GSI.Display_Status = sDisplay.Status;
+        GSI.Display_LED_Mode = sDisplay.LED;
 
         return GSI;
 

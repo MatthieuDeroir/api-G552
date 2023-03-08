@@ -1,5 +1,5 @@
-const nBytesToNumber = require("../../Data/Utils/nBytesToNumber");
 const eSport = require("../Utils/Enums/eSport");
+const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 
 /*
     * 0x3C : Handball
@@ -12,21 +12,12 @@ class Frame_0x3C {
             Sport: eSport.Handball,
         };
 
-        if (_message.slice(4, 8).includes(0x20)) {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + "." + nBytesToNumber(_message[6]);
-        } else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5])  + ":" + nBytesToNumber(_message[6], _message[7]);
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
-        }
+        GSI.Horn = Tools.Horn(_message[19]);
 
-        GSI.Horn = _message[19] === 0x31;
-
-        GSI.Home_IndividualFoul = new Array(14);
-        GSI.Guest_IndividualFoul = new Array(14);
-        for (let i = 0; i < 14; i++) {
-            GSI.Home_IndividualFoul[i] = nBytesToNumber(_message[22 + i]);
-            GSI.Guest_IndividualFoul[i] = nBytesToNumber(_message[36 + i]);
-        }
+        GSI.Home_IndividualFoul = Tools.IndividualFouls(22, 14, _message);
+        GSI.Guest_IndividualFoul = Tools.IndividualFouls(36, 14, _message);
 
         return GSI;
     }

@@ -48,8 +48,6 @@ server.listen(config.portWS, () => {
     console.log(`WS Server started on ${config.ip}:${config.portWS}`);
 });
 
-
-
 desk.on('connection', (socket) => {
     socket.on('connect', (data) => {
         console.log(`Connected to desk socket`);

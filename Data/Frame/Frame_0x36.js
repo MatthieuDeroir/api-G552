@@ -1,6 +1,9 @@
 const eSport = require('../Utils/Enums/eSport');
 const nBytesToNumber = require("../Utils/nBytesToNumber");
+const nBytesToTables = require("../Utils/nBytesToTables");
 const LED = require("../Utils/Enums/eLED");
+
+const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 
 /*
     * 0x36 : Volleyball
@@ -14,15 +17,11 @@ class Frame_0x36 {
         };
 
         //CHRONO
-        if (_message[7] === 0x20) {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + "." + nBytesToNumber(_message[6]);
-        } else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + ":" + nBytesToNumber(_message[6], _message[7]);
-        }
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
         // Points
-        GSI.Home_Points = nBytesToNumber(_message[9], _message[10]);
-        GSI.Guest_Points = nBytesToNumber(_message[12], _message[13]);
+        GSI.Home_TotalPoints = nBytesToNumber(_message[9], _message[10]);
+        GSI.Guest_TotalPoints = nBytesToNumber(_message[12], _message[13]);
 
         // Set
         GSI.Set = nBytesToNumber(_message[14]);
@@ -36,89 +35,41 @@ class Frame_0x36 {
         GSI.Guest_CountTimeout = nBytesToNumber(_message[18]);
 
         // Horn
-        GSI.Horn = _message[19] === 0x31;
+        GSI.Horn = Tools.Horn(_message[19]);
 
-        // Chrono Status
-        if (_message[20] === 0x30) {
-            GSI.Chrono_Status = true;
-            GSI.LED = false;
-        } else if (_message[20] === 0x31) {
-            GSI.Chrono_Status = false;
-            GSI.LED = false;
-        } else if (_message[20] === 0x32) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[20] === 0x33) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        // Timer Status
+        let Timer = Tools.TimerStartStop(_message[20]);
+        GSI.Timer_Status = Timer.Status;
+        GSI.LED = Timer.LED;
 
-        if (_message[21] === 0x31) {
-            GSI.Clock_Display = true;
-            GSI.Chrono_Display = false;
-        } else {
-            GSI.Clock_Display = false;
-            GSI.Chrono_Display = true;
-        }
+
+        // Clock Display / Chrono Display
+        let Display = Tools.ClockTimerDisplay(_message[21]);
+        GSI.Clock_Display = Display.Clock;
+        GSI.Chrono_Display = Display.Chrono;
+
 
         // Set Points
-        GSI.Home_SetPoints = [
-            nBytesToNumber(_message[22], _message[23]),
-            nBytesToNumber(_message[26], _message[27]),
-            nBytesToNumber(_message[30], _message[31]),
-            nBytesToNumber(_message[34], _message[35]),
-        ];
-        GSI.Guest_SetPoints = [
-            nBytesToNumber(_message[24], _message[25]),
-            nBytesToNumber(_message[28], _message[29]),
-            nBytesToNumber(_message[32], _message[33]),
-            nBytesToNumber(_message[36], _message[37]),
-        ];
+        GSI.Home_PointsBySet = nBytesToTables(22, 4, 4, _message);
+        GSI.Guest_PointsBySet = nBytesToTables(26, 4, 4, _message);
 
-        // Players index
-        GSI.Home_PlayersIndex = new Array(6);
-        GSI.Guest_PlayersIndex = new Array(6);
 
-        for (let i = 0; i < 6; i++) {
-            if (_message[38 + i] >= 0x30 && _message[38 + i] <= 0x3f) {
-                GSI.Home_PlayersIndex[nBytesToNumber(_message[38 + i])] = true;
-            }
-            if (_message[44 + i] >= 0x30 && _message[44 + i] <= 0x3f) {
-                GSI.Guest_PlayersIndex[nBytesToNumber(_message[44 + i])] = true;
-            }
-        }
+        // Players in play
+        let PlayersInPlay = Tools.PlayersInPlay(_message);
+        GSI.Home_PlayersInPlay = PlayersInPlay.Home;
+        GSI.Guest_PlayersInPlay = PlayersInPlay.Guest;
+
 
         // Service
-        if (_message[50] === 0x31) {
-            GSI.Home_Service = 1;
-            GSI.Guest_Service = 0;
-        } else if (_message[50] === 0x32) {
-            GSI.Home_Service = 2;
-            GSI.Guest_Service = 0;
-        } else if (_message[50] === 0x33) {
-            GSI.Home_Service = 0;
-            GSI.Guest_Service = 1;
-        } else if (_message[50] === 0x34) {
-            GSI.Home_Service = 0;
-            GSI.Guest_Service = 2;
-        } else {
-            GSI.Home_Service = 0;
-            GSI.Guest_Service = 0;
-        }
+        let Service = Tools.Service(_message[50]);
+        GSI.Home_Service = Service.Home;
+        GSI.Guest_Service = Service.Guest;
 
         // WInner
-        if (_message[51] === 0x31) {
-            GSI.Home_Winner = true;
-            GSI.Guest_Winner = false;
-        } else if (_message[51] === 0x32) {
-            GSI.Home_Winner = false;
-            GSI.Guest_Winner = true;
-        } else {
-            GSI.Home_Winner = false;
-            GSI.Guest_Winner = false;
-        }
+        let Winner = Tools.Winner(_message[51]);
+        GSI.Home_Winner = Winner.Home;
+        GSI.Guest_Winner = Winner.Guest;
+
         // TODO: DID 19,20,21!
         // TODO : add clock_display and chrono_display to game_state
         return GSI;

@@ -1,10 +1,13 @@
-function parseBytesToNumber(...numbers) {
+function nBytesToNumber(...bytes) {
     let num = 0;
 
-    for (let n in numbers) {
-        num += parseInt((numbers[n] - 0x30).toString()) * Math.pow(10, numbers.length - n - 1);
+
+    for (let b in bytes) {
+        num += parseInt((bytes[b] - 0x30).toString()) * Math.pow(10, bytes.length - b - 1);
     }
+
     return num;
 }
 
-module.exports = parseBytesToNumber;
+
+module.exports = nBytesToNumber;

@@ -1,8 +1,7 @@
 const nBytesToNumber = require("../Utils/nBytesToNumber");
-
+const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 const eSport = require("../Utils/Enums/eSport");
-const eTeam = require("../Utils/Enums/eTeam");
-const LED = require("../Utils/Enums/eLED");
+
 
 /*
     * 0x33 : Basketball
@@ -10,30 +9,16 @@ const LED = require("../Utils/Enums/eLED");
 
 class Frame_0x33 {
     static build(_message) {
-        const ascii = new TextEncoder("ascii");
-        const UTF16 = new TextEncoder("UTF-16");
-
         let GSI = {
             InsertType: "DirectConsoleData",
             Sport: eSport.Basketball,
         }
 
         // Possession
-        if (_message[3] === 0x31) {
-            GSI.Possession = eTeam.Home;
-        } else if (_message[3] === 0x32) {
-            GSI.Possession = eTeam.Guest;
-        } else {
-            //TODO: Clear possession when no team is selected
-            GSI.Possession = eTeam.None;
-        }
+        GSI.Possession = Tools.Possession(_message[3]);
 
         // Chrono
-        if (_message[7] === 0x20){
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + "." + nBytesToNumber(_message[6]);
-        } else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + ":" + nBytesToNumber(_message[6], _message[7]);
-        }
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
         // Home Team Score
         GSI.Home_Points = nBytesToNumber(_message[8], _message[9], _message[10]);
@@ -42,30 +27,18 @@ class Frame_0x33 {
         GSI.Guest_Points = nBytesToNumber(_message[11], _message[12], _message[13]);
 
         // Period Number
-        // TODO : why is it stored in string format in original code?
-        if (_message[14] === 0x30) {
-            GSI.Period = 0;
-        } else {
-            GSI.Period = nBytesToNumber(_message[14]);
-        }
+        GSI.Period = nBytesToNumber(_message[14]);
+
 
         // Home Team Fouls
-        if (_message[15] === 0x52) {
-            GSI.Home_TeamFouls = 8;
-            GSI.Home_TeamFouls_RS = true;
-        } else {
-            GSI.Home_TeamFouls = nBytesToNumber(_message[15]);
-            GSI.Home_TeamFouls_RS = false;
-        }
+        let Home = Tools.B_TeamFouls(_message[15]);
+        GSI.Home_TeamFouls = Home.TeamFouls;
+        GSI.Home_TeamFouls_RS = Home.TeamFouls_RS;
 
         // Guest Team Fouls
-        if (_message[16] === 0x52) {
-            GSI.Guest_TeamFouls = 8;
-            GSI.Guest_TeamFouls_RS = true;
-        } else {
-            GSI.Guest_TeamFouls = nBytesToNumber(_message[16]);
-            GSI.Guest_TeamFouls_RS = false;
-        }
+        let Guest = Tools.B_TeamFouls(_message[16]);
+        GSI.Guest_TeamFouls = Guest.TeamFouls;
+        GSI.Guest_TeamFouls_RS = Guest.TeamFouls_RS;
 
         // Home Team Timeout
         GSI.Home_CountTimeout = nBytesToNumber(_message[17]);
@@ -74,35 +47,18 @@ class Frame_0x33 {
         GSI.Guest_CountTimeout = nBytesToNumber(_message[18]);
 
         // Horn
-        GSI.Horn = _message[19] === 0x31;
+        GSI.Horn = Tools.Horn(_message[19]);
 
-        // Chrono Status
-        if (_message[20] === 0x30) {
-            GSI.Chrono_Status = true;
-            GSI.LED = false;
-        }  else if (_message[20] === 0x31) {
-            GSI.Chrono_Status = false;
-            GSI.LED = false;
-        } else if (_message[20] === 0x32) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[20] === 0x33) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        // Timer Status
+        let Timer = Tools.TimerStartStop(_message[20]);
+        GSI.Timer_Status = Timer.Status;
+        GSI.Timer_LED = Timer.LED;
 
         // Home Team Individual Fouls
-        GSI.Home_IndividualFoul = new Array(12);
+        GSI.Home_IndividualFoul = Tools.IndividualFouls(22, 12, _message);
 
         // Guest Team Individual Fouls
-        GSI.Guest_IndividualFoul = new Array(12);
-
-        for (let i = 0; i < 12; i++) {
-            GSI.Home_IndividualFoul[i] = nBytesToNumber(_message[22 + i]);
-            GSI.Guest_IndividualFoul[i] = nBytesToNumber(_message[34 + i]);
-        }
+        GSI.Guest_IndividualFoul = Tools.IndividualFouls(34, 12, _message);
 
         // Chrono TimeOut
         //TODO: why Digit1 is stored in 21th byte, but Digit2 and Digit3 are stored in 46th and 47th byte?
@@ -110,52 +66,19 @@ class Frame_0x33 {
         GSI.Chrono_TimeOut_Digit2 = nBytesToNumber(_message[46]);
         GSI.Chrono_TimeOut_Digit3 = nBytesToNumber(_message[47]);
 
-
-
-        // Note 6 :  start/stop chronomètre	"31" --> stop + Pas de led strip fin des 24s
-        // "32" --> stop + led strip fin des 24s rouge
-        // (Mode Euroleague à partir du 13/08/2014) "33" --> stop + led strip fin des 24s jaunes
-        // "30" --> start
-        // Note 7 :  Affichage 24"  	"31" --> allumé + led strip fixe
-        // "32" --> allumé + led strip clignotant
-        // "30" --> éteint
-
         // 24" timer
         GSI.Timer24s_Digit1 = nBytesToNumber(_message[48]);
         GSI.Timer24s_Digit2 = nBytesToNumber(_message[49]);
 
-        if (_message[50] !== 0x31) {
-            GSI.Horn24s_Status = false;
-        } else if (_message[50] === 0x31) {
-            GSI.Horn24s_Status = true;
-        }
+        GSI.Horn24s_Status = Tools.sHorn(_message[50]);
 
-        if (_message[51] === 0x30) {
-            GSI.Timer24s_Status = true;
-            GSI.LED = false;
-        }   else if (_message[51] === 0x31) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = false;
-        } else if (_message[51] === 0x32) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[51] === 0x33) {
-            GSI.Timer24s_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        let Timer24s = Tools.sTimerStartStop(_message[51]);
+        GSI.Timer24s_Status = Timer24s.Status;
+        GSI.Timer24s_LED = Timer24s.LED;
 
-        if (_message[52] === 0x30) {
-            GSI.Display_Status = false;
-            GSI.Display_LED_Mode = LED.eMode.Off;
-        } else if (_message[52] === 0x31) {
-            GSI.Display_Status = true;
-            GSI.Display_LED_Mode = LED.eMode.Fix;
-        } else if (_message[52] === 0x32) {
-            GSI.Display_Status = true;
-            GSI.Display_LED_Mode = LED.eMode.Blink;
-        }
+        let sDisplay = Tools.sDisplay(_message[52]);
+        GSI.Display_Status = sDisplay.Status;
+        GSI.Display_LED_Mode = sDisplay.LED;
 
         return GSI;
     }

@@ -1,5 +1,6 @@
 const { StringDecoder } = require('string_decoder');
-
+const Encode = require('../Utils/Encode');
+const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 /*
     * 0x77 : Team Names
  */
@@ -12,25 +13,11 @@ class Frame_0x77_TeamNames {
             insertType: 'DirectConsoleData',
         };
 
-        let reEncodedMessage = [..._message];
+        let reEncodedMessage = Encode(_message);
 
-        for (let i = 0; i < _message.length; i++) {
-            if (reEncodedMessage[i] === 32) {
-                reEncodedMessage[i] = 0;
-            }
-            i++;
-        }
+        GSI.Home_TeamName = Tools.TeamName(6, reEncodedMessage);
 
-        GSI.homeTeamName = UTF16.write(Buffer.from(reEncodedMessage.slice(6, 24)));
-        if (reEncodedMessage[24] !== 0x00 && reEncodedMessage[25] !== 0x00) {
-            GSI.homeTeamName += UTF16.write(Buffer.from(reEncodedMessage.slice(24, 26)));
-        }
-
-        GSI.guestTeamName = '';
-        if (reEncodedMessage[28] !== 0x00 && reEncodedMessage[29] !== 0x00) {
-            GSI.guestTeamName = UTF16.write(Buffer.from(reEncodedMessage.slice(28, 30)));
-        }
-        GSI.guestTeamName += UTF16.write(Buffer.from(reEncodedMessage.slice(30, 48)));
+        GSI.Guest_TeamName = Tools.TeamName(30, reEncodedMessage);
 
         return GSI;
     }

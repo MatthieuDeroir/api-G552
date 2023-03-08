@@ -1,5 +1,6 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
 const LED = require("../Utils/Enums/eLED");
+const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 
 /*
     * 0x9A : Simple Timer
@@ -12,39 +13,20 @@ class Frame_0x9A {
             insertType: 'DirectConsoleData',
         }
 
-        if (_message[7] === 0x20){
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + '.' + nBytesToNumber(_message[6]);
-        }
-        else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + ':' + nBytesToNumber(_message[6], _message[7]);
-        }
+        // Chrono
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
-        GSI.Horn = _message[19] === 0x31;
+        GSI.Horn = Tools.Horn(_message[19]);
 
-        // Chrono Status
-        if (_message[20] === 0x30) {
-            GSI.Chrono_Status = true;
-            GSI.LED = false;
-        } else if (_message[20] === 0x31) {
-            GSI.Chrono_Status = false;
-            GSI.LED = false;
-        } else if (_message[20] === 0x32) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[20] === 0x33) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        // Timer Status
+        let Timer = Tools.TimerStartStop(_message[20]);
+        GSI.Timer_Status = Timer.Status;
+        GSI.LED = Timer.LED;
 
-        if (_message[21] === 0x31) {
-            GSI.Clock_Display = true;
-            GSI.Chrono_Display = false;
-        } else {
-            GSI.Clock_Display = false;
-            GSI.Chrono_Display = true;
-        }
+        // Clock Display / Chrono Display
+        let Display = Tools.ClockTimerDisplay(_message[21]);
+        GSI.Clock_Display = Display.Clock;
+        GSI.Chrono_Display = Display.Chrono;
 
         return GSI;
     }

@@ -1,5 +1,7 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
+const nBytesToTables = require('../Utils/nBytesToTables');
 const LED = require("../Utils/Enums/eLED");
+const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 
 /*
     * 0x35 : Handball / Soccer / Boxe
@@ -12,12 +14,7 @@ class Frame_0x35 {
         };
 
         //CHRONO
-
-        if (_message[7] === 0x20) {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + "." + nBytesToNumber(_message[6]);
-        } else {
-            GSI.Chrono = nBytesToNumber(_message[4], _message[5]) + ":" + nBytesToNumber(_message[6], _message[7]);
-        }
+        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
 
         // HOME TEAM FOULS
         GSI.Home_Team_Fouls = nBytesToNumber(_message[8]);
@@ -34,59 +31,36 @@ class Frame_0x35 {
         // PERIOD
         GSI.Period = nBytesToNumber(_message[14]);
 
-        // TODO: Penalties
         // HOME PENALTIES
-        GSI.Home_Penalties = nBytesToNumber(_message[15]);
+        GSI.Home_PenaltiesInProgress = Tools.PenaltiesInProgress(_message[15]);
 
         // GUEST PENALTIES
-        GSI.Guest_Penalties = nBytesToNumber(_message[16]);
+        GSI.Guest_PenaltiesInProgress = Tools.PenaltiesInProgress(_message[16]);
 
         // HOME TIMEOUTS
-        GSI.Home_CountTimeout = nBytesToNumber(_message[17]);
+        GSI.Home_TimeOuts = nBytesToNumber(_message[17]);
 
         // GUEST TIMEOUTS
-        GSI.Guest_CountTimeout = nBytesToNumber(_message[18]);
+        GSI.Guest_TimeOuts = nBytesToNumber(_message[18]);
 
         // HORN
-        GSI.Horn = _message[19] === 0x31;
+        GSI.Horn = Tools.Horn(_message[19]);
 
         // Timer Start/Stop
-        if (_message[20] === 0x30) {
-            GSI.Chrono_Status = true;
-            GSI.LED = false;
-        }  else if (_message[20] === 0x31) {
-            GSI.Chrono_Status = false;
-            GSI.LED = false;
-        } else if (_message[20] === 0x32) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Red;
-        } else if (_message[20] === 0x33) {
-            GSI.Chrono_Status = false;
-            GSI.LED = true;
-            GSI.LED_Color = LED.eColor.Yellow;
-        }
+        let Timer = Tools.TimerStartStop(_message[20]);
+        GSI.Timer_Status = Timer.Status;
+        GSI.Timer_LED = Timer.LED;
 
-        // INDIVIDUAL FOULS
-        GSI.Home_ExclusionShirtNumber = new Array(3);
-        GSI.Guest_ExclusionShirtNumber = new Array(3);
-        GSI.Home_ExclusionTimer = new Array(3);
-        GSI.Guest_ExclusionTimer = new Array(3);
+        // Exclusions
+        let Home_Exclusion = Tools.Exclusion(22, 5, 3,_message);
+        GSI.Home_ExclusionTimer = Home_Exclusion.Timer;
+        GSI.Home_ExclusionShirtNumber = Home_Exclusion.ShirtNumber;
 
-        for (let i = 0; i < 3; i++) {
-            GSI.Home_ExclusionShirtNumber[i] = nBytesToNumber(_message[22 + 5 * i], _message[23 + 5 * i]);
-            GSI.Home_ExclusionTimer[i] = nBytesToNumber(_message[24 + 5 * i], _message[25 + 5 * i], _message[26 + 5 * i]);
-            GSI.Guest_ExclusionShirtNumber[i] = nBytesToNumber(_message[37 + 5 * i], _message[38 + 5 * i]);
-            GSI.Guest_ExclusionTimer[i] = nBytesToNumber(_message[39 + 5 * i], _message[40 + 5 * i], _message[41 + 5 * i]);
+        let Guest_Exclusion = Tools.Exclusion(37, 5, 3, _message);
+        GSI.Guest_ExclusionTimer = Guest_Exclusion.Timer;
+        GSI.Guest_ExclusionShirtNumber = Guest_Exclusion.ShirtNumber;
 
-            // exceptions for 10:00 exclusion timers
-            if (_message[24 + 5 * i] === 0x30 && _message[25 + 5 * i] === 0x30 && _message[26 + 5 * i] === 0x30) {
-                GSI.Home_ExclusionTimer[i] = 1000;
-            }
-            if (_message[39 + 5 * i] === 0x30 && _message[40 + 5 * i] === 0x30 && _message[41 + 5 * i] === 0x30) {
-                GSI.Guest_ExclusionTimer[i] = 1000;
-            }
-        }
+
         return GSI;
     }
 }

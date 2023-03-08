@@ -1,5 +1,5 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
-
+const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 /*
     * 0xA9 : Home Shirt Numbers Summary
  */
@@ -10,16 +10,9 @@ class Frame_0xA9 {
             insertType: 'DirectConsoleData',
         };
 
-        GSI.Home_PlayerNumber = new Array(16);
+        // Home Player Number
+        GSI.Home_PlayerNumber = Tools.ShirtNumber(4, 16, _message);
 
-        for (let i = 0; i < 16; i++) {
-            if (_message[4 + 2 * i] === 0x30 && _message[5 + 2 * i] === 0x30)
-                GSI.Home_PlayerNumber[i] = -3;
-            else if (_message[4 + 2 * i] === 0x20 && _message[5 + 2 * i] === 0x30)
-                GSI.Home_PlayerNumber[i] = -2;
-            else
-                GSI.Home_PlayerNumber[i] = nBytesToNumber(_message[4 + 2 * i], _message[5 + 2 * i])
-        }
         return GSI;
     }
 }
