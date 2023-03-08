@@ -7,7 +7,7 @@ const mediaController = new MediaController();
 router.post('/', mediaController.create);
 router.put('/:id', mediaController.update);
 router.get('/', mediaController.getAll);
-router.get('/id/:id', mediaController.getById);
+router.get('/:id', mediaController.getById);
 router.delete('/:id', mediaController.delete);
 // router.get('/user/:id', mediaController.getByUser);
 

@@ -9,10 +9,6 @@ class Macro {
         const createTable = `
             CREATE TABLE IF NOT EXISTS macro
             (
-                id
-                    INTEGER
-                    PRIMARY
-                        KEY,
                 button_id
                     INTEGER,
                 event_id
@@ -36,7 +32,7 @@ class Macro {
                 FOREIGN KEY
                     (
                      button_id
-                        ) REFERENCES buttons
+                        ) REFERENCES button
                     (
                      id
                         )
@@ -60,18 +56,6 @@ class Macro {
             );
         });
     }
-
-    getById(id) {
-        return new Promise((resolve, reject) => {
-            db.get("SELECT * FROM macro WHERE id = ?", [id], (err, macro) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(macro);
-                }
-            });
-        });
-    }
     getByUserId(userId) {
         return new Promise((resolve, reject) => {
             db.all("SELECT * FROM macro WHERE user_id = ?", [userId], (err, macros) => {
@@ -84,13 +68,37 @@ class Macro {
         });
     }
 
+    getByEventId(eventId) {
+        return new Promise((resolve, reject) => {
+            db.all("SELECT * FROM macro WHERE event_id = ?", [eventId], (err, macros) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(macros);
+                }
+            });
+        });
+    }
+
+    getByButtonId(buttonId) {
+        return new Promise((resolve, reject) => {
+            db.all("SELECT * FROM macro WHERE button_id = ?", [buttonId], (err, macros) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(macros);
+                }
+            });
+        });
+    }
 
 
-    update(id, button_id, eventId, userId) {
+
+    update(button_id, eventId, userId) {
         return new Promise((resolve, reject) => {
             db.run(
-                `UPDATE macro SET button_id = ?, event_id = ?, user_id = ? WHERE id = ?`,
-                [button_id, eventId, userId, id],
+                `UPDATE macro SET button_id = ?, event_id = ?, user_id = ?`
+                [button_id, eventId, userId],
                 (err) => {
                     if (err) {
                         reject(err);
@@ -104,15 +112,19 @@ class Macro {
 
 
 
-    delete(id) {
+    delete(button_id, eventId, userId) {
         return new Promise((resolve, reject) => {
-            db.run("DELETE FROM macro WHERE id = ?", [id], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
+            db.run(
+                `DELETE FROM macro WHERE button_id = ?, event_id = ?, user_id = ?`,
+                [button_id, eventId, userId],
+                (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
                 }
-            });
+            );
         });
     }
 

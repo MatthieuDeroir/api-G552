@@ -7,7 +7,7 @@ let Closing = false;
 
 class SerialPortConnection {
     constructor() {
-        console.log('Serial Port Initialization');
+        // console.log('Serial Port Initialization');
         // this.Init();
     }
     Init() {
@@ -38,7 +38,7 @@ class SerialPortConnection {
 
         ports.forEach(port => {
             // filter the elements to only get the serial ports
-            if (port.startsWith('ttyq5')) {
+            if (port.startsWith('tty')) {
                 let PortName = port;
                 let found = false;
                 AllDevices.forEach(device => {

@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serial port
-const SerialPortConnection = require('./SerialPorts/serialPort');
+const SerialPortConnection = require('./Data/SerialPorts/serialPortConnection');
 const sp = new SerialPortConnection();
 
 // Routes
@@ -48,8 +48,6 @@ server.listen(config.portWS, () => {
     console.log(`WS Server started on ${config.ip}:${config.portWS}`);
 });
 
-
-
 desk.on('connection', (socket) => {
     socket.on('connect', (data) => {
         console.log(`Connected to desk socket`);
@@ -58,5 +56,13 @@ desk.on('connection', (socket) => {
         console.log(`Received frame from desk`);
         console.log(data);
     });
+    socket.on('message', (data) => {
+        console.log(`Received message from desk`);
+        console.log(data);
+    });
+    socket.on('disconnect', () => {
+        console.log(`Disconnected from desk socket`);
+    });
+
 });
 

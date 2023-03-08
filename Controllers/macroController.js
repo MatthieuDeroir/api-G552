@@ -4,7 +4,6 @@ class MacroController {
     constructor() {
         this.macro = new Macro();
     }
-
     create = (req, res) => {
         this.macro.create(req.body)
             .then((macro) => {
@@ -24,7 +23,6 @@ class MacroController {
                 res.status(500).json({message: err});
             });
     }
-
 
     getById= (req, res) => {
         this.macro.getById(req.params.id)

@@ -10,52 +10,44 @@ class EventMedia {
             CREATE TABLE IF NOT EXISTS event_media
             (
                 event_id
-                INTEGER,
+                    INTEGER,
                 media_id
-                INTEGER,
-                user_id
-                INTEGER,
-                duration
-                INTEGER,
+                    INTEGER,
+                media_dur_in_event
+                    INTEGER,
+                media_pos_in_event
+                    INTEGER,
                 PRIMARY
-                KEY
-            (
-                event_id,
-                media_id,
-                user_id
-            ),
+                    KEY
+                    (
+                     event_id,
+                     media_id
+                        ),
                 FOREIGN KEY
-            (
-                event_id
-            ) REFERENCES events
-            (
-                id
-            ),
+                    (
+                     event_id
+                        ) REFERENCES events
+                    (
+                     id
+                        ),
                 FOREIGN KEY
-            (
-                media_id
-            ) REFERENCES media
-            (
-                id
-            ),
-                FOREIGN KEY
-            (
-                user_id
-            ) REFERENCES users
-            (
-                id
+                    (
+                     media_id
+                        ) REFERENCES media
+                    (
+                     id
+                        )
             )
-                )
         `;
         db.run(createTable);
     }
 
-    create(eventId, mediaId, duration) {
+    create(eventId, mediaId, ) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO event_media (event_id, media_id, duration)
+                `INSERT INTO event_media (event_id, media_id)
                  VALUES (?, ?, ?)`,
-                [eventId, mediaId, duration],
+                [eventId, mediaId],
                 (err) => {
                     if (err) {
                         reject(err);
