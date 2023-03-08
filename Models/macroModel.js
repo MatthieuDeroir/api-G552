@@ -9,10 +9,6 @@ class Macro {
         const createTable = `
             CREATE TABLE IF NOT EXISTS macro
             (
-                id
-                    INTEGER
-                    PRIMARY
-                        KEY,
                 button_id
                     INTEGER,
                 event_id

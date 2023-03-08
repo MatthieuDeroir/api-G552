@@ -15,8 +15,6 @@ class Media {
                     INTEGER
                     PRIMARY
                         KEY,
-                username
-                    TEXT,
                 originalFileName
                     TEXT,
                 fileName
@@ -34,7 +32,16 @@ class Media {
                 uploaded_at
                     TIMESTAMP
                     DEFAULT
-                        CURRENT_TIMESTAMP
+                        CURRENT_TIMESTAMP,
+                user_id
+                    INTEGER,
+                FOREIGN KEY
+                    (
+                     user_id
+                        ) REFERENCES users
+                    (
+                     id
+                        )
             )
         `;
         db.run(createTable);
@@ -124,6 +131,24 @@ class Media {
         });
     }
 
+    getByUserId(id) {
+        return new Promise((resolve, reject) => {
+            db.all(
+                `SELECT *
+                 FROM media
+                 WHERE user_id = ?`,
+                [id],
+                (err, media) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(media);
+                    }
+                }
+            );
+        });
+    }
+
     delete(id) {
         return new Promise((resolve, reject) => {
             db.run(
@@ -142,23 +167,6 @@ class Media {
         });
     }
 
-    getByUsername(username) {
-        return new Promise((resolve, reject) => {
-            db.all(
-                `SELECT *
-                 FROM media
-                 WHERE username = ?`,
-                [username],
-                (err, media) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(media);
-                    }
-                }
-            );
-        });
-    }
 }
 
 module.exports = Media;

@@ -12,7 +12,15 @@ class Event {
                 id       INTEGER PRIMARY KEY,
                 name     TEXT,
 
-                category TEXT
+                user_id
+                    INTEGER,
+                FOREIGN KEY
+                    (
+                     user_id
+                        ) REFERENCES users
+                    (
+                     id
+                        )
             )
         `;
         db.run(createTable);
@@ -73,6 +81,19 @@ class Event {
             });
         });
     }
+
+    getByUserId(id) {
+        return new Promise((resolve, reject) => {
+            db.all(`SELECT * FROM events WHERE user_id = ?`, [id], (err, events) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(events);
+                }
+            });
+        });
+    }
+
     delete(id) {
         return new Promise((resolve, reject) => {
             db.run(`DELETE FROM events WHERE id = ?`, [id], (err) => {

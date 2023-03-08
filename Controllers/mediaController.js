@@ -76,6 +76,21 @@ class MediaController {
             });
     };
 
+    getByUserId = (req, res) => {
+        this.media
+            .getByUserId(req.params.id)
+            .then((media) => {
+                if (media) {
+                    res.status(200).json(media);
+                } else {
+                    res.status(404).json({message: "Media not found"});
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({message: err});
+            });
+    }
+
     delete = (req, res) => {
         this.media.getById(req.params.id)
             .then((file) => {
