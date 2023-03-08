@@ -13,7 +13,9 @@ class EventMedia {
                     INTEGER,
                 media_id
                     INTEGER,
-                duration
+                media_dur_in_event
+                    INTEGER,
+                media_pos_in_event
                     INTEGER,
                 PRIMARY
                     KEY
@@ -40,7 +42,7 @@ class EventMedia {
         db.run(createTable);
     }
 
-    create(eventId, mediaId) {
+    create(eventId, mediaId, ) {
         return new Promise((resolve, reject) => {
             db.run(
                 `INSERT INTO event_media (event_id, media_id)
