@@ -56,8 +56,8 @@ class Media {
   //     });
   // }
 
-  create(file) {
-    console.log(file);
+  create(file, user) {
+    console.log("test2");
     const originalFileName = file.originalname;
     
     const fileName = file.filename
@@ -67,14 +67,14 @@ class Media {
     const path = file.path.split("public")[1];
     const format = file.mimetype.split("/")[1];
     const type = file.mimetype.split("/")[0];
-
+    const username = user;
  
 
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO media (originalFileName, fileName, lastModified, size, path, format, type)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [originalFileName, fileName, lastModified, size, path, format, type],
+        `INSERT INTO media (username,originalFileName, fileName, lastModified, size, path, format, type)
+                    VALUES (?,?, ?, ?, ?, ?, ?, ?)`,
+        [username,originalFileName, fileName, lastModified, size, path, format, type],
         function (err) {
           if (err) {
             console.log(err);

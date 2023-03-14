@@ -50,14 +50,15 @@ class EventMedia {
     db.run(createTable);
   }
 
-  create(eventId, mediaId, duration) {
+  create(mediaId,eventId , duration,userId) {
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO event_media (event_id, media_id, duration)
-                 VALUES (?, ?, ?)`,
-        [eventId, mediaId, duration],
+        `INSERT INTO event_media (event_id, media_id,user_id, duration)
+                 VALUES (?, ?, ?, ?)`,
+        [eventId, mediaId, userId,duration],
         (err) => {
           if (err) {
+            console.log(err);
             reject(err);
           } else {
             resolve();
@@ -86,23 +87,23 @@ class EventMedia {
     });
   }
 
-  getAllByMedia(mediaId) {
-    console.log(mediaId);
+  getAllByMedia(mediaId, userId) {
+
     return new Promise((resolve, reject) => {
       db.all(
-        "SELECT * FROM event_media WHERE media_id = ?",
-        [mediaId],
+        "SELECT * FROM event_media WHERE media_id = ? AND user_id = ?",
+        [mediaId, userId],
         (err, events) => {
           if (err) {
             reject(err);
           } else {
-            console.log(events);
             resolve(events);
           }
         }
       );
     });
   }
+  
 
   deleteAllByMedia(mediaId) {
     return new Promise((resolve, reject) => {

@@ -7,7 +7,7 @@ const eventController = new EventController();
 router.post('/', eventController.create);
 router.put('/:id', eventController.update);
 router.get('/', eventController.getAll);
-router.get('/:id', eventController.getById);
+router.get('/:id', eventController.getByUserId);
 router.delete('/:id', eventController.delete);
 
 module.exports = router;

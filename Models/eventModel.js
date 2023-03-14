@@ -10,7 +10,7 @@ class Event {
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY,
             name TEXT,
-            
+            user_id INTEGER,
             category TEXT
         )
         `;
@@ -18,20 +18,20 @@ class Event {
     }
 
     create(event) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                `INSERT INTO events (name, category) VALUES (?, ?)`,
-                [event.name, event.category],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(this.getById(this.lastID));
-                    }
+    return new Promise((resolve, reject) => {
+        db.run(
+            `INSERT INTO events (name, category, user_id) VALUES (?, ?, ?)`,
+            [event.name, event.category, event.userId],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(this.getById(this.lastID));
                 }
-            );
-        });
-    }
+            }
+        );
+    });
+}
 
     update(event) {
         return new Promise((resolve, reject) => {
@@ -68,6 +68,17 @@ class Event {
                     reject(err);
                 } else {
                     resolve(event);
+                }
+            });
+        });
+    }
+    getByUserId(userId) {
+        return new Promise((resolve, reject) => {
+            db.all(`SELECT * FROM events WHERE user_id = ?`, [userId], (err, events) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(events);
                 }
             });
         });

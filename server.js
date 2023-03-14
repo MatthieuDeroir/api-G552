@@ -16,6 +16,7 @@ const SerialPortConnection = require('./SerialPorts/serialPort');
 const sp = new SerialPortConnection();
 
 // Routes
+const authRoutes = require('./Routes/authRoutes');
 const userRoutes = require('./Routes/userRoutes');
 const mediaRoutes = require('./Routes/mediaRoutes');
 const eventmediaRoutes = require('./Routes/eventmediaRoutes');
@@ -24,6 +25,7 @@ const macroRoutes = require('./Routes/macroRoutes');
 const buttonRoutes = require('./Routes/buttonRoutes');
 
 app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 app.use('/medias', mediaRoutes);
 app.use('/events', eventRoutes);
 app.use('/eventmedias', eventmediaRoutes);
