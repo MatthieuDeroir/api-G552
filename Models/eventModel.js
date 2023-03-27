@@ -27,10 +27,11 @@ class Event {
     }
 
     create(event) {
+        console.log(event);
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO events (name, category) VALUES (?, ?)`,
-                [event.name, event.category],
+                `INSERT INTO events (name, user_id) VALUES (?, ?)`,
+                [event.name, event.userId],
                 (err) => {
                     if (err) {
                         reject(err);

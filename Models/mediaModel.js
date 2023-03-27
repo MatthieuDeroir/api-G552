@@ -47,8 +47,9 @@ class Media {
         db.run(createTable);
     }
 
-    create(file) {
+    create(file,username) {
         console.log(file);
+
         const originalFileName = file.originalname;
 
         const fileName = file.filename
@@ -166,6 +167,24 @@ class Media {
             );
         });
     }
+    getByUsername(username) {
+        console.log('tesr');
+        return new Promise((resolve, reject) => {
+          db.all(
+            `SELECT *
+                        FROM media
+                        WHERE username = ?`,
+            [username],
+            (err, media) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(media);
+              }
+            }
+          );
+        });
+      }
 
 }
 
