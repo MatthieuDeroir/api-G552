@@ -4,7 +4,7 @@ const MediaController = require('../Controllers/mediaController');
 const router = express.Router();
 const mediaController = new MediaController();
 
-router.post('/:user', mediaController.create);
+router.post('/:user/:id', mediaController.create);
 router.put('/:id', mediaController.update);
 router.get('/', mediaController.getAll);
 router.get('/:user', mediaController.getByUserId);

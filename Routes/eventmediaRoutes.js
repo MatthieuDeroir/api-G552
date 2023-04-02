@@ -5,6 +5,7 @@ const router = express.Router();
 const eventMediaController = new EventMediaController();
 
 router.post('/', eventMediaController.create);
+router.put('/:id/media-positions', eventMediaController.updateMediaPositions);
 router.delete('/:id', eventMediaController.delete);
 router.get('/media/:mediaId', eventMediaController.getAllByMedia);
 router.get('/event/:eventId', eventMediaController.getAllByEvent);

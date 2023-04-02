@@ -8,7 +8,7 @@ class MediaController {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const username = req.params.user;
-        const userFolder = `../G552_frontend/public/medias/${username}`;
+        const userFolder = `../../G522_Frontend/G552_frontend/public/medias/${username}`;
         cb(null, userFolder);
       },
       filename: (req, file, cb) => {
@@ -24,15 +24,15 @@ class MediaController {
   }
 
   create = (req, res) => {
-    console.log(req.body);
+    console.log(req.params);
     this.upload.single("file")(req, res, (err) => {
       if (err) {
         console.log(err);
         res.status(500).json({ message: err });
       } else {
-        const username = req.params.user;
+        const id = req.params.id;
         this.media
-          .create(req.file, username)
+          .create(req.file, id)
           .then((media) => {
             res.status(201).json(media);
           })
@@ -103,7 +103,7 @@ class MediaController {
       .then((file) => {
         const filePath = file.path;
         console.log(filePath);
-        fs.unlink("../G552_frontend/public/" + filePath, (err) => {
+        fs.unlink("../../G522_Frontend/G552_frontend/public/" + filePath, (err) => {
           if (err) {
             console.log(err);
             return res.status(500).json({ error: err });

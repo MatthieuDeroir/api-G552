@@ -47,25 +47,25 @@ class Media {
         db.run(createTable);
     }
 
-    create(file,username) {
+    create(file, user_id) {
         console.log(file);
-
+    
         const originalFileName = file.originalname;
-
+    
         const fileName = file.filename
         const lastModified = Date.now();
         const size = file.size;
-
+    
         const path = file.path.split("public")[1];
         const format = file.mimetype.split("/")[1];
         const type = file.mimetype.split("/")[0];
-
-
+    
+    
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO media (originalFileName, fileName, lastModified, size, path, format, type)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [originalFileName, fileName, lastModified, size, path, format, type],
+                `INSERT INTO media (originalFileName, fileName, lastModified, size, path, format, type, user_id)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [originalFileName, fileName, lastModified, size, path, format, type, user_id],
                 function (err) {
                     if (err) {
                         reject(err);
@@ -76,6 +76,7 @@ class Media {
             );
         });
     }
+    
 
     update(media) {
         return new Promise((resolve, reject) => {

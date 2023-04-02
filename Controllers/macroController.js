@@ -15,7 +15,6 @@ class MacroController {
     }
 
     update = (req, res) => {
-        console.log(req.body);
         this.macro.update(req.body)
             .then((macro) => {
                 res.status(200).json(macro);
