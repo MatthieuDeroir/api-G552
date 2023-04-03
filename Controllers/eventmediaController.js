@@ -19,7 +19,7 @@ class EventMediaController {
 
   getAllByEvent = (req, res) => {
     this.eventmedia
-      .getAllByMedia(req.params.eventId)
+      .getAllByEvent(req.params.eventId)
       .then((eventmedias) => {
         res.status(200).json(eventmedias);
       })
@@ -40,8 +40,23 @@ class EventMediaController {
   };
 
   delete = (req, res) => {
+    const eventId = req.params.id;
+    const mediaId = req.body.idBdd;
     this.eventmedia
-      .delete(req.params.id)
+      .delete(eventId,mediaId)
+      .then(() => {
+        res.status(204).json();
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err,
+        });
+      });
+  };
+  deleteAllByMedia = (req, res) => {
+    const mediaId = req.params.id;
+    this.eventmedia
+      .deleteAllByMedia(mediaId)
       .then(() => {
         res.status(204).json();
       })
@@ -52,10 +67,14 @@ class EventMediaController {
       });
   };
   updateMediaPositions = (req, res) => {
-    const eventId = req.params.id;
-    const mediaPositions = req.body.mediaPositions;
-    this.eventmedia
-      .updateMediaPositions(eventId, mediaPositions)
+    const mediaPositions = req.body;
+    const promises = mediaPositions.map((positionData) => {
+      const eventId = positionData.eventId;
+      const mediaId = positionData.mediaId;
+      const newPosition = positionData.media_pos_in_event;
+      return this.eventmedia.updateMediaPositions(eventId, mediaId, newPosition);
+    });
+    Promise.all(promises)
       .then(() => {
         res.sendStatus(200);
       })
@@ -64,6 +83,21 @@ class EventMediaController {
         res.sendStatus(500);
       });
   };
+
+  updateMediaDuration = (req, res) => {
+    const { eventId, mediaId, duration } = req.body;
+
+    this.eventmedia
+      .updateDuration(eventId, mediaId, duration)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  };
+
 }
 
 module.exports = EventMediaController;

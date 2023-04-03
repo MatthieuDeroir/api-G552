@@ -13,7 +13,6 @@ const signUp = async (req, res) => {
     role: req.body.role,
   };
 
-  console.log(user);
 
   try {
     verification.checkDuplicateUsername(user.username);
@@ -58,7 +57,6 @@ const signIn = async (req, res) => {
         
       bcrypt.compare(user.password, foundUser.password, function (err, result) {
         if (err) {
-            console.log("test");
           console.log(err);
           return res.status(500).json({ message: err });
         } else {
