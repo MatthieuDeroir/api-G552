@@ -6,13 +6,12 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const signUp = async (req, res) => {
-  const folderName = `../G552_frontend/public/medias/${req.body.username}`;
+  const folderName = `../../Front/G552_frontend/public/medias/${req.body.username}`;
   const user = {
     username: req.body.username,
     password: req.body.password,
     role: req.body.role,
   };
-
 
   try {
     verification.checkDuplicateUsername(user.username);
@@ -22,8 +21,9 @@ const signUp = async (req, res) => {
     const newUser = new User();
     console.log(fs.existsSync(folderName));
     if (!fs.existsSync(folderName)) {
-        console.log("Folder created");
+        console.log("Folder does not exist");
       fs.mkdirSync(folderName);
+      console.log("Folder created");
     } else {
       res.status(418).json({ message: "Folder already exists" });
     }
@@ -43,7 +43,6 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-    
   const user = {
     username: req.body.username,
     password: req.body.password,
@@ -54,7 +53,6 @@ const signIn = async (req, res) => {
     const foundUser = await userController.getByUsername(user.username);
 
     if (foundUser) {
-        
       bcrypt.compare(user.password, foundUser.password, function (err, result) {
         if (err) {
           console.log(err);

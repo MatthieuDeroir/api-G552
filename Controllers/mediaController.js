@@ -8,7 +8,7 @@ class MediaController {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const username = req.params.user;
-        const userFolder = `../G552_FRONTEND/public/medias/${username}`;
+        const userFolder = `../../Front/G552_frontend/public/medias/${username}`;
         cb(null, userFolder);
       },
       filename: (req, file, cb) => {
