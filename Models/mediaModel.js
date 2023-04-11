@@ -150,6 +150,7 @@ class Media {
             );
         });
     }
+    
 
     delete(id) {
         return new Promise((resolve, reject) => {

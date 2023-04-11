@@ -42,7 +42,12 @@ app.listen(config.portAPI, () => {
 
 // Websocket
 const server = require('http').Server(app)
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 const desk = io.of('/ws/desk');
 
 server.listen(config.portWS, () => {
@@ -64,6 +69,5 @@ desk.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`Disconnected from desk socket`);
     });
-
 });
 

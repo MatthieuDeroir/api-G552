@@ -94,19 +94,15 @@ class EventMedia {
     });
   }
 
-  deleteAllByMedia(mediaId) {
+  deleteAllByEventId(eventId) {
     return new Promise((resolve, reject) => {
-      db.run(
-        `DELETE FROM event_media WHERE media_id = ?`,
-      [mediaId],
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
+      db.run("DELETE FROM event_media WHERE event_id = ?", [eventId], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
         }
-      );
+      });
     });
   }
 
