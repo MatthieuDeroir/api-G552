@@ -95,11 +95,12 @@ class MediaController {
   };
 
   delete = (req, res) => {
+
     this.media
       .getById(req.params.id)
       .then((file) => {
         const filePath = file.path;
-        fs.unlink("../../G522_Frontend/G552_frontend/public/" + filePath, (err) => {
+        fs.unlink("../../Front/G552_frontend/public/" + filePath, (err) => {
           if (err) {
             console.log(err);
             return res.status(500).json({ error: err });
