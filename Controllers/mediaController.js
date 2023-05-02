@@ -21,6 +21,13 @@ class MediaController {
     });
     this.upload = multer({ storage: this.storage });
     this.media = new Media();
+    this.create = this.create.bind(this);
+    this.update = this.update.bind(this);
+    this.getAll = this.getAll.bind(this);
+    this.getById = this.getById.bind(this);
+    this.getByUserId = this.getByUserId.bind(this);
+    this.delete = this.delete.bind(this);
+    
   }
 
   create = (req, res) => {

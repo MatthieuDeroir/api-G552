@@ -1,14 +1,13 @@
 const db = require("../Database/db");
-const crypto = require("crypto");
-const fs = require("fs");
+
 
 class Media {
-    constructor() {
-        this.createTable();
-    }
+  constructor() {
+    this.createTable();
+  }
 
-    createTable() {
-        const createTable = `
+  createTable() {
+    const createTable = `
             CREATE TABLE IF NOT EXISTS media
             (
                 id
@@ -44,150 +43,155 @@ class Media {
                         )
             )
         `;
-        db.run(createTable);
-    }
+    db.run(createTable);
+  }
 
-    create(file, user_id) {
-        console.log(file);
-    
-        const originalFileName = file.originalname;
-    
-        const fileName = file.filename
-        const lastModified = Date.now();
-        const size = file.size;
-    
-        const path = file.path.split("public")[1];
-        const format = file.mimetype.split("/")[1];
-        const type = file.mimetype.split("/")[0];
-    
-    
-        return new Promise((resolve, reject) => {
-            db.run(
-                `INSERT INTO media (originalFileName, fileName, lastModified, size, path, format, type, user_id)
+  create(file, user_id) {
+    console.log(file);
+
+    const originalFileName = file.originalname;
+
+    const fileName = file.filename;
+    const lastModified = Date.now();
+    const size = file.size;
+
+    const path = file.path.split("public")[1];
+    const format = file.mimetype.split("/")[1];
+    const type = file.mimetype.split("/")[0];
+
+    return new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO media (originalFileName, fileName, lastModified, size, path, format, type, user_id)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [originalFileName, fileName, lastModified, size, path, format, type, user_id],
-                function (err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(this.lastID);
-                    }
-                }
-            );
-        });
-    }
-    
+        [
+          originalFileName,
+          fileName,
+          lastModified,
+          size,
+          path,
+          format,
+          type,
+          user_id,
+        ],
+        function (err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(this.lastID);
+          }
+        }
+      );
+    });
+  }
 
-    update(media) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                `UPDATE media
+  update(media) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE media
                  SET username = ?,
                      path     = ?,
                      type     = ?,
                      size     = ?
                  WHERE id = ?`,
-                [media.name, media.path, media.type, media.size, media.id],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(this.getById(media.id));
-                    }
-                }
-            );
-        });
-    }
+        [media.name, media.path, media.type, media.size, media.id],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(this.getById(media.id));
+          }
+        }
+      );
+    });
+  }
 
-    getAll() {
-        return new Promise((resolve, reject) => {
-            db.all(
-                `SELECT *
+  getAll() {
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT *
                  FROM media`,
-                (err, media) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(media);
-                    }
-                }
-            );
-        });
-    }
+        (err, media) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(media);
+          }
+        }
+      );
+    });
+  }
 
-    getById(id) {
-        return new Promise((resolve, reject) => {
-            db.get(
-                `SELECT *
+  getById(id) {
+    return new Promise((resolve, reject) => {
+      db.get(
+        `SELECT *
                  FROM media
                  WHERE id = ?`,
-                [id],
-                (err, media) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(media);
-                    }
-                }
-            );
-        });
-    }
+        [id],
+        (err, media) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(media);
+          }
+        }
+      );
+    });
+  }
 
-    getByUserId(id) {
-        return new Promise((resolve, reject) => {
-            db.all(
-                `SELECT *
+  getByUserId(id) {
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT *
                  FROM media
                  WHERE user_id = ?`,
-                [id],
-                (err, media) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(media);
-                    }
-                }
-            );
-        });
-    }
-    
+        [id],
+        (err, media) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(media);
+          }
+        }
+      );
+    });
+  }
 
-    delete(id) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                `DELETE
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE
                  FROM media
                  WHERE id = ?`,
-                [id],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            );
-        });
-    }
-    getByUsername(username) {
-        console.log('tesr');
-        return new Promise((resolve, reject) => {
-          db.all(
-            `SELECT *
+        [id],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+  getByUsername(username) {
+    console.log("tesr");
+    return new Promise((resolve, reject) => {
+      db.all(
+        `SELECT *
                         FROM media
                         WHERE username = ?`,
-            [username],
-            (err, media) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(media);
-              }
-            }
-          );
-        });
-      }
-
+        [username],
+        (err, media) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(media);
+          }
+        }
+      );
+    });
+  }
 }
 
 module.exports = Media;

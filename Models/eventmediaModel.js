@@ -43,6 +43,7 @@ class EventMedia {
   }
 
   create(event) {
+    console.log("event", event);
     return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO event_media (event_id, media_id, media_dur_in_event, media_pos_in_event)

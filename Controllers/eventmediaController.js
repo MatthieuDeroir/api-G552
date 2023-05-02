@@ -1,21 +1,68 @@
 const EventMedia = require("../Models/eventmediaModel");
+const Media = require("../Models/mediaModel");
+const ffmpeg = require("fluent-ffmpeg");
 
 class EventMediaController {
   constructor() {
     this.eventmedia = new EventMedia();
+    this.media = new Media();
   }
 
   create = (req, res) => {
-    this.eventmedia
-      .create(req.body)
-      .then((eventmedia) => {
-        res.status(201).json(eventmedia);
+    console.log("create", req.body);
+    const { mediaId, eventId, duration, userId, media_pos_in_event } = req.body;
+  
+    // Vérifier si la mediaId correspond à une vidéo
+    this.media.getById(mediaId)
+      .then((media) => {
+        console.log("media", media);
+        if (media && media.type === "video") {
+          // Obtenir la durée de la vidéo en utilisant fluent-ffmpeg
+          ffmpeg.ffprobe('../../Front/G552_frontend/public'+media.path, (err, metadata) => {
+            if (err) {
+              console.log(err);
+              res.status(500).json({ message: err });
+            } else {
+              console.log("metadata", metadata);
+              const videoDuration = metadata.format.duration; // Durée de la vidéo en secondes
+              console.log("videoDuration", videoDuration);
+              // Ajouter la durée de la vidéo à l'événement
+              this.eventmedia
+                .create({
+                  mediaId,
+                  eventId,
+                  duration: videoDuration,
+                  userId,
+                  media_pos_in_event,
+                })
+                .then((eventmedia) => {
+                  res.status(201).json(eventmedia);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  res.status(500).json({ message: err });
+                });
+            }
+          });
+        } else {
+          // Créer l'événement sans la durée de la vidéo
+          this.eventmedia
+            .create({ mediaId, eventId, userId, media_pos_in_event, duration })
+            .then((eventmedia) => {
+              res.status(201).json(eventmedia);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({ message: err });
+            });
+        }
       })
       .catch((err) => {
         console.log(err);
         res.status(500).json({ message: err });
       });
   };
+  
 
   getAllByEvent = (req, res) => {
     this.eventmedia
