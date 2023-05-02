@@ -22,6 +22,8 @@ const eventmediaRoutes = require("./Routes/eventmediaRoutes");
 const eventRoutes = require("./Routes/eventRoutes");
 const macroRoutes = require("./Routes/macroRoutes");
 const buttonRoutes = require("./Routes/buttonRoutes");
+const paramRoutes = require("./Routes/paramRoutes");
+const veilleRoutes = require("./Routes/veilleRoutes");
 
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
@@ -30,6 +32,8 @@ app.use("/events", eventRoutes);
 app.use("/eventmedias", eventmediaRoutes);
 app.use("/macros", macroRoutes);
 app.use("/buttons", buttonRoutes);
+app.use("/params", paramRoutes);
+app.use("/veilles", veilleRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -52,7 +56,24 @@ const desk = io.of("/ws/desk");
 server.listen(config.portWS, () => {
   console.log(`WS Server started on ${config.ip}:${config.portWS}`);
 });
+const { exec } = require("child_process");
 
+// Sur Windows :
+exec(
+  "wmic logicaldisk get Size, FreeSpace /format:value",
+  function (err, stdout, stderr) {
+    if (err) {
+      console.error(err);
+    } else {
+      const lines = stdout.split("\n");
+      const sizeInBytes = lines;
+      const availableInBytes = parseInt(lines[2].split("=")[1]);
+      const sizeInGo = sizeInBytes / 1e9;
+      const availableInGo = availableInBytes / 1e9;
+      console.log(`Size: ${sizeInGo} Go, Available: ${availableInGo} Go`);
+    }
+  }
+);
 desk.on("connection", (socket) => {
   socket.on("connect", (data) => {
     console.log(`Connected to desk socket`);

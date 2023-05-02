@@ -1,6 +1,8 @@
 const db = require("../Database/db");
 const bcrypt = require("bcrypt");
 const Macro = require('./macroModel');
+const Param = require('./paramModel');
+const Veille = require('./veilleModel');
 
 class User {
   constructor() {
@@ -48,7 +50,18 @@ class User {
         macroPromises.push(new Macro().create(i, null, userId));
       }
       await Promise.all(macroPromises);
-  
+
+      (async () => {
+        const veille = new Veille();
+        const veilleId = await veille.create({ enable: false, startTime: '1', endTime: '24' });
+
+        const param = new Param();
+        await param.create({ userId: userId, veilleId: veilleId, eventAuto: true });
+      })();
+
+    
+
+
       return 
     } catch (err) {
       throw err;
