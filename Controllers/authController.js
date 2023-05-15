@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const signUp = async (req, res) => {
+  console.log(req.body);
   const folderName = `../../Front/G552_frontend/public/medias/${req.body.username}`;
   const user = {
     username: req.body.username,
@@ -14,12 +15,14 @@ const signUp = async (req, res) => {
   };
 
   try {
+   
     verification.checkDuplicateUsername(user.username);
     verification.checkPasswordRequirements(user.password);
     verification.verifyRoles(user.role);
 
+    console.log("signUp");
     const newUser = new User();
-    console.log(fs.existsSync(folderName));
+    /* console.log(fs.existsSync(folderName));
     if (!fs.existsSync(folderName)) {
         console.log("Folder does not exist");
       fs.mkdirSync(folderName);
@@ -27,7 +30,7 @@ const signUp = async (req, res) => {
     } else {
       res.status(418).json({ message: "Folder already exists" });
     }
-
+ */
     const createdUser = await newUser
       .create(user)
       .then((user) => {
@@ -60,8 +63,9 @@ const signIn = async (req, res) => {
         } else {
           if (result) {
             const secret = config.secret;
+            console.log(secret);
             const accessToken = jwt.sign({ id: foundUser.id }, secret, {
-              expiresIn: 8 * 60 * 60, // expires in 8 hours (8 * 60 * 60 s)
+              expiresIn: 30, // expires in 8 hours (8 * 60 * 60 s)
             });
             return res.status(200).send({
               accessToken: accessToken,
@@ -84,6 +88,7 @@ const signIn = async (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
+
 
 const authentification = {
   signUp,

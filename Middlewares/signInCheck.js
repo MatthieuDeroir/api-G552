@@ -1,19 +1,39 @@
-// TODO : Check jwt token and return user info
-
-// TODO : Check if user is admin
-
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 const checkToken = (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    if (!token) {
-        return res.status(403).send({ auth: false, message: 'No token provided.' });
+  const secret = config.secret;
+  const authHeader = req.headers['authorization'];
+
+  if (!authHeader) {
+    return res.status(403).send({ auth: false, message: 'No token provided.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = jwt.decode(token);
+    const expirationTime = Math.floor(Date.now() / 1000) + (2 * 60 * 60); // Ajouter 2 heures
+
+    if (expirationTime > decoded.exp) {
+      // Mettre à jour la date d'expiration du token
+      decoded.exp = expirationTime;
+      console.log(expirationTime);
+
+      // Signer le token avec la nouvelle date d'expiration
+      const updatedToken = jwt.sign(decoded, secret);
+
+      // Mettre à jour l'en-tête "Authorization" avec le token mis à jour
+      res.setHeader('Authorization', `Bearer ${updatedToken}`);
     }
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-        }
-        req.userId = decoded.id;
-        next();
-    });
-}
+
+    req.userId = decoded.id;
+
+    next();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+  }
+};
+
+module.exports = checkToken;

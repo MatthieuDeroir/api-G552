@@ -5,8 +5,10 @@ const app = express();
 const config = require("./config");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const checkToken = require("./Middlewares/signInCheck");
 
 // Middleware
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,8 +17,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
 const sp = new SerialPortConnection();
 
+// Routes
 const authRoutes = require("./Routes/authRoutes");
 const userRoutes = require("./Routes/userRoutes");
+
+app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
+
+app.use(checkToken);
+
 const mediaRoutes = require("./Routes/mediaRoutes");
 const eventmediaRoutes = require("./Routes/eventmediaRoutes");
 const eventRoutes = require("./Routes/eventRoutes");
@@ -25,8 +34,6 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 
-app.use("/users", userRoutes);
-app.use("/auth", authRoutes);
 app.use("/medias", mediaRoutes);
 app.use("/events", eventRoutes);
 app.use("/eventmedias", eventmediaRoutes);
@@ -35,6 +42,7 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 
+// API
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });

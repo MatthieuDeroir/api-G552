@@ -22,6 +22,7 @@ class User {
   }
 
   async create(user) {
+    console.log('user', user);
     try {
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
