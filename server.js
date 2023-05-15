@@ -19,13 +19,12 @@ const sp = new SerialPortConnection();
 
 // Routes
 const authRoutes = require("./Routes/authRoutes");
-const userRoutes = require("./Routes/userRoutes");
 
-app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 
 app.use(checkToken);
-
+const userRoutes = require("./Routes/userRoutes");
+const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
 const eventmediaRoutes = require("./Routes/eventmediaRoutes");
 const eventRoutes = require("./Routes/eventRoutes");
@@ -34,6 +33,8 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 
+app.use("/scores", scoringRoutes);
+app.use("/users", userRoutes);
 app.use("/medias", mediaRoutes);
 app.use("/events", eventRoutes);
 app.use("/eventmedias", eventmediaRoutes);
@@ -59,8 +60,8 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
-const desk = io.of("/ws/desk");
-
+ const desk = io.of("/ws/desk");
+/*
 server.listen(config.portWS, () => {
   console.log(`WS Server started on ${config.ip}:${config.portWS}`);
 });
@@ -72,6 +73,7 @@ exec(
   function (err, stdout, stderr) {
     if (err) {
       console.error(err);
+      
     } else {
       const lines = stdout.split("\n");
       const sizeInBytes = lines;
@@ -81,7 +83,7 @@ exec(
       console.log(`Size: ${sizeInGo} Go, Available: ${availableInGo} Go`);
     }
   }
-);
+); */
 desk.on("connection", (socket) => {
   socket.on("connect", (data) => {
     console.log(`Connected to desk socket`);

@@ -53,19 +53,26 @@ const signIn = async (req, res) => {
 
   try {
     const userController = new User();
+    console.log(user.username);
     const foundUser = await userController.getByUsername(user.username);
-
+    console.log("foundUser", foundUser);
     if (foundUser) {
-      bcrypt.compare(user.password, foundUser.password, function (err, result) {
+      bcrypt.compare(user.password, foundUser.password, async function (err, result) {
         if (err) {
           console.log(err);
           return res.status(500).json({ message: err });
         } else {
           if (result) {
+            if (foundUser.firstLogin === 1) {
+              console.log("First login");
+              // Mettre à jour firstLogin à 0
+              await userController.updateFirstLogin(foundUser.id);
+            }
             const secret = config.secret;
             console.log(secret);
+            
             const accessToken = jwt.sign({ id: foundUser.id }, secret, {
-              expiresIn: 30, // expires in 8 hours (8 * 60 * 60 s)
+              expiresIn: 2 * 60 * 60, // expires in 2 hours (2 * 60 * 60)
             });
             return res.status(200).send({
               accessToken: accessToken,

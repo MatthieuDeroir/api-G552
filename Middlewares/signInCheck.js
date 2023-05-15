@@ -13,21 +13,28 @@ const checkToken = (req, res, next) => {
 
   try {
     const decoded = jwt.decode(token);
-    const expirationTime = Math.floor(Date.now() / 1000) + (2 * 60 * 60); // Ajouter 2 heures
 
-    if (expirationTime > decoded.exp) {
-      // Mettre à jour la date d'expiration du token
-      decoded.exp = expirationTime;
-      console.log(expirationTime);
-
-      // Signer le token avec la nouvelle date d'expiration
-      const updatedToken = jwt.sign(decoded, secret);
-
-      // Mettre à jour l'en-tête "Authorization" avec le token mis à jour
-      res.setHeader('Authorization', `Bearer ${updatedToken}`);
+    if (Date.now() > decoded.exp * 1000) {
+      return res.status(401).send({ auth: false, message: 'Token expired.' });
     }
 
-    req.userId = decoded.id;
+    // Vérifier si la date d'expiration est proche (par exemple, dans les 5 minutes)
+    const expirationTime = decoded.exp * 1000;
+    const currentTime = Date.now();
+    const timeDifference = expirationTime - currentTime;
+    const closeExpirationThreshold = 5 * 60 * 1000; // 5 minutes en millisecondes
+
+    if (timeDifference < closeExpirationThreshold) {
+      // Le token est proche de l'expiration, ne pas ajouter les 2 heures supplémentaires
+      req.userId = decoded.id;
+    } else {
+      // Le token est valide, ajouter les 2 heures supplémentaires
+      const updatedExpirationTime = Math.floor(Date.now() / 1000) + (2 * 60 * 60);
+      decoded.exp = updatedExpirationTime;
+      const updatedToken = jwt.sign(decoded, secret);
+      res.setHeader('Authorization', `Bearer ${updatedToken}`);
+      req.userId = decoded.id;
+    }
 
     next();
   } catch (err) {

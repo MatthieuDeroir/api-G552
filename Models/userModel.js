@@ -1,8 +1,9 @@
 const db = require("../Database/db");
 const bcrypt = require("bcrypt");
-const Macro = require('./macroModel');
-const Param = require('./paramModel');
-const Veille = require('./veilleModel');
+const Macro = require("./macroModel");
+const Param = require("./paramModel");
+const Veille = require("./veilleModel");
+const Scoring = require("./scoringModel");
 
 class User {
   constructor() {
@@ -15,25 +16,25 @@ class User {
             id INTEGER PRIMARY KEY,
             username TEXT,
             password TEXT,
-            role TEXT
+            role TEXT,
+            firstLogin INTEGER
         )
         `;
     db.run(createTable);
   }
 
   async create(user) {
-    console.log('user', user);
+    console.log("user", user);
     try {
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
-  
+
       await new Promise((resolve, reject) => {
         db.run(
-          `INSERT INTO users (username, password, role) VALUES (?, ?, ?)`,
-          [user.username, hash, user.role],
+          `INSERT INTO users (username, password, role, firstLogin) VALUES (?, ?, ?, ?)`,
+          [user.username, hash, user.role, 1],
           function (err) {
             if (err) {
-              console.log(err);
               reject(err);
             } else {
               userId = this.lastID;
@@ -42,9 +43,9 @@ class User {
           }
         );
       });
-  
-      console.log('newUser', userId);
-  
+
+      console.log("newUser", userId);
+
       // Create 10 macros for the new user
       const macroPromises = [];
       for (let i = 1; i <= 10; i++) {
@@ -54,21 +55,71 @@ class User {
 
       (async () => {
         const veille = new Veille();
-        const veilleId = await veille.create({ enable: false, startTime: '1', endTime: '24' });
+        const veilleId = await veille.create({
+          enable: false,
+          startTime: "1",
+          endTime: "24",
+        });
 
         const param = new Param();
-        await param.create({ userId: userId, veilleId: veilleId, eventAuto: true });
+        await param.create({
+          userId: userId,
+          veilleId: veilleId,
+          eventAuto: true,
+        });
+        const scoring = new Scoring();
+        await scoring.create({
+          team1: 0,
+          team2: 0,
+          userId: userId,
+        });
       })();
 
-    
-
-
-      return 
+      return;
     } catch (err) {
       throw err;
     }
   }
-  
+
+  changePassword(user, id) {
+    console.log("changePassword", user, id);
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(user.newPassword, 10, (err, hash) => {
+        if (err) {
+          reject(err);
+        } else {
+          db.run(
+            `UPDATE users SET password = ? WHERE id = ?`,
+            [hash, id],
+            (err) => {
+              if (err) {
+                console.log(err);
+                reject(err);
+              } else {
+                resolve(this.getById(user.id));
+              }
+            }
+          );
+        }
+      });
+    });
+  }
+
+  updateFirstLogin(userId) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE users SET firstLogin = 0 WHERE id = ?`,
+        [userId],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
 
   update(user) {
     return new Promise((resolve, reject) => {
@@ -99,11 +150,15 @@ class User {
         `SELECT * FROM users WHERE username = ?`,
         [username],
         (err, user) => {
+          console.log(err, user);
           if (err) {
-            console.log(`Error looking up user with username: ${username}`, err);
+            console.log(
+              `Error looking up user with username: ${username}`,
+              err
+            );
             reject(err);
           } else {
-              console.log(`Found user with username: ${username}`, user);
+            console.log(`Found user with username: ${username}`, user);
             resolve(user);
           }
         }
