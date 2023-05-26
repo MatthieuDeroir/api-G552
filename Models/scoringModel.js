@@ -12,8 +12,8 @@ class Scoring {
         id INTEGER PRIMARY KEY,
         score_team1 INTEGER,
         score_team2 INTEGER,
-        user_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        user_id INTEGER, 
+        FOREIGN KEY(user_id) REFERENCES users(id)
       )
     `;
     db.run(createTable);

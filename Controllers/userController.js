@@ -1,5 +1,5 @@
 const User = require("../Models/userModel");
-
+const verification = require("../Middlewares/signUpCheck");
 class UserController {
   constructor() {
     this.user = new User();
@@ -26,11 +26,20 @@ class UserController {
       });
   };
 
+
+  
+
+  
   changePassword = (req, res) => {
     console.log("changePassword");
     console.log(req.params.id);
+    const newPassword = req.body.newPassword;
+    if (!this.verification.checkPasswordRequirements(newPassword)) {
+      res.status(400).json({ message: "Invalid password" });
+      return;
+    }
     this.user
-      .changePassword(req.body,req.params.id)
+      .changePassword(newPassword, req.params.id)
       .then((user) => {
         res.status(200).json(user);
       })

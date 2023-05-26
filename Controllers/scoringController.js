@@ -20,7 +20,7 @@ class ScoringController {
   update(req, res) {
     const id = req.params.id;
     console.log();
-    const {team1, team2 } = req.body;
+    const { team1, team2 } = req.body;
     this.scoring
       .update({ id, team1, team2 })
       .then((scoring) => {
@@ -43,6 +43,7 @@ class ScoringController {
   }
 
   getById(req, res) {
+    console.log(req.params.id);
     const id = req.params.id;
     this.scoring
       .getById(id)
@@ -59,6 +60,7 @@ class ScoringController {
   }
 
   getByUserId(req, res) {
+    console.log(req.params.userId);
     const userId = req.params.userId;
     this.scoring
       .getByUserId(userId)
