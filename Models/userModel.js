@@ -81,8 +81,8 @@ class User {
     }
   }
 
-  changePassword(user, id) {
-    console.log("changePassword", user, id);
+  changePassword(user) {
+    console.log("changePassword", user);
     return new Promise((resolve, reject) => {
       bcrypt.hash(user.newPassword, 10, (err, hash) => {
         if (err) {
@@ -90,7 +90,7 @@ class User {
         } else {
           db.run(
             `UPDATE users SET password = ? WHERE id = ?`,
-            [hash, id],
+            [hash, user.id],
             (err) => {
               if (err) {
                 console.log(err);

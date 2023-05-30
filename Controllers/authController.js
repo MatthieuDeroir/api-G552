@@ -24,14 +24,16 @@ const signUp = async (req, res) => {
         .json({ message: "Le nom d'utilisateur est déjà utilisé" });
     }
 
-    const passwordRequirements = await verification.checkPasswordRequirements(user.password);
+    const passwordRequirements = await verification.checkPasswordRequirements(
+      user.password
+    );
     console.log(passwordRequirements);
     if (!passwordRequirements.result) {
       console.log("Les exigences du mot de passe ne sont pas satisfaites");
       return res.status(400).json({ message: passwordRequirements.message });
     }
 
-   /*  const rolesVerified = await verification.verifyRoles(user.role);
+    /*  const rolesVerified = await verification.verifyRoles(user.role);
     if (!rolesVerified.result) {
       console.log("Les rôles ne sont pas valides");
       return res.status(400).json({ message: rolesVerified.message });
@@ -115,10 +117,42 @@ const signIn = async (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
+const modifyPassword = async (req, res) => {
+  const newUser = new User();
+  const user = {
+    id: req.params.id,
+    newPassword: req.body.password,
+  };
+  console.log(user);
+  try {
+    const passwordRequirements = await verification.checkPasswordRequirements(
+      user.newPassword
+    );
+    console.log(passwordRequirements);
+    if (!passwordRequirements.result) {
+      console.log("Les exigences du mot de passe ne sont pas satisfaites");
+      return res.status(400).json({ message: passwordRequirements.message });
+    }
+
+    const modifyUserPassword = await newUser
+      .changePassword(user)
+      .then((user) => {
+        res.status(201).json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({ message: err });
+      });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: err.message });
+  }
+};
 
 const authentification = {
   signUp,
   signIn,
+  modifyPassword,
 };
 
 module.exports = authentification;

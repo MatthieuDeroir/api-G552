@@ -1,4 +1,3 @@
-// Basics
 const express = require("express");
 const db = require("./Database/db");
 const app = express();
@@ -7,19 +6,14 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const checkToken = require("./Middlewares/signInCheck");
 
-// Middleware
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serial port
 const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
 const sp = new SerialPortConnection();
 
-// Routes
 const authRoutes = require("./Routes/authRoutes");
-
 app.use("/auth", authRoutes);
 
 app.use(checkToken);
@@ -32,6 +26,7 @@ const macroRoutes = require("./Routes/macroRoutes");
 const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
+const { emit } = require("process");
 
 app.use("/scores", scoringRoutes);
 app.use("/users", userRoutes);
@@ -43,7 +38,6 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 
-// API
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -52,7 +46,6 @@ app.listen(config.portAPI, () => {
   console.log(`API Server started on ${config.ip}:${config.portAPI}`);
 });
 
-// Websocket
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   cors: {
@@ -60,37 +53,15 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
- const desk = io.of("/ws/desk");
-/*
-server.listen(config.portWS, () => {
-  console.log(`WS Server started on ${config.ip}:${config.portWS}`);
-});
-const { exec } = require("child_process");
+let timerInterval;
+let timerValue = 0;
+const desk = io.of("/ws/desk");
 
-// Sur Windows :
-exec(
-  "wmic logicaldisk get Size, FreeSpace /format:value",
-  function (err, stdout, stderr) {
-    if (err) {
-      console.error(err);
-      
-    } else {
-      const lines = stdout.split("\n");
-      const sizeInBytes = lines;
-      const availableInBytes = parseInt(lines[2].split("=")[1]);
-      const sizeInGo = sizeInBytes / 1e9;
-      const availableInGo = availableInBytes / 1e9;
-      console.log(`Size: ${sizeInGo} Go, Available: ${availableInGo} Go`);
-    }
-  }
-); */
 desk.on("connection", (socket) => {
-  socket.on("connect", (data) => {
-    console.log(`Connected to desk socket`);
-  });
-  socket.on("frame", (data) => {
-    console.log(`Received frame from desk`);
-    console.log(data);
+  
+  socket.on("connect", () => {
+    emit("connect");
+    console.log("Connected to desk socket");
   });
   socket.on("message", (data) => {
     console.log(`Received message from desk`);
@@ -103,7 +74,58 @@ desk.on("connection", (socket) => {
         data
     );
   });
-  socket.on("disconnect", () => {
-    console.log(`Disconnected from desk socket`);
+  socket.on("getTimerValue", () => {
+    socket.emit("timerValue", timerValue);
   });
+  
+  
+  socket.on("timerUpdate", (data) => {
+    timerValue = data;
+    console.log(`Le client a mis à jour le minuteur à ${timerValue}`);
+  });
+  socket.on("startTimer", () => {
+    console.log("Le client a démarré le minuteur");
+
+    // Vérifier si le minuteur est déjà en cours d'exécution
+    if (!timerInterval && timerValue > 0) {
+      timerInterval = setInterval(() => {
+        console.log(timerValue);
+        timerValue -= 1;
+
+        // Vérifier si le minuteur a atteint zéro
+        if (timerValue === 0) {
+          console.log("Le minuteur est arrivé à zéro");
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+
+        // Émettre l'événement "timerUpdate" avec la valeur du minuteur aux clients connectés
+        desk.emit("timerUpdate", timerValue);
+      }, 1000);
+    }
+  });
+
+  // Écoute de l'événement "stopTimer" émis par le client
+  socket.on("stopTimer", () => {
+    console.log("Le client a arrêté le minuteur");
+
+    // Arrêter le minuteur et réinitialiser ses valeurs
+    clearInterval(timerInterval);
+    timerInterval = null;
+
+    // Émettre l'événement "timerUpdate" avec la valeur réinitialisée aux clients connectés
+    io.emit("timerUpdate", timerValue);
+  });
+
+  socket.on("startBuzzer", () => {
+    console.log("Le client fait sonner le buzzer");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Un client s'est déconnecté");
+  });
+});
+
+server.listen(config.portWS, () => {
+  console.log(`WS Server started on ${config.ip}:${config.portWS}`);
 });

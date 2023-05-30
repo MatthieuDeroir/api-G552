@@ -18,10 +18,10 @@ class ScoringController {
   }
 
   update(req, res) {
+    const scoring = new Scoring();
     const id = req.params.id;
-    console.log();
     const { team1, team2 } = req.body;
-    this.scoring
+   scoring
       .update({ id, team1, team2 })
       .then((scoring) => {
         res.status(200).json(scoring);

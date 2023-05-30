@@ -36,7 +36,7 @@ class Scoring {
   }
 
   update(score) {
-    console.log("score", score.id, score.team1, score.team2);
+    console.log("score", score);
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE scoring SET score_team1 = ?, score_team2 = ? WHERE user_id = ?`,

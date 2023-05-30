@@ -31,15 +31,8 @@ class UserController {
 
   
   changePassword = (req, res) => {
-    console.log("changePassword");
-    console.log(req.params.id);
-    const newPassword = req.body.newPassword;
-    if (!this.verification.checkPasswordRequirements(newPassword)) {
-      res.status(400).json({ message: "Invalid password" });
-      return;
-    }
     this.user
-      .changePassword(newPassword, req.params.id)
+      .changePassword(req.body,req.params.id)
       .then((user) => {
         res.status(200).json(user);
       })
@@ -47,6 +40,7 @@ class UserController {
         res.status(500).json({ message: err });
       });
   };
+
 
   getByUsername = (req, res) => {
     this.user
