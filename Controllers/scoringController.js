@@ -6,9 +6,9 @@ class ScoringController {
   }
 
   create(req, res) {
-    const { team1, team2, userId } = req.body;
+    const { team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 } = req.body;
     this.scoring
-      .create({ team1, team2, userId })
+      .create({ team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 })
       .then((scoring) => {
         res.status(201).json(scoring);
       })
@@ -20,9 +20,10 @@ class ScoringController {
   update(req, res) {
     const scoring = new Scoring();
     const id = req.params.id;
-    const { team1, team2 } = req.body;
-   scoring
-      .update({ id, team1, team2 })
+    const { team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 } = req.body;
+    console.log(req.body);
+    scoring
+      .update({ id, team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 })
       .then((scoring) => {
         res.status(200).json(scoring);
       })
@@ -32,7 +33,8 @@ class ScoringController {
   }
 
   getAll(req, res) {
-    this.scoring
+    const scoring = new Scoring();
+    scoring
       .getAll()
       .then((scorings) => {
         res.status(200).json(scorings);
@@ -43,7 +45,6 @@ class ScoringController {
   }
 
   getById(req, res) {
-    console.log(req.params.id);
     const id = req.params.id;
     this.scoring
       .getById(id)
@@ -60,7 +61,6 @@ class ScoringController {
   }
 
   getByUserId(req, res) {
-    console.log(req.params.userId);
     const userId = req.params.userId;
     this.scoring
       .getByUserId(userId)

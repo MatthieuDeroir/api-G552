@@ -67,12 +67,6 @@ class User {
           veilleId: veilleId,
           eventAuto: true,
         });
-        const scoring = new Scoring();
-        await scoring.create({
-          team1: 0,
-          team2: 0,
-          userId: userId,
-        });
       })();
 
       return;
@@ -106,6 +100,7 @@ class User {
   }
 
   updateFirstLogin(userId) {
+    console.log("updateFirstLogin", userId);
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE users SET firstLogin = 0 WHERE id = ?`,

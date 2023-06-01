@@ -84,11 +84,11 @@ const signIn = async (req, res) => {
             return res.status(500).json({ message: err });
           } else {
             if (result) {
-              if (foundUser.firstLogin === 1) {
+              /* if (foundUser.firstLogin === 1) {
                 console.log("First login");
-                // Mettre à jour firstLogin à 0
+                
                 await userController.updateFirstLogin(foundUser.id);
-              }
+              } */
               const secret = config.secret;
               console.log(secret);
 
@@ -121,7 +121,7 @@ const modifyPassword = async (req, res) => {
   const newUser = new User();
   const user = {
     id: req.params.id,
-    newPassword: req.body.password,
+    newPassword: req.body.newPassword,
   };
   console.log(user);
   try {
@@ -135,14 +135,17 @@ const modifyPassword = async (req, res) => {
     }
 
     const modifyUserPassword = await newUser
-      .changePassword(user)
-      .then((user) => {
-        res.status(201).json(user);
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).json({ message: err });
-      });
+  .changePassword(user)
+  .then((user) => {
+    return newUser.updateFirstLogin(user.id);
+  })
+  .then(() => {
+    res.status(201).json(user);
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.status(500).json({ message: err });
+  });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
