@@ -47,6 +47,6 @@ const signUpMultipleUsers = async () => {
 signUpMultipleUsers();
 
 // Point d'écoute pour l'application Express
-app.listen(4000, () => {
+app.listen(40000, () => {
   console.log('Serveur en cours d\'exécution sur le port 4000');
 });

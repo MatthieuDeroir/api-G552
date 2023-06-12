@@ -27,15 +27,12 @@ class MediaController {
     this.getById = this.getById.bind(this);
     this.getByUserId = this.getByUserId.bind(this);
     this.delete = this.delete.bind(this);
-    
   }
 
   create = (req, res) => {
-    this.upload.single("file")(req, res, (err) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ message: err });
-      } else {
+    this.upload
+      .single("file")(req, res)
+      .then(() => {
         const id = req.params.id;
         this.media
           .create(req.file, id)
@@ -44,9 +41,15 @@ class MediaController {
           })
           .catch((err) => {
             res.status(500).json({ message: err });
+          })
+          .then(() => {
+            // Code à exécuter après la création de l'objet media
           });
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ message: err });
+      });
   };
 
   update = (req, res) => {
@@ -102,7 +105,6 @@ class MediaController {
   };
 
   delete = (req, res) => {
-
     this.media
       .getById(req.params.id)
       .then((file) => {

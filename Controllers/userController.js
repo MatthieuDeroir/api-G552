@@ -1,5 +1,5 @@
 const User = require("../Models/userModel");
-const verification = require("../Middlewares/signUpCheck");
+/* const verification = require("../Middlewares/signUpCheck"); */
 class UserController {
   constructor() {
     this.user = new User();

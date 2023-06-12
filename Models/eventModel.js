@@ -27,7 +27,6 @@ class Event {
   }
 
   create(event) {
-    console.log(event);
     return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO events (name, user_id) VALUES (?, ?)`,
