@@ -8,7 +8,7 @@ class MediaController {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const username = req.params.user;
-        const userFolder = `../../Front/G552_frontend/public/medias/${username}`;
+        const userFolder = `../../uploads`;
         cb(null, userFolder);
       },
       filename: (req, file, cb) => {
@@ -28,28 +28,36 @@ class MediaController {
     this.getByUserId = this.getByUserId.bind(this);
     this.delete = this.delete.bind(this);
   }
-
+  
   create = (req, res) => {
-    this.upload
-      .single("file")(req, res)
-      .then(() => {
+    const username = req.params.user;
+    this.upload.single("file")(req, res, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ message: err });
+      } else {
+        res.status(201).json({ message: "File uploaded successfully" });
         const id = req.params.id;
+        console.log(req.file.path);
         this.media
-          .create(req.file, id)
+          .create(req.file, id,username)
           .then((media) => {
-            res.status(201).json(media);
+            console.log('media', req.file);
+            fs.rename(req.file.path, '../../test/G552_frontend/public/medias/'+ username +'/' + req.file.filename, (erreur) => {
+              if (erreur) {
+                console.error('Erreur lors du déplacement du fichier :', erreur);
+              } else {
+                console.log('Fichier déplacé avec succès');
+              }
+            });
           })
           .catch((err) => {
             res.status(500).json({ message: err });
-          })
-          .then(() => {
-            // Code à exécuter après la création de l'objet media
           });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({ message: err });
-      });
+      
+        }
+    });
+
   };
 
   update = (req, res) => {
@@ -109,10 +117,22 @@ class MediaController {
       .getById(req.params.id)
       .then((file) => {
         const filePath = file.path;
-        fs.unlink("../../Front/G552_frontend/public/" + filePath, (err) => {
+        fs.unlink("../../test/G552_frontend/public/" + filePath, (err) => {
           if (err) {
-            console.log(err);
-            return res.status(500).json({ error: err });
+            {
+              this.media
+                .delete(req.params.id)
+                .then(() => {
+                  console.log("delete OK");
+                  return res
+                    .status(204)
+                    .json({ message: "File deleted successfully" });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return res.status(500).json({ message: err });
+                });
+            }
           } else {
             this.media
               .delete(req.params.id)

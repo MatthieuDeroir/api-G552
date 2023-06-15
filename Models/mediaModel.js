@@ -46,7 +46,7 @@ class Media {
     db.run(createTable);
   }
 
-  create(file, user_id) {
+  create(file, user_id,username) {
     console.log(file);
 
     const originalFileName = file.originalname;
@@ -55,7 +55,7 @@ class Media {
     const lastModified = Date.now();
     const size = file.size;
 
-    const path = file.path.split("public")[1];
+    const path = "/medias/" + username +"/"+ fileName;
     const format = file.mimetype.split("/")[1];
     const type = file.mimetype.split("/")[0];
 
