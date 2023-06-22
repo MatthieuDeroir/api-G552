@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
+const SerialPortConnection = require("./Data/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 
 const authRoutes = require("./Routes/authRoutes");
@@ -57,7 +57,6 @@ server.listen(config.portWS, () => {
 });
 let timerInterval;
 let timerValue = 0;
-const desk = io.of("/ws/desk");
 
 desk.on("connection", (socket) => {
   
@@ -128,6 +127,3 @@ desk.on("connection", (socket) => {
   });
 });
 
-server.listen(config.portWS, () => {
-  console.log(`WS Server started on ${config.ip}:${config.portWS}`);
-});
