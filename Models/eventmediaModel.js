@@ -3,6 +3,7 @@ const db = require('../Database/db');
 class EventMedia {
     constructor() {
         this.createTable();
+        this.createTrigger();
     }
 
     createTable() {
@@ -42,12 +43,28 @@ class EventMedia {
         db.run(createTable);
     }
 
-    create(eventId, mediaId, ) {
+    createTrigger() {
+        const createTrigger = `
+            CREATE TRIGGER IF NOT EXISTS event_media_same_user
+            BEFORE INSERT ON event_media
+            BEGIN
+              SELECT 
+                CASE 
+                  WHEN (SELECT User_id FROM Media WHERE id = NEW.media_id) = (SELECT User_id FROM Event WHERE id = NEW.event_id) 
+                  THEN NULL
+                  ELSE RAISE(ABORT, 'Media and Event must have the same User id')
+                END;
+            END;
+        `;
+        db.run(createTrigger);
+    }
+
+    create(eventId, mediaId, mediaDurInEvent, mediaPosInEvent) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO event_media (event_id, media_id)
-                 VALUES (?, ?, ?)`,
-                [eventId, mediaId],
+                `INSERT INTO event_media (event_id, media_id, media_dur_in_event, media_pos_in_event)
+                 VALUES (?, ?, ?, ?)`,
+                [eventId, mediaId, mediaDurInEvent, mediaPosInEvent],
                 (err) => {
                     if (err) {
                         reject(err);

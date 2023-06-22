@@ -9,6 +9,6 @@ router.put('/:id', mediaController.update);
 router.get('/', mediaController.getAll);
 router.get('/:id', mediaController.getById);
 router.delete('/:id', mediaController.delete);
-// router.get('/user/:id', mediaController.getByUser);
+router.get('/user/:id', mediaController.getByUserId);
 
 module.exports = router;

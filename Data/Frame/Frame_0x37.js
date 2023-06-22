@@ -46,7 +46,6 @@ class Frame_0x37 {
         GSI.Display_LED_Mode = sDisplay.LED;
 
         return GSI;
-
     }
 }
 
