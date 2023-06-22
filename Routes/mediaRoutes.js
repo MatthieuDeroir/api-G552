@@ -9,5 +9,7 @@ router.put('/:id', mediaController.update);
 router.get('/', mediaController.getAll);
 router.get('/:user', mediaController.getByUserId);
 router.delete('/:id', mediaController.delete);
+router.get('/user/:id', mediaController.getByUserId);
+
 
 module.exports = router;

@@ -5,6 +5,7 @@ class EventMedia {
     this.createTable();
   }
 
+
   createTable() {
     const createTable = `
         CREATE TABLE IF NOT EXISTS event_media

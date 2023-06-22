@@ -1,4 +1,4 @@
-const Gamestate = require('../../Data/GameState');
+const Gamestate = require('../../Data/Game');
 const Frame = require('../../Data/Frame/Frame_index');
 
 describe('Gamestate', () => {

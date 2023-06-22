@@ -64,6 +64,7 @@ class EventMediaController {
   };
   
 
+<<<<<<< HEAD
   getAllByEvent = (req, res) => {
     this.eventmedia
       .getAllByEvent(req.params.eventId)
@@ -74,6 +75,17 @@ class EventMediaController {
         res.status(500).json({ message: err });
       });
   };
+=======
+    getAllByEvent = (req, res) => {
+        this.eventmedia.getAllByEvent(req.params.event_id)
+            .then((eventmedias) => {
+                res.status(200).json(eventmedias);
+            })
+            .catch((err) => {
+                res.status(500).json({message: err});
+            });
+    }
+>>>>>>> main
 
   getAllByMedia = (req, res) => {
     this.eventmedia

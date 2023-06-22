@@ -46,12 +46,14 @@ app.listen(config.portAPI, () => {
   console.log(`API Server started on ${config.ip}:${config.portAPI}`);
 });
 
-const server = require("http").Server(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
+// Websocket
+const server = require('http').Server(app)
+const io = require('socket.io')(server);
+const desk = io.of('/ws/desk');
+
+server.listen(config.portWS, () => {
+    console.log(`WebSocket Server started on ${config.ip}:${config.portWS}`);
+
 });
 let timerInterval;
 let timerValue = 0;
