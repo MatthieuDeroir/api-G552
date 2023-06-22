@@ -12,28 +12,31 @@ const checkToken = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.decode(token);
-    const expirationTime = Math.floor(Date.now() / 1000) + 2; // Ajouter 2 heures
+    const decoded = jwt.verify(token, secret);
+    req.userId = decoded.id;
 
-    if (expirationTime > decoded.exp) {
-      // Mettre à jour la date d'expiration du token
-      decoded.exp = expirationTime;
-
-      // Signer le token avec la nouvelle date d'expiration
-      const updatedToken = jwt.sign(decoded, secret);
-
-      // Mettre à jour l'en-tête "Authorization" avec le token mis à jour
-      res.setHeader("Authorization", `Bearer ${updatedToken}`);
+    // Vérifier l'inactivité de l'utilisateur
+    const currentTime = Math.floor(Date.now() / 1000);
+    const lastActivityTime = decoded.lastActivityTime; // Heure de la dernière activité stockée
+      console.log('lastActivityTime', lastActivityTime);
+    // Vérifier si la durée depuis la dernière activité dépasse 2 heures (7200 secondes)
+    if (currentTime - lastActivityTime > 10) {
+      return res.status(401).send({ auth: false, message: "Inactive user." });
     }
 
-    req.userId = decoded.id;
+    // Mettre à jour l'heure de la dernière activité avec l'heure actuelle
+    decoded.lastActivityTime = currentTime;
+
+    // Générer un nouveau token avec l'heure de dernière activité mise à jour
+    const newToken = jwt.sign(decoded, secret);
+
+    // Ajouter le nouveau token à l'en-tête de la réponse
+    res.setHeader("Authorization", `Bearer ${newToken}`);
 
     next();
   } catch (err) {
     console.log(err);
-    return res
-      .status(500)
-      .send({ auth: false, message: "Failed to authenticate token." });
+    return res.status(401).send({ auth: false, error: err.message });
   }
 };
 
