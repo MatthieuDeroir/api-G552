@@ -114,12 +114,12 @@ class EventMediaController {
       });
   };
   updateMediaPositions = (req, res) => {
-    const mediaPositions = req.body;
-    const promises = mediaPositions.map((positionData) => {
-      const eventId = positionData.eventId;
-      const mediaId = positionData.mediaId;
-      const newPosition = positionData.media_pos_in_event;
-      return this.eventmedia.updateMediaPositions(eventId, mediaId, newPosition);
+    console.log("updateMediaPositions", req.body);
+    const datas = req.body;
+    const promises = datas.map((dataPosition) => {
+      const event_media_id = dataPosition.event_media_id;
+      const newPosition = dataPosition.media_pos_in_event;
+      return this.eventmedia.updateMediaPositions(event_media_id, newPosition);
     });
     Promise.all(promises)
       .then(() => {

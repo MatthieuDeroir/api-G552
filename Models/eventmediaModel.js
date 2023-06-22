@@ -7,43 +7,20 @@ class EventMedia {
 
   createTable() {
     const createTable = `
-            CREATE TABLE IF NOT EXISTS event_media
-            (
-                event_id
-                    INTEGER,
-                media_id
-                    INTEGER,
-                media_dur_in_event
-                    INTEGER,
-                media_pos_in_event
-                    INTEGER,
-                PRIMARY
-                    KEY
-                    (
-                     event_id,
-                     media_id
-                        ),
-                FOREIGN KEY
-                    (
-                     event_id
-                        ) REFERENCES events
-                    (
-                     id
-                        ),
-                FOREIGN KEY
-                    (
-                     media_id
-                        ) REFERENCES media
-                    (
-                     id
-                        )
-            )
-        `;
+        CREATE TABLE IF NOT EXISTS event_media
+        (
+            id INTEGER PRIMARY KEY,
+            event_id INTEGER,
+            media_id INTEGER,
+            media_dur_in_event INTEGER,
+            media_pos_in_event INTEGER
+        )
+    `;
     db.run(createTable);
-  }
+}
+
 
   create(event) {
-    console.log("event", event);
     return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO event_media (event_id, media_id, media_dur_in_event, media_pos_in_event)
@@ -61,12 +38,14 @@ class EventMedia {
   }
 
   getAllByEvent(eventId) {
+    console.log("getAllByEvent", eventId);
     return new Promise((resolve, reject) => {
       db.all(
-        `SELECT media.*, event_media.media_pos_in_event, event_media.media_dur_in_event
-          FROM event_media
-          JOIN media ON event_media.media_id = media.id
-          WHERE event_media.event_id = ?`,
+        `SELECT media.*, event_media.media_pos_in_event, event_media.media_dur_in_event, event_media.id AS event_media_id
+        FROM event_media
+        JOIN media ON event_media.media_id = media.id
+        WHERE event_media.event_id = ?
+        `,
         [eventId],
         (err, medias) => {
           if (err) {
@@ -138,15 +117,14 @@ class EventMedia {
     });
   }
 
-  updateMediaPositions(eventId, mediaId, newPosition) {
-    const eventIdInt = parseInt(eventId);
-
+  updateMediaPositions(event_media_id, newPosition) {
+    console.log("updateMediaPositions");
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE event_media
          SET media_pos_in_event = ?
-         WHERE event_id = ? AND media_id = ?`,
-        [newPosition, eventIdInt, mediaId],
+         WHERE id = ?`,
+        [newPosition, event_media_id],
         (err) => {
           if (err) {
             reject(err);
