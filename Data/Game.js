@@ -14,10 +14,12 @@ class Game {
             Value: null,
             Display: null,
         },
+
         Clock: {
             Value: null,
             Display: null,
         },
+
         Timer: {
             Value: null,
             Status: null,
@@ -163,7 +165,6 @@ class Game {
 
     static Insert(GSI) {
         this.State = GSI;
-        console.log(this.State)
     }
 
 }

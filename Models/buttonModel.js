@@ -25,13 +25,13 @@ class Button {
         return new Promise((resolve, reject) => {
             db.run(
                 `INSERT INTO button (name)
-                 VALUES (?, ?)`,
-                [button.name, button.userId],
-                (err) => {
+                 VALUES (?)`,
+                [button.value],
+                function (err) {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(this.getById(this.lastID));
+                        resolve(this.lastID);
                     }
                 }
             );

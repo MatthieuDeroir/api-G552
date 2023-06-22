@@ -36,6 +36,7 @@ describe('Frame_0x35', () => {
             0x0D, // End byte
         ];
 
+
         const expectedGSI = {
             insertType: 'DirectConsoleData',
             Chrono: '12.3',
