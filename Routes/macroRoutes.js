@@ -8,6 +8,8 @@ router.post('/', macroController.create);
 router.put('/:id', macroController.update);
 router.get('/:id', macroController.getById);
 router.get('/user/:id', macroController.getByUserId);
+router.get('/button/:id', macroController.getByButtonId);
+router.get('/event/:id', macroController.getByEventId);
 router.delete('/:id', macroController.delete);
 
 module.exports = router;
