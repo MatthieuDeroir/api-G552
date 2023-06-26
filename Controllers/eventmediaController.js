@@ -87,10 +87,9 @@ class EventMediaController {
   };
 
   delete = (req, res) => {
-    const eventId = req.params.id;
-    const mediaId = req.body.idBdd;
+    const mediaId = req.body.id;
     this.eventmedia
-      .delete(eventId,mediaId)
+      .delete(mediaId)
       .then(() => {
         res.status(204).json();
       })

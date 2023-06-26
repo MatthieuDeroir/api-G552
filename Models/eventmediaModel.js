@@ -39,7 +39,6 @@ class EventMedia {
   }
 
   getAllByEvent(eventId) {
-    console.log("getAllByEvent", eventId);
     return new Promise((resolve, reject) => {
       db.all(
         `SELECT media.*, event_media.media_pos_in_event, event_media.media_dur_in_event, event_media.id AS event_media_id
@@ -99,14 +98,14 @@ class EventMedia {
     });
   }
 
-  delete(eventId, mediaId) {
+  delete( mediaId) {
     return new Promise((resolve, reject) => {
       db.run(
         `DELETE
                  FROM event_media
-                 WHERE event_id = ?
-                   AND media_id = ?`,
-        [eventId, mediaId],
+                 WHERE id = ?
+                 `,
+        [mediaId],
         (err) => {
           if (err) {
             reject(err);

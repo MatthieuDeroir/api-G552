@@ -153,7 +153,6 @@ class User {
             );
             reject(err);
           } else {
-            console.log(`Found user with username: ${username}`, user);
             resolve(user);
           }
         }

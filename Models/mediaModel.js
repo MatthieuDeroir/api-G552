@@ -1,6 +1,5 @@
 const db = require("../Database/db");
 
-
 class Media {
   constructor() {
     this.createTable();

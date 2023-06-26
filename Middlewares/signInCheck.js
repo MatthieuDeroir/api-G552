@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 
-const checkToken = (req, res, next) => {
+const checkToken = async (req, res, next) => {
   const secret = config.secret;
   const authHeader = req.headers["authorization"];
 
@@ -14,24 +14,29 @@ const checkToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, secret);
     req.userId = decoded.id;
+    const RefreshToken = require("../Models/refreshTokenModel");
 
-    // Vérifier l'inactivité de l'utilisateur
-    const currentTime = Math.floor(Date.now() / 1000);
-    const lastActivityTime = decoded.lastActivityTime; // Heure de la dernière activité stockée
-      console.log('lastActivityTime', lastActivityTime);
-    // Vérifier si la durée depuis la dernière activité dépasse 2 heures (7200 secondes)
-    if (currentTime - lastActivityTime > 10) {
-      return res.status(401).send({ auth: false, message: "Inactive user." });
+    const refreshTokenModel = new RefreshToken();
+    const refreshToken = await refreshTokenModel.getByUserId(req.userId);
+
+    const lastActivity = refreshToken ? refreshToken.last_activity : null;
+    if (!refreshToken) {
+      return res.status(401).send({ auth: false, message: "Token expired due to inactivity." });
     }
-
-    // Mettre à jour l'heure de la dernière activité avec l'heure actuelle
-    decoded.lastActivityTime = currentTime;
-
-    // Générer un nouveau token avec l'heure de dernière activité mise à jour
-    const newToken = jwt.sign(decoded, secret);
-
-    // Ajouter le nouveau token à l'en-tête de la réponse
-    res.setHeader("Authorization", `Bearer ${newToken}`);
+    if (lastActivity) {
+      const currentTime = Math.floor(Date.now()); // Temps actuel en secondes
+      const timeDifference = currentTime - lastActivity;
+      if (timeDifference > 2 * 60 * 60 * 1000) {
+        console.log("Token expired due to inactivity.");
+        // Déconnexion de l'utilisateur en raison d'une inactivité de plus de 2 heures
+        await refreshTokenModel.deleteByUserId(req.userId);
+        return res.status(401).send({ auth: false, message: "Token expired due to inactivity." });
+      } else {
+        console.log("Token refreshed.");
+        // Mise à jour de la dernière activité
+        await refreshTokenModel.updateLastActivity(req.userId, currentTime);
+      }
+    }
 
     next();
   } catch (err) {

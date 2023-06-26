@@ -2,10 +2,13 @@ const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const config = require("../config");
 const verification = require("../Middlewares/signUpCheck");
+const RefreshToken = require("../Models/refreshTokenModel");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const signUp = async (req, res) => {
+  this.refreshToken = new RefreshToken();
+
   console.log(req.body);
   const folderName = `../../Front/G552_frontend/public/medias/${req.body.username}`;
   const user = {
@@ -71,30 +74,35 @@ const signIn = async (req, res) => {
 
   try {
     const userController = new User();
-    console.log(user.username);
     const foundUser = await userController.getByUsername(user.username);
-    console.log("foundUser", foundUser);
     if (foundUser) {
       bcrypt.compare(
         user.password,
         foundUser.password,
-        async function (err, result) {
+        async function (err, isMatch) {
           if (err) {
             console.log(err);
             return res.status(500).json({ message: err });
           } else {
-            if (result) {
-              /* if (foundUser.firstLogin === 1) {
-                console.log("First login");
-                
-                await userController.updateFirstLogin(foundUser.id);
-              } */
-              const secret = config.secret;
-              console.log(secret);
+            if (isMatch) {
+              const accessToken = jwt.sign(
+                { id: foundUser.id },
+                config.secret,
+                {
+                  expiresIn: 7 * 24 * 60 * 60, // 7 jours
+                }
+              );
+              const refreshTokenModel = new RefreshToken();
+              await refreshTokenModel.deleteAll(foundUser.id);
 
-              const accessToken = jwt.sign({ id: foundUser.id }, secret, {
-                expiresIn: 2 * 60 * 60, // expires in 2 hours (2 * 60 * 60)
-              });
+              const newRefreshToken = {
+                token: accessToken,
+                user: foundUser.id,
+                lastActivity: Date.now(),
+              };
+
+              await refreshTokenModel.create(newRefreshToken);
+
               return res.status(200).send({
                 accessToken: accessToken,
                 user: foundUser,
@@ -135,17 +143,17 @@ const modifyPassword = async (req, res) => {
     }
 
     const modifyUserPassword = await newUser
-  .changePassword(user)
-  .then((user) => {
-    return newUser.updateFirstLogin(user.id);
-  })
-  .then(() => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    console.log(err);
-    return res.status(500).json({ message: err });
-  });
+      .changePassword(user)
+      .then((user) => {
+        return newUser.updateFirstLogin(user.id);
+      })
+      .then(() => {
+        res.status(201).json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({ message: err });
+      });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
