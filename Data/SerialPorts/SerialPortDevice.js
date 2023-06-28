@@ -104,5 +104,45 @@ class SerialPortDevice {
             this.bufferIndex = 0;
             this.buffer = new Uint8Array(54);
         }
+
     }
+
+    Stop() {
+        this.Continue = false;
+        if (this.ReadTimeout) {
+            clearTimeout(this.ReadTimeout);
+        }
+        if (this.SerialPort) {
+            this.SerialPort.drain(() => {
+                this.SerialPort.close(() => {
+                    this.SerialPort = null;
+                    console.log(`Closed port ${this.DevicePortName}`);
+                });
+            });
+        }
+    }
+
+    Start() {
+        this.SerialPort = new SerialPort(this.DevicePortName, {
+            baudRate: 115200,
+            autoOpen: false
+        });
+        this.InitThread();
+    }
+
+    Restart() {
+        this.Stop();
+        this.Start();
+    }
+
+    SendData(data) {
+        if (this.SerialPort) {
+            this.SerialPort.write(data, (error) => {
+                if (error) {
+                    console.log(`Error writing to device ${this.DevicePortName}: ${error}`);
+                }
+            });
+        }
+    }
+
 }

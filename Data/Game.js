@@ -2,7 +2,6 @@ const Frames = require('./Frame/Frame_index');
 
 class Game {
     static State = {
-        Horn: null,
 
         Possession: null,
 
@@ -14,6 +13,15 @@ class Game {
             Value: null,
             Display: null,
         },
+
+        Horn: null,
+
+        Chrono_24s: {
+            Value: null,
+            Display: null,
+        },
+
+        Horn24s: null,
 
         Clock: {
             Value: null,
@@ -74,6 +82,8 @@ class Game {
                 ShirtNumber: null,
             },
         }
+
+
     }
 
     static update = (_message) => {
