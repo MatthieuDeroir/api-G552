@@ -2,7 +2,7 @@ const eSport = require("../Utils/Enums/eSport");
 const Tools = require("../Utils/Frame_Tools/Frame_Tools_index");
 
 /*
-    * 0x3C : Handball
+    * 0x3C : Handball Specific
  */
 
 class Frame_0x3C {
