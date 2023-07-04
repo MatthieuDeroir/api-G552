@@ -10,12 +10,28 @@ class SerialPortConnection {
         // console.log('Serial Port Initialization');
         // this.Init();
     }
-    Init() {
+    StartReading() {
+        Closing = false;
         this.RefreshCurrentCOMPorts();
         this.ConnectAvailablePorts();
 
         // Check for ports every 0.1 seconds
         setInterval(this.TryConnectCOMPorts, 100);
+    }
+
+    StopReading() {
+        Closing = true;
+        AllDevices.forEach(device => {
+            if (device.Started) {
+                device.Continue = false;
+                device.SerialPort.drain(() => {
+                    device.SerialPort.close(() => {
+                        device.SerialPort = null;
+                        console.log(`Closed port ${device.DevicePortName}`);
+                    });
+                });
+            }
+        });
     }
 
     TryConnectCOMPorts() {

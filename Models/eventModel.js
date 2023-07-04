@@ -1,4 +1,6 @@
 const db = require("../Database/db");
+const eventEmitter = require("../Utils/SharedEmitter");  // Instance partagée de EventEmitter
+
 
 class Event {
   constructor() {
@@ -35,6 +37,7 @@ class Event {
           if (err) {
             reject(err);
           } else {
+            eventEmitter.emit('updated', { type: 'Event', data: event });  // Emettez un événement lors de la mise à jour
             resolve(this.getById(this.lastID));
           }
         }

@@ -2,6 +2,8 @@ const Media = require("../Models/mediaModel");
 const fs = require("fs");
 const multer = require("multer");
 const crypto = require("crypto");
+const sharedEmitter = require('../Utils/SharedEmitter');
+
 
 class MediaController {
   constructor() {
@@ -36,6 +38,7 @@ class MediaController {
         console.log(err);
         res.status(500).json({ message: err });
       } else {
+        sharedEmitter.emit('created', req.file.filename);
         res.status(201).json({ message: "File uploaded successfully" });
         const id = req.params.id;
         console.log(req.file.path);
@@ -64,6 +67,7 @@ class MediaController {
     this.media
       .update(req.body)
       .then((media) => {
+        sharedEmitter.emit('updated', req.file.filename);
         res.status(200).json(media);
       })
       .catch((err) => {
