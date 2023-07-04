@@ -9,7 +9,7 @@ class EventController {
         console.log(req.body);
         this.event.create(req.body)
             .then((event) => {
-                sharedEmitter.emit('Event created', event);
+                sharedEmitter.emit('created', event);
                 res.status(201).json(event);
             })
             .catch((err) => {
@@ -20,7 +20,7 @@ class EventController {
     update = (req, res) => {
         this.event.update(req.body)
             .then((event) => {
-                sharedEmitter.emit('Event updated', event);
+                sharedEmitter.emit('updated', event);
                 res.status(200).json(event);
             })
             .catch((err) => {

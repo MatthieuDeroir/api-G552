@@ -38,7 +38,7 @@ class MediaController {
         console.log(err);
         res.status(500).json({ message: err });
       } else {
-        sharedEmitter.emit('Media creation', req.file.filename);
+        sharedEmitter.emit('created', req.file.filename);
         res.status(201).json({ message: "File uploaded successfully" });
         const id = req.params.id;
         console.log(req.file.path);
@@ -67,7 +67,7 @@ class MediaController {
     this.media
       .update(req.body)
       .then((media) => {
-        sharedEmitter.emit('Media update', req.file.filename);
+        sharedEmitter.emit('updated', req.file.filename);
         res.status(200).json(media);
       })
       .catch((err) => {

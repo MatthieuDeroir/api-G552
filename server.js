@@ -25,8 +25,8 @@ const sp = new SerialPortConnection();
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
-
-app.use(checkToken);
+//TODO: Uncomment this line to activate token check
+// app.use(checkToken);
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
@@ -50,7 +50,7 @@ app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World :3");
 });
 
 
