@@ -2,7 +2,7 @@ const { SerialPort } = require('serialport');
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config');
-import sharedEmitter from '../../Utils/sharedEmitter';
+const sharedEmitter = require( '../../Utils/SharedEmitter');
 
 let AllDevices = [];
 let Closing = false;
