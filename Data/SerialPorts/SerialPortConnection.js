@@ -2,7 +2,11 @@ const { SerialPort } = require('serialport');
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config');
-const sharedEmitter = require( '../../Utils/SharedEmitter');
+
+const EventEmitter = require('events');
+
+const sharedEmitter = new EventEmitter();
+
 
 let AllDevices = [];
 let Closing = false;
@@ -137,4 +141,4 @@ class SerialPortConnection {
 }
 
 
-module.exports = SerialPortConnection;
+module.exports = { SerialPortConnection, sharedEmitter };

@@ -20,13 +20,12 @@ webSocketSetup(app);
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
 unixSocketSetup.startServer();
 
-const SerialPortConnection = require("./Data/SerialPorts/SerialPortConnection");
+const { SerialPortConnection, sharedEmitter } = require("./Data/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 // sp.StartReading();
-sp.on("data", (data) => {
+sharedEmitter.on("data", (data) => {
     console.log(data);
 });
-
 sp.StopReading();
 
 const authRoutes = require("./Routes/authRoutes");
