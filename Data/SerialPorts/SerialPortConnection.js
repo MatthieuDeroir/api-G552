@@ -2,6 +2,7 @@ const { SerialPort } = require('serialport');
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config');
+import sharedEmitter from '../../Utils/sharedEmitter';
 
 let AllDevices = [];
 let Closing = false;
@@ -120,6 +121,9 @@ class SerialPortConnection {
                         port.on('data', data => {
                             console.log(`Data received from ${device.DevicePortName} : ${data}`);
                             device.LastReadTime= new Date();
+
+                            // Emit the data event for this class
+                            sharedEmitter.emit('data', data);
                         });
                         port.on('close', () => {
                             console.log(`${device.DevicePortName} is closed`);

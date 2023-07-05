@@ -23,6 +23,11 @@ unixSocketSetup.startServer();
 const SerialPortConnection = require("./Data/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 // sp.StartReading();
+sp.on("data", (data) => {
+    console.log(data);
+});
+
+sp.StopReading();
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
