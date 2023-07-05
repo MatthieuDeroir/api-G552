@@ -22,6 +22,7 @@ unixSocketSetup.startServer();
 
 const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
 const sp = new SerialPortConnection();
+// sp.StartReading();
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
@@ -50,7 +51,7 @@ app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello World :3");
+  res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
 });
 
 
