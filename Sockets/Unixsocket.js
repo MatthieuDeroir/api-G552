@@ -89,7 +89,7 @@ module.exports = {
                             mode: 'media',
                             medias: [
                                 {
-                                    path: "/home/linaro/Server/Backend/Medias/1.jpg",
+                                    path: "/home/linaro/Server/Backend/Medias/1.png",
                                     duration: 2,
                                     type: "image"
                                 }
