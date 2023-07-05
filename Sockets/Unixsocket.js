@@ -83,21 +83,36 @@ module.exports = {
                     console.log("RS scoring data : ", scoreData);
                 }, 100);  // Increment and send score data every 0.1 seconds
 
-            } else if (mode === "media"){
-                    setInterval(() => {
-                        const mediaData = {
-                            mode: 'media',
-                            medias: [
-                                {
-                                    path: "/home/linaro/Server/Backend/Medias/1.png",
-                                    duration: 2,
-                                    type: "image"
-                                }
-                            ]
-                        };
-                        sharedEmitter.emit("media", mediaData);
-                        console.log("Media data sent", mediaData);
-                    }, 10000);  // send media data every 5 seconds
+            } else if (mode === "media") {
+                setInterval(() => {
+                    const mediaData = {
+                        mode: 'media',
+                        medias: [
+                            {
+                                path: "/home/linaro/Server/Backend/Medias/1.png",
+                                duration: 2,
+                                type: "image"
+                            },
+                            {
+                                path: "/home/linaro/Server/Backend/Medias/1.mp4",
+                                duration: 3,
+                                type: "video"
+                            },
+                            {
+                                path: "/home/linaro/Server/Backend/Medias/2.mp4",
+                                duration: 2,
+                                type: "video"
+                            },
+                            {
+                                path: "/home/linaro/Server/Backend/Medias/3.mp4",
+                                duration: 3,
+                                type: "video"
+                            }
+                        ]
+                    };
+                    sharedEmitter.emit("media", mediaData);
+                    console.log("Media data sent", mediaData);
+                }, 10000);  // send media data every 5 seconds
             }
         });
             server.on('error', (err) => {
