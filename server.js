@@ -20,7 +20,7 @@ webSocketSetup(app);
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
 unixSocketSetup.startServer();
 
-const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
+const SerialPortConnection = require("./Data/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 // sp.StartReading();
 
