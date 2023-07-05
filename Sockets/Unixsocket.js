@@ -63,7 +63,7 @@ const server = net.createServer((client) => {
     });
 });
 
-let mode = "sport";
+let mode = "media";
 let sport = "basketball";
 
 // Export the function to start the server
@@ -107,7 +107,7 @@ module.exports = {
                         };
                         sharedEmitter.emit("media", mediaData);
                         console.log("Media data sent", mediaData);
-                    }, 10000);  // send media data every 5 seconds
+                    }, 1000);  // send media data every 5 seconds
             }
         });
             server.on('error', (err) => {
