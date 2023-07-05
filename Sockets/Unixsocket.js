@@ -63,7 +63,7 @@ const server = net.createServer((client) => {
     });
 });
 
-let mode = "sport";
+let mode = "media";
 let sport = "basketball";
 
 // Export the function to start the server
@@ -90,17 +90,17 @@ module.exports = {
                             medias: [
                                 {
                                     path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/1.jpg",
-                                    duration: 1,
+                                    duration: 2,
                                     type: "image"
                                 },
                                 {
                                     path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/2.jpg",
-                                    duration: 1,
+                                    duration: 2,
                                     type: "image"
                                 },
                                 {
                                     path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/1.mp4",
-                                    duration: 2,
+                                    duration: 4,
                                     type: "video"
                                 },
                             ]

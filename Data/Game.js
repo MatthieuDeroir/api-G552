@@ -1,4 +1,5 @@
 const Frames = require('./Frame/Frame_index');
+import sharedEmitter from '../Utils/SharedEmitter';
 
 class Game {
     static State = {
@@ -167,6 +168,7 @@ class Game {
                 break;
         }
         this.Insert(toInsert);
+        this.Send();
     };
 
     static getState() {
@@ -175,6 +177,12 @@ class Game {
 
     static Insert(GSI) {
         this.State = GSI;
+    }
+
+    static Send() {
+        console.log(this.State);
+        sharedEmitter.emit('scoring', this.State);
+
     }
 
 }

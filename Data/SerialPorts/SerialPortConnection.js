@@ -1,14 +1,23 @@
 const { SerialPort } = require('serialport');
 const fs = require('fs');
 const path = require('path');
+const config = require('../../config');
 
 let AllDevices = [];
 let Closing = false;
 
 class SerialPortConnection {
     constructor() {
-        // console.log('Serial Port Initialization');
-        // this.Init();
+        console.log('Serial Port Initialization');
+        this.currentCOMPorts = [];
+        this.connection = null;
+        this.currentCOMPortName = "";
+
+        // Bind 'this' to class methods
+        this.RefreshCurrentCOMPorts = this.RefreshCurrentCOMPorts.bind(this);
+        this.TryConnectCOMPorts = this.TryConnectCOMPorts.bind(this);
+        this.StartReading = this.StartReading.bind(this);
+        this.StopReading = this.StopReading.bind(this);
     }
     StartReading() {
         Closing = false;
@@ -16,7 +25,7 @@ class SerialPortConnection {
         this.ConnectAvailablePorts();
 
         // Check for ports every 0.1 seconds
-        setInterval(this.TryConnectCOMPorts, 100);
+        setInterval(this.TryConnectCOMPorts, config.SerialPort.RefreshInterval);
     }
 
     StopReading() {
@@ -34,6 +43,8 @@ class SerialPortConnection {
         });
     }
 
+
+
     TryConnectCOMPorts() {
         if (!Closing) {
             this.RefreshCurrentCOMPorts();
@@ -50,11 +61,11 @@ class SerialPortConnection {
         console.log(portnames);
 
         // get all the elements in the device directory
-        let ports = fs.readdirSync('/dev');
+        let ports = fs.readdirSync(config.SerialPort.Path);
 
         ports.forEach(port => {
             // filter the elements to only get the serial ports
-            if (port.startsWith('tty')) {
+            if (port.startsWith(config.SerialPort.Filter)) {
                 let PortName = port;
                 let found = false;
                 AllDevices.forEach(device => {
@@ -92,13 +103,13 @@ class SerialPortConnection {
                 console.log("Connecting to : " + device.DevicePortName);
                 device.Started = true;
                 const options = {
-                    baudRate: 9600,
-                    dataBits: 8,
-                    parity: 'none',
-                    stopBits: 1,
-                    flowControl: 'none',
-                    handshake:'none',
-                    path:`/dev/${device.DevicePortName}`
+                    baudRate: config.SerialPort.BaudRate,
+                    dataBits: config.SerialPort.DataBits,
+                    parity: config.SerialPort.Parity,
+                    stopBits: config.SerialPort.StopBits,
+                    flowControl: config.SerialPort.FlowControl,
+                    handshake: config.SerialPort.Handshake,
+                    path:`${config.SerialPort.Path}/${device.DevicePortName}`
                 };
                 let port = new SerialPort(options, (err) => {
                     if (err) {
