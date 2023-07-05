@@ -37,16 +37,23 @@ class SerialPortConnection {
         Closing = true;
         AllDevices.forEach(device => {
             if (device.Started) {
-                device.Continue = false;
-                device.SerialPort.drain(() => {
-                    device.SerialPort.close(() => {
-                        device.SerialPort = null;
-                        console.log(`Closed port ${device.DevicePortName}`);
+                // Check if device.SerialPort exists before attempting to drain and close it
+                if (device.SerialPort) {
+                    device.Continue = false;
+                    device.SerialPort.drain(() => {
+                        device.SerialPort.close(() => {
+                            device.SerialPort = null;
+                            console.log(`Closed port ${device.DevicePortName}`);
+                        });
                     });
-                });
+                }
+                else {
+                    console.log(`Could not close port ${device.DevicePortName} because it is undefined.`);
+                }
             }
         });
     }
+
 
 
 
@@ -114,22 +121,20 @@ class SerialPortConnection {
                     stopBits: config.SerialPort.StopBits,
                     flowControl: config.SerialPort.FlowControl,
                     handshake: config.SerialPort.Handshake,
-                    path:`${config.SerialPort.Path}/${device.DevicePortName}`
+                    path: `${config.SerialPort.Path}/${device.DevicePortName}`
                 };
-                let port = new SerialPort(options, (err) => {
+                device.SerialPort = new SerialPort(options, (err) => { // Assign new SerialPort instance to device.SerialPort
                     if (err) {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
                         console.log(`Port ${device.DevicePortName} open`);
-                        port.on('data', data => {
+                        device.SerialPort.on('data', data => {
                             console.log(`Data received from ${device.DevicePortName} : ${data}`);
-                            device.LastReadTime= new Date();
-
-                            // Emit the data event for this class
+                            device.LastReadTime = new Date();
                             sharedEmitter.emit('data', data);
                         });
-                        port.on('close', () => {
+                        device.SerialPort.on('close', () => {
                             console.log(`${device.DevicePortName} is closed`);
                             device.Started = false;
                         });
@@ -138,6 +143,7 @@ class SerialPortConnection {
             }
         });
     }
+
 }
 
 

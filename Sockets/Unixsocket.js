@@ -33,7 +33,7 @@ const server = net.createServer((client) => {
                 client.write(data + '\n');  // data is already a string
                 console.log('Sent data:', jsonData)
             } else if (jsonData.mode === 'media') {
-                client.write(JSON.stringify({mode: 'media', path: jsonData.path, duration: jsonData.duration}) + '\n');
+                client.write(JSON.stringify({ mode: 'media', path: jsonData.path, duration: jsonData.duration }) + '\n');
                 console.log('Sent data:', jsonData)
             }
         } catch (err) {
@@ -72,7 +72,7 @@ module.exports = {
         server.listen(socketPath, () => {
             console.log(`UnixSocket Server listening on ${socketPath}`);
             let chrono = 0; // Initial chrono value
-            if (mode === "scoring"){
+            if (mode === "scoring") {
                 setInterval(() => {
                     chrono += 1; // Increment chrono by 0.1 every 100 milliseconds
                     const scoreData = {
@@ -88,34 +88,34 @@ module.exports = {
                     const mediaData = {
                         mode: 'media',
                         medias: [
-                            {
-                                path: "/home/linaro/Server/Backend/Medias/1.png",
-                                duration: 2,
-                                type: "image"
-                            },
-                            {
-                                path: "/home/linaro/Server/Backend/Medias/1.mp4",
-                                duration: 3,
-                                type: "video"
-                            },
-                            {
-                                path: "/home/linaro/Server/Backend/Medias/2.mp4",
-                                duration: 2,
-                                type: "video"
-                            },
-                            {
-                                path: "/home/linaro/Server/Backend/Medias/3.mp4",
-                                duration: 3,
-                                type: "video"
-                            }
+                            // {
+                            //     path: "/home/linaro/Server/Backend/Medias/1.png",
+                            //     duration: 2,
+                            //     type: "image"
+                            // },
+                            // {
+                            //     path: "/home/linaro/Server/Backend/Medias/1.mp4",
+                            //     duration: 3,
+                            //     type: "video"
+                            // },
+                            // {
+                            //     path: "/home/linaro/Server/Backend/Medias/2.mp4",
+                            //     duration: 2,
+                            //     type: "video"
+                            // },
+                            // {
+                            //     path: "/home/linaro/Server/Backend/Medias/3.mp4",
+                            //     duration: 3,
+                            //     type: "video"
+                            // }
                         ]
                     };
                     sharedEmitter.emit("media", mediaData);
                     console.log("Media data sent", mediaData);
-                }, 10000);  // send media data every 5 seconds
+                }, 100000);  // send media data every 5 seconds
             }
         });
-            server.on('error', (err) => {
+        server.on('error', (err) => {
             console.error('Server error:', err);
         });
     }
