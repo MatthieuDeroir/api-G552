@@ -89,20 +89,10 @@ module.exports = {
                             mode: 'media',
                             medias: [
                                 {
-                                    path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/1.jpg",
+                                    path: "/home/linaro/Server/Backend/Medias/1.jpg",
                                     duration: 2,
                                     type: "image"
-                                },
-                                {
-                                    path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/2.jpg",
-                                    duration: 2,
-                                    type: "image"
-                                },
-                                {
-                                    path: "/Users/mderoir/Desktop/STRAM/G552/api552/Medias/1.mp4",
-                                    duration: 4,
-                                    type: "video"
-                                },
+                                }
                             ]
                         };
                         sharedEmitter.emit("media", mediaData);
