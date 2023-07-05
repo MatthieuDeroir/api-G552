@@ -27,7 +27,6 @@ sp.StartReading();
 sharedEmitter.on("data", (data) => {
     console.log("data sent:", data);
 });
-sp.StopReading();
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
