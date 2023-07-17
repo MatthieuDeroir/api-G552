@@ -72,7 +72,7 @@ class SerialPortConnection {
         let ports = await fs.readdir(config.SerialPort.Path);
 
         ports.forEach(port => {
-            if (port === (config.SerialPort.Filter)) {
+            if (port.includes(config.SerialPort.Filter)) {
                 let PortName = port;
                 let found = false;
                 AllDevices.forEach(device => {
@@ -121,7 +121,7 @@ class SerialPortConnection {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
-                        console.log(`Port open`);
+                        console.log(`Port ${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
                                 console.log(`Data received from ${device.DevicePortName.replace(/\t/g, "\\t")} : ${data}`);
