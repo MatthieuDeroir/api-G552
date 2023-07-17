@@ -24,9 +24,9 @@ const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/Ser
 const sp = new SerialPortConnection();
 
 sp.StartReading();
-sharedEmitter.on("data", (data) => {
-    console.log("data sent:", data);
-});
+// sharedEmitter.on("data", (data) => {
+//     console.log("data sent:", data);
+// });
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
