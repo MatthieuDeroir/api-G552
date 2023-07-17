@@ -125,23 +125,32 @@ class SerialPortConnection {
                     handshake: config.SerialPort.Handshake,
                     path: `${config.SerialPort.Path}/${device.DevicePortName}`
                 };
-                device.SerialPort = new SerialPort(options, (err) => { // Assign new SerialPort instance to device.SerialPort
+                device.SerialPort = new SerialPort(options, (err) => {
                     if (err) {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
                         console.log(`Port ${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
-                            console.log(`Data received from ${device.DevicePortName} : ${data}`);
-                            device.LastReadTime = new Date();
-                            sharedEmitter.emit('data', data);
+                            try {
+                                console.log(`Data received from ${device.DevicePortName} : ${data}`);
+                                device.LastReadTime = new Date();
+                                sharedEmitter.emit('data', data);
+                            } catch (err) {
+                                console.log(`Error handling data from ${device.DevicePortName}: ${err}`);
+                            }
                         });
                         device.SerialPort.on('close', () => {
                             console.log(`${device.DevicePortName} is closed`);
                             device.Started = false;
                         });
+                        device.SerialPort.on('error', (err) => {
+                            console.log(`Error with port ${device.DevicePortName}: ${err}`);
+                            device.Started = false;
+                        });
                     }
                 });
+
             }
         });
     }
