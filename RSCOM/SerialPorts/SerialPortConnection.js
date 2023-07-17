@@ -122,6 +122,7 @@ class SerialPortConnection {
                         device.Started = false;
                     } else {
                         console.log(`Port ${device.DevicePortName} open`);
+                        console.log(`Buffer ${device._pool}`);
                         device.SerialPort.on('data', data => {
                             try {
                                 console.log(`Data received from ${device.DevicePortName} : ${data}`);
