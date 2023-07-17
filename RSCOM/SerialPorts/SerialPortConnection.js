@@ -101,7 +101,7 @@ class SerialPortConnection {
     async ConnectAvailablePorts() {
         for (const device of AllDevices) {
             if (!device.Started && device.DeviceExists) {
-                console.log("Connecting to : " + device.DevicePortName + ' ');
+                // console.log("Connecting to : " + device.DevicePortName + ' ');
                 device.Started = true;
 
                 const options = {
