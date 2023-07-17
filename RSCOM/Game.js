@@ -1,6 +1,5 @@
 const Frames = require('./Frame/Frame_index');
-import sharedEmitter from '../Utils/SharedEmitter';
-
+const sharedEmitter = require('../Utils/SharedEmitter');
 class Game {
     static State = {
 
@@ -109,6 +108,7 @@ class Game {
     }
 
     static select = (_message) => {
+        console.log("select method was called with _message: ", _message);
         let toInsert = null;
         switch (_message[1]) {
             case 0x3A:

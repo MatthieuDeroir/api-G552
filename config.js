@@ -18,7 +18,7 @@ const config = {
         FlowControl: 'none',
         Handshake:'none',
         Path:`/dev`,
-        Filter: `tty`
+        Filter: `tty10`
     }
 
     // WebSockets config
