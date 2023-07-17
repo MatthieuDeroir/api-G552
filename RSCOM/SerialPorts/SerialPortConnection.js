@@ -121,7 +121,7 @@ class SerialPortConnection {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
-                        console.log(`Port ${device.DevicePortName} open`);
+                        console.log(`Port open`);
                         device.SerialPort.on('data', data => {
                             try {
                                 console.log(`Data received from ${device.DevicePortName.replace(/\t/g, "\\t")} : ${data}`);
