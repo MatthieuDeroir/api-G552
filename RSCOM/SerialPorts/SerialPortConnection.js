@@ -120,6 +120,8 @@ class SerialPortConnection {
                     parity: config.SerialPort.Parity,
                     stopBits: config.SerialPort.StopBits,
                     flowControl: config.SerialPort.FlowControl,
+                    readTimeout: config.SerialPort.ReadTimeout,
+                    writeTimeout: config.SerialPort.WriteTimeout,
                     handshake: config.SerialPort.Handshake,
                     path: `${config.SerialPort.Path}/${device.DevicePortName}`
                 };
