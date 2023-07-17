@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(config.portAPI, () => {
-  console.log(`API Server started on ${config.ip}:${config.portAPI}`);
+    console.log(`API Server started on ${config.ip}:${config.portAPI}`);
 });
 
 const webSocketSetup = require("./Sockets/Websocket.js");
@@ -20,9 +20,13 @@ webSocketSetup(app);
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
 unixSocketSetup.startServer();
 
-const SerialPortConnection = require("./Data/SerialPorts/serialPortConnection");
+const { SerialPortConnection, sharedEmitter } = require("./Data/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
-// sp.StartReading();
+
+sp.StartReading();
+sharedEmitter.on("data", (data) => {
+    console.log("data sent:", data);
+});
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
@@ -51,7 +55,7 @@ app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
 
 app.get("/", (req, res) => {
-  res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
+    res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
 });
 
 
