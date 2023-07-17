@@ -50,7 +50,7 @@ class SerialPortConnection {
                         });
                     });
                 } else {
-                    console.log(`Could not close port ${device.DevicePortName} because it is undefined.`);
+                    console.log(`Could not close port ${device.DevicePortName.replace(/\t/g, "\\t")} because it is undefined.`);
                 }
             }
         });
@@ -101,7 +101,7 @@ class SerialPortConnection {
     async ConnectAvailablePorts() {
         for (const device of AllDevices) {
             if (!device.Started && device.DeviceExists) {
-                console.log("Connecting to : " + device.DevicePortName + ' ');
+                console.log("Connecting to : " + device.DevicePortName.replace(/\t/g, "\\t"));
                 device.Started = true;
 
                 const options = {
@@ -124,15 +124,15 @@ class SerialPortConnection {
                         console.log(`Port ${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
-                                console.log(`Data received from ${device.DevicePortName} : ${data}`);
+                                console.log(`Data received from ${device.DevicePortName.replace(/\t/g, "\\t")} : ${data}`);
                                 device.LastReadTime = new Date();
                                 sharedEmitter.emit('data', data);
                             } catch (err) {
-                                console.log(`Error handling data from ${device.DevicePortName}: ${err}`);
+                                console.log(`Error handling data from ${device.DevicePortName.replace(/\t/g, "\\t")}: ${err}`);
                             }
                         });
                         device.SerialPort.on('close', () => {
-                            console.log(`${device.DevicePortName} is closed`);
+                            console.log(`${device.DevicePortName.replace(/\t/g, "\\t")} is closed`);
                             device.Started = false;
                         });
                         device.SerialPort.on('error', (err) => {
