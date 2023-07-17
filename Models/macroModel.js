@@ -94,14 +94,15 @@ class Macro {
 
 
 
-    update(button_id, eventId, userId) {
+    update(macro) {
         return new Promise((resolve, reject) => {
             db.run(
-                `UPDATE macro SET button_id = ?, event_id = ?, user_id = ?`
-                [button_id, eventId, userId],
+                `UPDATE macro SET event_id = ? WHERE button_id = ? AND user_id = ?`,
+                [macro.event_id, macro.button_id, macro.user_id],
                 (err) => {
                     if (err) {
                         reject(err);
+                        console.log(err);
                     } else {
                         resolve();
                     }
@@ -109,7 +110,7 @@ class Macro {
             );
         });
     }
-
+    
 
 
     delete(button_id, eventId, userId) {

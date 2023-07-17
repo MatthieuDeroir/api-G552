@@ -1,12 +1,15 @@
 const Event = require('../Models/eventModel')
+const sharedEmitter = require('../Utils/SharedEmitter');
 class EventController {
     constructor() {
         this.event = new Event();
     }
 
     create = (req, res) => {
+        console.log(req.body);
         this.event.create(req.body)
             .then((event) => {
+                sharedEmitter.emit('created', event);
                 res.status(201).json(event);
             })
             .catch((err) => {
@@ -17,6 +20,7 @@ class EventController {
     update = (req, res) => {
         this.event.update(req.body)
             .then((event) => {
+                sharedEmitter.emit('updated', event);
                 res.status(200).json(event);
             })
             .catch((err) => {
@@ -35,6 +39,7 @@ class EventController {
     }
 
     getById= (req, res) => {
+        console.log(req.params.id);
         this.event.getById(req.params.id)
             .then((event) => {
                 if (event) {

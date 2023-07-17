@@ -58,6 +58,26 @@ class MacroController {
             });
     }
 
+    getByButtonId = (req, res) => {
+        this.macro.getByButtonId(req.params.id)
+            .then((macros) => {
+                res.status(200).json(macros);
+            })
+            .catch((err) => {
+                res.status(500).json({message: err});
+            });
+    }
+
+    getByEventId = (req, res) => {
+        this.macro.getByEventId(req.params.id)
+            .then((macros) => {
+                res.status(200).json(macros);
+            })
+            .catch((err) => {
+                res.status(500).json({message: err});
+            });
+    }
+
 
 }
 
