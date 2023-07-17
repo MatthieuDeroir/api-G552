@@ -10,31 +10,20 @@ const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 class Frame_0x62_PlayerNames {
     // This static method is used to build the 0x62 frame
     static build(_message) {
-        // Create a string decoder with UTF-16LE encoding
-        const decoder = new StringDecoder('utf16le');
-
-        // Initialize the GSI object
-        const GSI = {
-            // This property specifies the type of insert
-            insertType: 'eGameStateInsertType.DirectConsoleData',
-            // This property stores the player names
-            Guest_PlayerName: new Array(16),
-            // This property stores the player numbers
-            Guest_PlayerNumber: new Array(16),
-        };
-
-        // Re-encode the _message by replacing 0x20 with 0x00
         let reEncodedMessage = Encode(_message);
-
-        // Calculate the index of the player
-        let Guest = Tools.PlayerName(_message[2], reEncodedMessage);
-        GSI.Guest_PlayerName[Guest.indexPlayer] = Guest.playerName;
-        GSI.Guest_PlayerNumber[Guest.indexPlayer] = Guest.playerNumber;
-
-        // Return the GSI object
-        return GSI;
+        let GuestInfos = Tools.PlayerName(_message[2], reEncodedMessage);
+        return {
+            insertType: 'DirectConsoleData',
+            Guest: {
+                Player: {
+                    Name: Array(16).fill().map((_, i) => i === GuestInfos.indexPlayer ? GuestInfos.playerName : ""),
+                    Number: Array(16).fill().map((_, i) => i === GuestInfos.indexPlayer ? GuestInfos.playerNumber : "")
+                },
+            }
+        };
     }
 }
 
 // Export the Frame_0x62_PlayerNames class
-module.exports = Frame_0x62_PlayerNames;
+module
+    .exports = Frame_0x62_PlayerNames;

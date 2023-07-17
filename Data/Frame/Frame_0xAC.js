@@ -1,19 +1,20 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
 const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
+
 /*
-    * 0xAC : Home Shirt Numbers Summary
+    * 0xAC : Guest Shirt Numbers Summary
  */
 
 class Frame_0xAC {
     static build(_message) {
-        const GSI = {
+        return {
             insertType: 'DirectConsoleData',
+            Guest: {
+                Player:{
+                    Number: Tools.ShirtNumber(4, 16, _message)
+                },
+            }
         };
-
-        // Home Player Number
-        GSI.Home_PlayerNumber = Tools.ShirtNumber(4, 16, _message);
-
-        return GSI;
     }
 }
 

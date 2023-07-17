@@ -18,6 +18,7 @@ class Frame_0x33 {
                 Display: Tools.ClockTimerDisplay(_message[8]).Timer,
                 Status: Tools.TimerStartStop(_message[20]).Status,
                 LED: Tools.TimerStartStop(_message[20]).LED,
+                Horn: Tools.Horn(_message[19]),
             },
 
 
@@ -25,18 +26,10 @@ class Frame_0x33 {
                 Status: Tools.sTimerStartStop(_message[24]).Status,
                 LED: Tools.sTimerStartStop(_message[24]).LED,
                 Value: Tools.Chrono24s(nBytesToNumber(_message[48]), nBytesToNumber(_message[49])),
-            },
-
-            sDisplay: {
-                Status: Tools.sDisplay(_message[52]).Display,
-                LED: Tools.sDisplay(_message[52]).LED,
+                Horn24s_Status: Tools.sHorn(_message[50]),
             },
 
             Period: nBytesToNumber(_message[11]),
-
-            Horn: Tools.Horn(_message[19]),
-
-            Horn24s_Status: Tools.sHorn(_message[50]),
 
             Home: {
                 Points: nBytesToNumber(_message[9], _message[10]),
