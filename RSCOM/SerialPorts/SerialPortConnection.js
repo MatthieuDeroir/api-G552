@@ -1,12 +1,10 @@
 const { SerialPort } = require('serialport');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const config = require('../../config');
 
 const EventEmitter = require('events');
-
 const sharedEmitter = new EventEmitter();
-
 
 let AllDevices = [];
 let Closing = false;
@@ -17,24 +15,29 @@ class SerialPortConnection {
         this.currentCOMPorts = [];
         this.connection = null;
         this.currentCOMPortName = "";
+        this.checkInterval = null;
 
         // Bind 'this' to class methods
-        this.RefreshCurrentCOMPorts = this.RefreshCurrentCOMPorts.bind(this);
-        this.TryConnectCOMPorts = this.TryConnectCOMPorts.bind(this);
         this.StartReading = this.StartReading.bind(this);
         this.StopReading = this.StopReading.bind(this);
+        this.TryConnectCOMPorts = this.TryConnectCOMPorts.bind(this);
+        this.RefreshCurrentCOMPorts = this.RefreshCurrentCOMPorts.bind(this);
+        this.ConnectAvailablePorts = this.ConnectAvailablePorts.bind(this);
     }
-    StartReading() {
+
+    async StartReading() {
         Closing = false;
-        this.RefreshCurrentCOMPorts();
-        this.ConnectAvailablePorts();
+        await this.RefreshCurrentCOMPorts();
+        await this.ConnectAvailablePorts();
 
         // Check for ports every 0.1 seconds
-        setInterval(this.TryConnectCOMPorts, config.SerialPort.RefreshInterval);
+        this.checkInterval = setInterval(this.TryConnectCOMPorts, config.SerialPort.RefreshInterval);
     }
 
     StopReading() {
         Closing = true;
+        clearInterval(this.checkInterval);
+
         AllDevices.forEach(device => {
             if (device.Started) {
                 // Check if device.SerialPort exists before attempting to drain and close it
@@ -46,37 +49,29 @@ class SerialPortConnection {
                             console.log(`Closed port ${device.DevicePortName}`);
                         });
                     });
-                }
-                else {
+                } else {
                     console.log(`Could not close port ${device.DevicePortName} because it is undefined.`);
                 }
             }
         });
     }
 
-
-
-
-    TryConnectCOMPorts() {
+    async TryConnectCOMPorts() {
         if (!Closing) {
-            this.RefreshCurrentCOMPorts();
-            this.ConnectAvailablePorts();
+            await this.RefreshCurrentCOMPorts();
+            await this.ConnectAvailablePorts();
         }
     }
 
-    RefreshCurrentCOMPorts() {
+    async RefreshCurrentCOMPorts() {
         AllDevices.forEach(device => {
             device.DeviceExists = false;
         });
 
-        let portnames = SerialPort.list();
-        console.log(portnames);
-
-        // get all the elements in the device directory
-        let ports = fs.readdirSync(config.SerialPort.Path);
+        let portnames = await SerialPort.list();
+        let ports = await fs.readdir(config.SerialPort.Path);
 
         ports.forEach(port => {
-            // filter the elements to only get the serial ports
             if (port.startsWith(config.SerialPort.Filter)) {
                 let PortName = port;
                 let found = false;
@@ -100,20 +95,15 @@ class SerialPortConnection {
             }
         });
 
-        AllDevices.forEach((device, index) => {
-            if (!device.DeviceExists) {
-                console.log("Removing COM Device : " + device.DevicePortName);
-                AllDevices.splice(index, 1);
-            }
-        });
+        AllDevices = AllDevices.filter(device => device.DeviceExists);
     }
 
-    ConnectAvailablePorts() {
-        AllDevices.forEach(device => {
-            console.log(device);
+    async ConnectAvailablePorts() {
+        for (const device of AllDevices) {
             if (!device.Started && device.DeviceExists) {
                 console.log("Connecting to : " + device.DevicePortName);
                 device.Started = true;
+
                 const options = {
                     baudRate: config.SerialPort.BaudRate,
                     dataBits: config.SerialPort.DataBits,
@@ -125,6 +115,7 @@ class SerialPortConnection {
                     handshake: config.SerialPort.Handshake,
                     path: `${config.SerialPort.Path}/${device.DevicePortName}`
                 };
+
                 device.SerialPort = new SerialPort(options, (err) => {
                     if (err) {
                         console.log(`Error opening port: ${err.message}`);
@@ -150,12 +141,9 @@ class SerialPortConnection {
                         });
                     }
                 });
-
             }
-        });
+        }
     }
-
 }
-
 
 module.exports = { SerialPortConnection, sharedEmitter };

@@ -1,8 +1,8 @@
 const SerialPort = require('serialport');
 
 class SerialPortDevice {
-    constructor() {
-        this.DevicePortName = null;
+    constructor(portName) {
+        this.DevicePortName = portName;
         this.DeviceExists = true;
         this.Started = false;
         this.SerialPort = null;
