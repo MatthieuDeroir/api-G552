@@ -4,35 +4,32 @@ import sharedEmitter from '../Utils/SharedEmitter';
 class Game {
     static State = {
 
-        Possession: null,
+        Sport: null,
 
         Period: null,
 
         Set: null,
 
-        Chrono: {
-            Value: null,
-            Display: null,
-        },
-
-        Horn: null,
-
-        Chrono_24s: {
-            Value: null,
-            Display: null,
-        },
-
-        Horn24s: null,
-
-        Clock: {
-            Value: null,
-            Display: null,
-        },
+        TieBreak: null,
 
         Timer: {
             Value: null,
+            Display: null,
             Status: null,
             LED: null,
+            Horn: null,
+        },
+
+        Timer24s: {
+            Value: null,
+            Display: null,
+            Status: null,
+            LED: null,
+            Horn24s: null,
+        },
+
+        Clock: {
+            Display: null,
         },
 
         Guest: {
@@ -40,6 +37,7 @@ class Game {
                 Name: new Array(16),
                 Number: new Array(16),
             },
+            PlayersInPlay: null,
             TeamName: null,
             Points: null,
             TotalPoints: null,
@@ -49,20 +47,26 @@ class Game {
             Fouls: {
                 Individual: new Array(16),
                 Team: null,
+                RS: null,
             },
-            Timeouts: null,
-            CountTimeOuts: null,
+            Timeout : {
+                Count : null,
+                Time : null,
+            },
             PenaltiesInProgress: null,
             Exclusion: {
                 Timer: null,
                 ShirtNumber: null,
-            }
+            },
+            Possession: null,
+            Warnings: null,
         },
         Home: {
             Player: {
                 Name: new Array(16),
                 Number: new Array(16),
             },
+            PlayersInPlay: null,
             TeamName: null,
             Points: null,
             TotalPoints: null,
@@ -72,16 +76,20 @@ class Game {
             Fouls: {
                 Individual: new Array(16),
                 Team: null,
+                RS: null,
             },
-
-            Timeouts: null,
-            CountTimeOuts: null,
+            Timeout : {
+                Count : null,
+                Time : null,
+            },
             PenaltiesInProgress: null,
 
             Exclusion: {
                 Timer: null,
                 ShirtNumber: null,
             },
+            Possession: null,
+            Warnings: null,
         }
 
 
@@ -182,7 +190,6 @@ class Game {
     static Send() {
         console.log(this.State);
         sharedEmitter.emit('scoring', this.State);
-
     }
 
 }

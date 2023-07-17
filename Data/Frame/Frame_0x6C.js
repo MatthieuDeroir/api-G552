@@ -2,6 +2,7 @@ const nBytesToNumber = require('../Utils/nBytesToNumber');
 const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 const LED = require("../Utils/Enums/eLED");
 const nBytesToTables = require("../Utils/nBytesToTables");
+const eSport = require("../Utils/Enums/eSport");
 
 /*
     * 0x6C : Badminton
@@ -9,49 +10,40 @@ const nBytesToTables = require("../Utils/nBytesToTables");
 
 class Frame_0x6C {
     static build(_message){
-
-        const GSI = {
+        return {
             insertType: 'DirectConsoleData',
-        }
+            Sport: eSport.Badminton,
 
-        // Chrono
-        GSI.Chrono = Tools.Chrono(_message[4], _message[5], _message[6], _message[7]);
+            Chrono: {
+                Value: Tools.Chrono(_message[4], _message[5], _message[6], _message[7]),
+                Display: Tools.ClockTimerDisplay(_message[8]).Chrono,
+            },
 
-        // Home Score
-        GSI.Home_Points = nBytesToNumber(_message[9], _message[10]);
+            Home: {
+                Points: nBytesToNumber(_message[9], _message[10]),
+                SetsWon: nBytesToNumber(_message[15]),
+                PointsBySet: nBytesToTables(24, 4, 3, _message),
+                Service: Tools.Service(_message[50]).Home,
+                Winner: Tools.Winner(_message[51]).Home,
+            },
 
-        // Gu est Score
-        GSI.Guest_Points = nBytesToNumber(_message[12], _message[13]);
+            Guest: {
+                Points: nBytesToNumber(_message[12], _message[13]),
+                SetsWon: nBytesToNumber(_message[16]),
+                PointsBySet: nBytesToTables(26, 4, 3, _message),
+                Service: Tools.Service(_message[50]).Guest,
+                Winner: Tools.Winner(_message[51]).Guest,
+            },
 
-        // Set won
-        GSI.Home_SetsWon = nBytesToNumber(_message[15]);
-        GSI.Guest_SetsWon = nBytesToNumber(_message[16]);
+            Timer: {
+                Status: Tools.TimerStartStop(_message[20]).Status,
+                LED: Tools.TimerStartStop(_message[20]).LED,
+            },
 
-        // Timer Status
-        let Timer = Tools.TimerStartStop(_message[20]);
-        GSI.Timer_Status = Timer.Status;
-        GSI.LED = Timer.LED;
-
-
-        // Clock Display / Chrono Display
-        let Display = Tools.ClockTimerDisplay(_message[21]);
-        GSI.Clock_Display = Display.Clock;
-        GSI.Chrono_Display = Display.Chrono;
-
-        // Points in Set
-        GSI.Home_PointsBySet = nBytesToTables(24, 4, 3, _message);
-        GSI.Guest_PointsBySet = nBytesToTables(26, 4, 3, _message);
-
-        // Service
-        let Service = Tools.Service(_message[50]);
-        GSI.Home_Service = Service.Home;
-        GSI.Guest_Service = Service.Guest;
-
-        // WInner
-        let Winner = Tools.Winner(_message[51]);
-        GSI.Home_Winner = Winner.Home;
-        GSI.Guest_Winner = Winner.Guest;
-        return GSI;
+            Clock: {
+                Display: Tools.ClockTimerDisplay(_message[21]).Clock,
+            }
+        };
     }
 }
 

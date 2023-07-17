@@ -2,6 +2,7 @@ const TeamFouls = require('./2_11_TeamFouls');
 const Possession = require('./3_Possession');
 const PlayerName = require('./3_26_PlayerName');
 const Chrono = require('./4_7_Chrono');
+const Chrono24s = require('./48_49_Chrono24s');
 const ShirtNumber = require('./4_35_ShirtNumber');
 const TeamName = require('./6_48_TeamName');
 const IndividualPoints = require('./11_47_IndividualPoints');
@@ -10,6 +11,7 @@ const B_TeamFouls = require('./15_16_TeamFouls');
 const Horn = require('./19_Horn');
 const TimerStartStop = require('./20_TimerStartStop');
 const ClockTimerDisplay = require('./21_ClockTimerDisplay');
+const TimeOut = require('./21_47_TimeOut');
 const PenaltiesTimer = require('./22_43_PenaltiesTimer');
 const IndividualFouls = require('./22_45_IndividualFouls');
 const Exclusion = require('./22_51_Exclusion');
@@ -27,6 +29,7 @@ const Tools = {
     PlayerName,
     Possession,
     Chrono,
+    Chrono24s,
     ShirtNumber,
     TeamName,
     IndividualPoints,
@@ -35,6 +38,7 @@ const Tools = {
     Horn,
     TimerStartStop,
     ClockTimerDisplay,
+    TimeOut,
     PenaltiesTimer,
     IndividualFouls,
     Exclusion,
