@@ -90,7 +90,7 @@ class SerialPortConnection {
                         LastReadTime: new Date()
                     };
                     AllDevices.push(device);
-                    console.log("Added new COM Device : " + device.DevicePortName);
+                    // console.log("Added new COM Device : " + device.DevicePortName);
                 }
             }
         });
@@ -121,7 +121,7 @@ class SerialPortConnection {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
-                        // console.log(`Port ${device.DevicePortName} open`);
+                        console.log(`Port ${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
                                 console.log(`Data received from ${device.DevicePortName} : ${data}`);
