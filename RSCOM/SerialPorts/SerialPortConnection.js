@@ -72,7 +72,7 @@ class SerialPortConnection {
         let ports = await fs.readdir(config.SerialPort.Path);
 
         ports.forEach(port => {
-            if (port.startsWith(config.SerialPort.Filter)) {
+            if (port.includes(config.SerialPort.Filter)) {
                 let PortName = port;
                 let found = false;
                 AllDevices.forEach(device => {
