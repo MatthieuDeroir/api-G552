@@ -90,7 +90,7 @@ class SerialPortConnection {
                         LastReadTime: new Date()
                     };
                     AllDevices.push(device);
-                    // console.log("Added new COM Device : " + device.DevicePortName);
+                    console.log("Added new COM Device : " + device.DevicePortName);
                 }
             }
         });
