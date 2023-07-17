@@ -1,5 +1,5 @@
-const Frame_0x37 = require('../../Data/Frame/Frame_0x37');
-const LED = require("../../Data/Utils/Enums/eLED");
+const Frame_0x37 = require('../../RSCOM/Frame/Frame_0x37');
+const LED = require("../../RSCOM/Utils/Enums/eLED");
 
 describe('Frame_0x37', () => {
     test('build should return a GSI object', () => {

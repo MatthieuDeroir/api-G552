@@ -1,5 +1,5 @@
 const assert = require("assert");
-const Frame_0x74 = require('../../Data/Frame/Frame_0x74');
+const Frame_0x74 = require('../../RSCOM/Frame/Frame_0x74');
 
 
 describe("Frame_0x74", () => {

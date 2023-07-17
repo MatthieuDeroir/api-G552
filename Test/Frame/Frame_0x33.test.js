@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
-const Frame_0x33 = require('../../Data/Frame/Frame_0x33');
-const Frame_0x36 = require("../../Data/Frame/Frame_0x36");
+const Frame_0x33 = require('../../RSCOM/Frame/Frame_0x33');
+const Frame_0x36 = require("../../RSCOM/Frame/Frame_0x36");
 
 describe('Frame_0x33.build', () => {
     it('30', () => {

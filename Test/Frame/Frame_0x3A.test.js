@@ -1,4 +1,4 @@
-const Frame_0x3A = require('../../Data/Frame/Frame_0x3A');
+const Frame_0x3A = require('../../RSCOM/Frame/Frame_0x3A');
 
 describe('Frame_0x3A', () => {
     test('should build correct GSI object from message', () => {

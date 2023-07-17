@@ -51,7 +51,6 @@ const server = net.createServer((client) => {
         }
     });
 
-
     console.log('Client connected');
 
     client.on('end', () => {

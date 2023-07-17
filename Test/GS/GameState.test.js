@@ -1,5 +1,5 @@
-const Gamestate = require('../../Data/Game');
-const Frame = require('../../Data/Frame/Frame_index');
+const Gamestate = require('../../RSCOM/Game');
+const Frame = require('../../RSCOM/Frame/Frame_index');
 
 describe('Gamestate', () => {
     test('should update gamestate correctly from Frame_0x3A message', () => {
