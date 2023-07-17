@@ -1,4 +1,4 @@
-const Frame_0x9A = require('../../Data/Frame/Frame_0x9A');
+const Frame_0x9A = require('../../RSCOM/Frame/Frame_0x9A');
 
 describe('Frame_0x9A', () => {
     it('should build a valid GSI object for 0x9A message with Chrono Status 0x30', () => {

@@ -1,4 +1,4 @@
-const nBytesToNumber = require('../../Data/Utils/nBytesToNumber');
+const nBytesToNumber = require('../../RSCOM/Utils/nBytesToNumber');
 
 describe('nBytesToNumber', () => {
     test('converts a single byte to its numeric value', () => {

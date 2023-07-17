@@ -20,7 +20,7 @@ webSocketSetup(app);
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
 unixSocketSetup.startServer();
 
-const { SerialPortConnection, sharedEmitter } = require("./Data/SerialPorts/SerialPortConnection");
+const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 
 sp.StartReading();

@@ -1,4 +1,4 @@
-const Chrono = require('../../../Data/Utils/Frame_Tools/4_7_Chrono');
+const Chrono = require('../../../RSCOM/Utils/Frame_Tools/4_7_Chrono');
 
 describe('Chrono', () => {
     it('should return a valid Chrono value for 0x30 0x30 0x30 0x20', () => {
