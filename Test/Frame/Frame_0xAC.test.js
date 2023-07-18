@@ -1,4 +1,4 @@
-const Frame_0xAC = require('../../Data/Frame/Frame_0xAC');
+const Frame_0xAC = require('../../RSCOM/Frame/Frame_0xAC');
 
 
 describe('Frame_0xAC', () => {

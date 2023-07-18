@@ -11,14 +11,16 @@ const config = {
     SerialPort: {
         MaxRetries: 10,
         RefreshInterval: 100,
-        BaudRate: 9600,
+        BaudRate: 115200,
         DataBits: 8,
         Parity: 'none',
         StopBits: 1,
         FlowControl: 'none',
         Handshake:'none',
         Path:`/dev`,
-        Filter: `tty`
+        Filter: `tty10`,
+        ReadTimeout: 2000,
+        WriteTimeout: 2000,
     }
 
     // WebSockets config

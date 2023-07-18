@@ -1,4 +1,4 @@
-const Frame_0x6C = require('../../Data/Frame/Frame_0x6C');
+const Frame_0x6C = require('../../RSCOM/Frame/Frame_0x6C');
 
 test('Frame_0x6C.build returns a valid object', () => {
     const message = [

@@ -1,4 +1,4 @@
-const Frame_0x93 = require("../../Data/Frame/Frame_0x93");
+const Frame_0x93 = require("../../RSCOM/Frame/Frame_0x93");
 describe('Frame_0x93', () => {
     it('. Chrono', () => {
         const message = [

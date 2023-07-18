@@ -1,4 +1,4 @@
-const Frame_0x36 = require('../../Data/Frame/Frame_0x36');
+const Frame_0x36 = require('../../RSCOM/Frame/Frame_0x36');
 
 /*
     0x36 : Volleyball

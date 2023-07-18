@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Frame_0x77_PlayerNames = require('../../Data/Frame/Frame_0x77_GuestPlayerNames');
+const Frame_0x77_PlayerNames = require('../../RSCOM/Frame/Frame_0x77_GuestPlayerNames');
 require('jest')
 
 describe('Frame_0x77_PlayerNames', () => {

@@ -1,4 +1,4 @@
-const Frame_0x39 = require('../../Data/Frame/Frame_0x39');
+const Frame_0x39 = require('../../RSCOM/Frame/Frame_0x39');
 
 /*
 
