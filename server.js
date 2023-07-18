@@ -18,7 +18,7 @@ const webSocketSetup = require("./Sockets/Websocket.js");
 webSocketSetup(app);
 
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
-unixSocketSetup.startServer();
+/* unixSocketSetup.startServer(); */
 
 const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
@@ -31,7 +31,7 @@ sp.StartReading();
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
 //TODO: Uncomment this line to activate token check
-// app.use(checkToken);
+app.use(checkToken);
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");

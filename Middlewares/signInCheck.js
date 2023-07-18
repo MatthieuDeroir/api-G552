@@ -1,39 +1,46 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-
 const checkToken = (req, res, next) => {
   const secret = config.secret;
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
-    return res.status(200).send({ auth: false, message: "No token provided." });
+    return res.status(401).send({ auth: false, message: "No token provided." });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
+    jwt.verify(token, secret); // Vérifie la validité du token, y compris l'expiration
     const decoded = jwt.decode(token);
-    const expirationTime = Math.floor(Date.now() / 1000) + 2; // Ajouter 2 heures
+
+    const expirationTime = Math.floor(Date.now() / 1000) + 2 * 60 * 60;
 
     if (expirationTime > decoded.exp) {
-      // Mettre à jour la date d'expiration du token
+      console.log("expirationTime", decoded.exp);
       decoded.exp = expirationTime;
 
-      // Signer le token avec la nouvelle date d'expiration
       const updatedToken = jwt.sign(decoded, secret);
-
-      // Mettre à jour l'en-tête "Authorization" avec le token mis à jour
       res.setHeader("Authorization", `Bearer ${updatedToken}`);
+      return res.status(200).send({
+        accessToken: updatedToken,
+        message: "Token has been refreshed.",
+      });
     }
 
     req.userId = decoded.id;
-
     next();
   } catch (err) {
     console.log(err);
-    return res
-      .status(500)
-      .send({ auth: false, message: "Failed to authenticate token." });
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .send({ auth: false, message: "Token has expired." });
+    } else {
+      return res
+        .status(500)
+        .send({ auth: false, message: "Failed to authenticate token." });
+    }
   }
 };
 

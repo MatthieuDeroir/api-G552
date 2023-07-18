@@ -17,7 +17,9 @@ class User {
             username TEXT,
             password TEXT,
             role TEXT,
-            firstLogin INTEGER
+            firstLogin INTEGER,
+            active_token TEXT,
+            last_activity INTEGER
         )
         `;
     db.run(createTable);
@@ -110,6 +112,21 @@ class User {
             reject(err);
           } else {
             resolve();
+          }
+        }
+      );
+    });
+  }
+  updateTokenAndActivity(user, callback) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE users SET active_token = ?, last_activity = ? WHERE id = ?`,
+        [user.active_token, user.last_activity, user.id],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(callback(null, user));
           }
         }
       );
