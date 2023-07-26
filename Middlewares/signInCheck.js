@@ -1,46 +1,42 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-const checkToken = (req, res, next) => {
+const User = require("../Models/userModel");
+const moment = require('moment');
+
+const checkToken = async (req, res, next) => {
   const secret = config.secret;
   const authHeader = req.headers["authorization"];
+  const userController = new User();
 
   if (!authHeader) {
-    return res.status(401).send({ auth: false, message: "No token provided." });
+    return res.status(200).send({ auth: false, message: "No token provided." });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
-    jwt.verify(token, secret); // Vérifie la validité du token, y compris l'expiration
-    const decoded = jwt.decode(token);
-
-    const expirationTime = Math.floor(Date.now() / 1000) + 2 * 60 * 60;
-
-    if (expirationTime > decoded.exp) {
-      console.log("expirationTime", decoded.exp);
-      decoded.exp = expirationTime;
-
-      const updatedToken = jwt.sign(decoded, secret);
-      res.setHeader("Authorization", `Bearer ${updatedToken}`);
-      return res.status(200).send({
-        accessToken: updatedToken,
-        message: "Token has been refreshed.",
-      });
+    const decoded = jwt.decode(token,secret);
+    const  user = await userController.getById( decoded.id );
+    if (user.active_token !== token) {
+      return res.status(401).json({ error: 'Token invalide' });
     }
 
-    req.userId = decoded.id;
+    const inactivite = moment.duration(moment(new Date()).diff(user.last_activity)).asHours();
+   
+
+    if (inactivite > 2) {
+      await userController.updateTokenAndActivity({ id: user.id , active_token: null });
+      return res.status(401).json({ error: 'Déconnecté en raison d\'inactivité' });
+    }
+
+    await userController.updateTokenAndActivity({ id: user.id , last_activity:  new Date(), active_token: token });
+
     next();
   } catch (err) {
     console.log(err);
-    if (err.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .send({ auth: false, message: "Token has expired." });
-    } else {
-      return res
-        .status(500)
-        .send({ auth: false, message: "Failed to authenticate token." });
-    }
+    return res
+      .status(500)
+      .send({ auth: false, message: "Failed to authenticate token." });
   }
 };
 

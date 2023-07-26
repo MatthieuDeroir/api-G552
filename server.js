@@ -32,6 +32,7 @@ const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
 //TODO: Uncomment this line to activate token check
 app.use(checkToken);
+const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
@@ -43,6 +44,7 @@ const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
 
+app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
 app.use("/users", userRoutes);
 app.use("/medias", mediaRoutes);

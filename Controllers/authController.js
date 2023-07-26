@@ -63,7 +63,6 @@ const signUp = async (req, res) => {
   }
 };
 
-
 const signIn = async (req, res) => {
   const user = {
     username: req.body.username,
@@ -85,36 +84,19 @@ const signIn = async (req, res) => {
             return res.status(500).json({ message: err });
           } else {
             if (result) {
-              
+              if (foundUser.firstLogin === 1) {
+                console.log("First login");
+                /* await userController.updateFirstLogin(foundUser.id); */
+                
+              }
               const secret = config.secret;
-
               const accessToken = jwt.sign({ id: foundUser.id }, secret, {
                 expiresIn: 2 * 60 * 60, // expires in 2 hours (2 * 60 * 60)
               });
-
-              userController.updateTokenAndActivity( // Note the change here
-                {
-                  active_token: accessToken,
-                  last_activity: Date.now(),
-                  id:  foundUser.id,  // Note the change here
-                },
-                function (err, doc) {
-                  if (err) {
-                    console.log(err);
-                    return res
-                      .status(500)
-                      .send({
-                        message:
-                          "Une erreur est survenue lors de la mise à jour du token et de la dernière activité.",
-                      });
-                  } else {
-                    return res.status(200).send({
-                      accessToken: accessToken,
-                      user: foundUser,
-                    });
-                  }
-                }
-              );
+              return res.status(200).send({
+                accessToken: accessToken,
+                user: foundUser,
+              });
             } else {
               console.log("Invalid Password!");
               return res.status(401).send({
@@ -133,16 +115,12 @@ const signIn = async (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
-
-
-
 const modifyPassword = async (req, res) => {
   const newUser = new User();
   const user = {
     id: req.params.id,
     newPassword: req.body.newPassword,
   };
-  console.log(user);
   try {
     const passwordRequirements = await verification.checkPasswordRequirements(
       user.newPassword
@@ -156,9 +134,6 @@ const modifyPassword = async (req, res) => {
     const modifyUserPassword = await newUser
       .changePassword(user)
       .then((user) => {
-        return newUser.updateFirstLogin(user.id);
-      })
-      .then(() => {
         res.status(201).json(user);
       })
       .catch((err) => {
