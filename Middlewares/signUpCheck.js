@@ -1,47 +1,83 @@
-const db = require('../Database/db.js');
+const db = require("../Database/db.js");
 
-const checkDuplicateUsername = (req, res, next) => {
-    db.get(`SELECT * FROM users WHERE username = ?`, [req.body.username], (err, row) => {
+const checkDuplicateUsername = async (req, res, next) => {
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT COUNT(*) as count FROM users WHERE username = ?`,
+      [req],
+      (err, row) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+          console.log(err);
+          reject(err);
+          return;
         }
-        if (row) {
-            res.status(400).send({ message: "Failed! Username is already in use!" });
-            return;
+
+        const count = row.count;
+        const isDuplicate = count > 0;
+
+        if (isDuplicate) {
+          console.log("Le nom d'utilisateur est déjà utilisé");
+          resolve(isDuplicate);
+          return;
         }
-        next();
+
+        resolve(isDuplicate);
+      }
+    );
+  });
+};
+const checkPasswordRequirements = async (req) => {
+  return new Promise((resolve, reject) => {
+    if (req.length < 8) {
+      console.log("Le mot de passe doit comporter au moins 8 caractères");
+      resolve({
+        message:
+          "Échec ! Le mot de passe doit comporter au moins 8 caractères !",
+        result: false,
+      });
+      return;
+    }
+    if (!/[a-zA-Z]/.test(req)) {
+      console.log("Le mot de passe doit contenir au moins une lettre");
+      resolve({
+        message: "Échec ! Le mot de passe doit contenir au moins une lettre !",
+        result: false,
+      });
+      return;
+    }
+    if (!/[0-9]/.test(req)) {
+      console.log("Le mot de passe doit contenir au moins un chiffre");
+      resolve({
+        message: "Échec ! Le mot de passe doit contenir au moins un chiffre !",
+        result: false,
+      });
+      return;
+    }
+    resolve({
+      message: "Les exigences du mot de passe sont satisfaites",
+      result: true,
     });
-}
+  });
+};
 
-const checkPasswordRequirements = (req, res, next) => {
-    if (req.body.password.length < 8) {
-        res.status(400).send({ message: "Failed! Password must be at least 8 characters long!" });
-        return;
+const verifyRoles = async (req, res, next) => {
+  return new Promise((resolve, reject) => {
+    if (req !== "root" && req !== "admin" && req !== "user") {
+      console.log("Les rôles ne sont pas valides");
+      reject({
+        message: "Échec ! Le rôle doit être soit 'root', 'admin' ou 'user' !",
+        result: false,
+      });
+      return;
     }
-    if (req.body.password.search(/[a-z]/i) < 0) {
-        res.status(400).send({ message: "Failed! Password must contain at least one letter!" });
-        return;
-    }
-    if (req.body.password.search(/[0-9]/) < 0) {
-        res.status(400).send({ message: "Failed! Password must contain at least one digit!" });
-        return;
-    }
-    next();
-}
-
-const verifyRoles = (req, res, next) => {
-    if (req.body.role !== 'root' && req.body.role !== 'admin' && req.body.role !== 'user') {
-        res.status(400).send({ message: "Failed! Role must be either 'root', 'admin' or 'user'!" });
-        return;
-    }
-    next();
-}
+    resolve();
+  });
+};
 
 const signUpCheck = {
-    checkDuplicateUsername,
-    checkPasswordRequirements,
-    verifyRoles
-}
+  checkDuplicateUsername,
+  checkPasswordRequirements,
+  verifyRoles,
+};
 
 module.exports = signUpCheck;

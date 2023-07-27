@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const Frame_0x35 = require('../../Data/Frame/Frame_0x35');
+const Frame_0x35 = require('../../RSCOM/Frame/Frame_0x35');
 
 describe('Frame_0x35', () => {
     it('. Chrono', () => {
@@ -35,6 +35,7 @@ describe('Frame_0x35', () => {
             0x20, // Reserved
             0x0D, // End byte
         ];
+
 
         const expectedGSI = {
             insertType: 'DirectConsoleData',
