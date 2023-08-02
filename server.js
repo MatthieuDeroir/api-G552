@@ -31,7 +31,7 @@ sp.StartReading();
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
 //TODO: Uncomment this line to activate token check
-app.use(checkToken);
+/* app.use(checkToken); */
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
@@ -43,6 +43,7 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
+const scoringTennisRoutes = require("./Routes/ScoringTennisRoutes");
 
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
@@ -55,6 +56,7 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
+app.use("/tennis", scoringTennisRoutes);
 
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
