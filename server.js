@@ -31,7 +31,7 @@ sp.StartReading();
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
 //TODO: Uncomment this line to activate token check
-/* app.use(checkToken); */
+app.use(checkToken);
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");

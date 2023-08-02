@@ -77,6 +77,19 @@ class ActiveSession {
     });
   }
 
+  getFirst() {
+    return new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM activeSessions ORDER BY id ASC LIMIT 1`, (err, session) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(session);
+        }
+      });
+    });
+  }
+  
+
   getByUserId(userId) {
     console.log("getByUserId", userId);
     return new Promise((resolve, reject) => {
@@ -99,7 +112,7 @@ class ActiveSession {
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 1`,
-        [session.active_token, session.last_activity , activeUser],
+        [session.active_token, session.last_activity],
         (err) => {
           if (err) {
             reject(err);

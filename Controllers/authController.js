@@ -101,11 +101,12 @@ const signIn = async (req, res) => {
                     active_token: null,
                     last_activity: null,
                   });
-                } else {
-                  return res.status(409).json({
-                    error: "Un autre utilisateur est déjà connecté",
-                  });
-                }
+                } 
+              }else {
+                console.log("Un autre utilisateur est déjà connecté");
+                return res.status(409).json({
+                  error: "Un autre utilisateur est déjà connecté",
+                });
               }
 
               const secret = config.secret;
