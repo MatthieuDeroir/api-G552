@@ -14,7 +14,39 @@ class ActiveSession {
             last_activity INTEGER
         )
         `;
-    db.run(createTable);
+    db.run(createTable, (err) => {
+      if (err) {
+        console.error(err);
+      } else {
+        // Vérifier si la table est vide
+        db.get(`SELECT COUNT(*) as count FROM activeSessions`, (err, row) => {
+          if (err) {
+            console.error(err);
+          } else {
+            // Si la table est vide, insérez la première ligne
+            if (row.count === 0) {
+              const firstRow = {
+                userId: null, // Utilisez les valeurs appropriées pour votre application
+                active_token: null,
+                last_activity: null,
+              };
+
+              db.run(
+                `INSERT INTO activeSessions (userId, activeToken, last_activity) VALUES (?, ?, ?)`,
+                [firstRow.userId, firstRow.activeToken, firstRow.last_activity],
+                (err) => {
+                  if (err) {
+                    console.error(err);
+                  } else {
+                    console.log("Première ligne insérée avec succès !");
+                  }
+                }
+              );
+            }
+          }
+        });
+      }
+    });
   }
 
   async create(session) {
@@ -35,16 +67,15 @@ class ActiveSession {
   }
   getAll() {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM activeSessions`, (err, sessions) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(sessions);
-            }
-        });
+      db.all(`SELECT * FROM activeSessions`, (err, sessions) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(sessions);
+        }
+      });
     });
-}
-  
+  }
 
   getByUserId(userId) {
     console.log("getByUserId", userId);
@@ -63,23 +94,22 @@ class ActiveSession {
     });
   }
 
-  updateOne (session) {
+  updateOne(session) {
     console.log("updateOne", session);
     return new Promise((resolve, reject) => {
-        db.run(
-            `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 0`,    
-            [session.activeToken, session.last_activity ],
-            (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-
-                }
-            }
-        );
+      db.run(
+        `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 1`,
+        [session.active_token, session.last_activity , activeUser],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
     });
-}
+  }
 
   delete(id) {
     return new Promise((resolve, reject) => {
