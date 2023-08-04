@@ -1,5 +1,5 @@
 const express = require('express');
-const ScoringTennisController = require('../Controllers/scoringTennisController');
+const ScoringTennisController = require('../../Controllers/Scoring/tennisController');
 
 const router = express.Router();
 const scoringTennisController = new ScoringTennisController();
