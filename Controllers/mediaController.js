@@ -10,7 +10,7 @@ class MediaController {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const username = req.params.user;
-        const userFolder = `../../uploads`;
+        const userFolder = `../../uploads/`;
         cb(null, userFolder);
       },
       filename: (req, file, cb) => {

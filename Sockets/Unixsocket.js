@@ -1,12 +1,12 @@
 const net = require('net');
 const fs = require('fs');
 const sharedEmitter = require("../Utils/SharedEmitter");
-/* const socketPath = '/tmp/_sysmes.sock'; */
+const socketPath = '/tmp/_sysmes.sock';
 
 // Check if the socket file already exists then delete it
-/* if (fs.existsSync(socketPath)) {
+if (fs.existsSync(socketPath)) {
     fs.unlinkSync(socketPath);
-} */
+}
 
 function handleData(data) {
     if (data.mode === 'scoring') {
@@ -66,7 +66,7 @@ let mode = "media";
 let sport = "basketball";
 
 // Export the function to start the server
-/* module.exports = {
+module.exports = {
     startServer: function () {
         server.listen(socketPath, () => {
             console.log(`UnixSocket Server listening on ${socketPath}`);
@@ -86,7 +86,7 @@ let sport = "basketball";
                 setInterval(() => {
                     const mediaData = {
                         mode: 'media',
-                        medias: [ */
+                        medias: [
                             // {
                             //     path: "/home/linaro/Server/Backend/Medias/1.png",
                             //     duration: 2,
@@ -106,7 +106,7 @@ let sport = "basketball";
                             //     path: "/home/linaro/Server/Backend/Medias/3.mp4",
                             //     duration: 3,
                             //     type: "video"
-                    /*         // }
+                            // }
                         ]
                     };
                     sharedEmitter.emit("media", mediaData);
@@ -118,4 +118,4 @@ let sport = "basketball";
             console.error('Server error:', err);
         });
     }
-} */
+}
