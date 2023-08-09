@@ -1,4 +1,4 @@
-const db = require("../Database/db");
+const db = require("../../Database/db");
 
 class TennisScore {
   constructor() {
@@ -18,7 +18,7 @@ class TennisScore {
         sets_won_player2 INTEGER,
         server_name TEXT,
         timer INTEGER,
-        set_type TEXT,
+        set_type INTEGER,
         deciding_point INTEGER,
         tie_break INTEGER,
         tie_break_in_final_set INTEGER,
@@ -39,12 +39,12 @@ class TennisScore {
           setsWonPlayer2: 0,
           server: "Visiteur",
           timer: 0,
-          setType: "normal",
+          setType: 7,
           decidingPoint: 0,
           tieBreak: 0,
           tieBreakInFinalSet: 0,
-          numberOfSets: 0,
-          gamesPerSet: 0,
+          numberOfSets: 3,
+          gamesPerSet: 6,
         });
       }
     });
@@ -79,7 +79,7 @@ class TennisScore {
           score.server,
           score.timer,
           score.setType,
-          score.decidingPoint,
+          score.decidingPointConvert,
           score.tieBreak,
           score.tieBreakInFinalSet,
           score.numberOfSets,
@@ -143,10 +143,10 @@ class TennisScore {
         [
           score.player1,
           score.player2,
-          score.lastSetType,
-          score.decidingPoint,
-          score.tieBreak,
-          score.tieBreakInFinalSet,
+          score.setType,
+          score.decidingPointConvert,
+          score.tieBreakConvert,
+          score.tieBreakInFinalSetConvert,
           score.numOfSets,
           score.gamesPerSet,
         ],
@@ -175,7 +175,7 @@ class TennisScore {
           score.server,
           score.timer,
           score.setType,
-          score.decidingPoint,
+          score.decidingPointConvert,
           score.tieBreak,
           score.tieBreakInFinalSet,
           score.numberOfSets,

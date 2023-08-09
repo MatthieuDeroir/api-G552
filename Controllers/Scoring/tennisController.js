@@ -1,4 +1,4 @@
-const TennisScore = require('../Models/scoringTennisModel');
+const TennisScore = require('../../Models/Scoring/tennisModel');
 
 class ScoringTennisController {
     constructor() {
