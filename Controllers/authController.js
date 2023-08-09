@@ -109,6 +109,7 @@ const signIn = async (req, res) => {
               //   });
               // }
 
+
               const secret = config.secret;
               const accessToken = jwt.sign({ id: foundUser.id }, secret);
 
