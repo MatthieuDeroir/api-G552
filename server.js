@@ -30,7 +30,7 @@ sharedEmitter.on("data", (data) => {
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
-//TODO: Uncomment this line to activate token check
+//Uncomment this line to activate token check
 app.use(checkToken);
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
 const userRoutes = require("./Routes/userRoutes");
