@@ -18,7 +18,7 @@ const config = {
         FlowControl: 'none',
         Handshake:'none',
         Path:`/dev`,
-        Filter: `tty10`,
+        Filter: `ttyS0`,
         ReadTimeout: 2000,
         WriteTimeout: 2000,
     }
