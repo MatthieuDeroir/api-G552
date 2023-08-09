@@ -56,7 +56,7 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
-app.use("/tennis", scoringTennisRoutes);
+// app.use("/tennis", scoringTennisRoutes);
 
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
