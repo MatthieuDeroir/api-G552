@@ -1,9 +1,14 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
+const User = require("../Models/userModel");
+const ActiveSession = require("../Models/activeSessionModel");
+const moment = require('moment');
 
-const checkToken = (req, res, next) => {
+const checkToken = async (req, res, next) => {
   const secret = config.secret;
   const authHeader = req.headers["authorization"];
+  const userController = new User();
+  const activeSession = new ActiveSession();
 
   if (!authHeader) {
     return res.status(200).send({ auth: false, message: "No token provided." });
@@ -12,21 +17,24 @@ const checkToken = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.decode(token);
-    const expirationTime = Math.floor(Date.now() / 1000) + 2; // Ajouter 2 heures
+    const decoded = jwt.decode(token,secret);
 
-    if (expirationTime > decoded.exp) {
-      // Mettre à jour la date d'expiration du token
-      decoded.exp = expirationTime;
+    const  user = await userController.getById( decoded.id );
+    if (user.active_token !== token) {
+      return res.status(401).json({ error: 'Token invalide' });
+    }
+    const session = await activeSession.getFirst()
+    console.log("session", session);
+    const inactivite = moment.duration(moment(new Date()).diff(session.last_activity)).asHours();
+    
+   console.log("inactivite", inactivite);
 
-      // Signer le token avec la nouvelle date d'expiration
-      const updatedToken = jwt.sign(decoded, secret);
-
-      // Mettre à jour l'en-tête "Authorization" avec le token mis à jour
-      res.setHeader("Authorization", `Bearer ${updatedToken}`);
+    if (inactivite > 2) {
+      await userController.updateTokenAndActivity({ id: user.id , active_token: null });
+      return res.status(401).json({ error: 'Déconnecté en raison d\'inactivité' });
     }
 
-    req.userId = decoded.id;
+    await activeSession.updateOne({last_activity:  new Date(), active_token: token });
 
     next();
   } catch (err) {

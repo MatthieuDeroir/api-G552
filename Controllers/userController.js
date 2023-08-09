@@ -25,13 +25,9 @@ class UserController {
       });
   };
 
-
-  
-
-  
   changePassword = (req, res) => {
     this.user
-      .changePassword(req.body,req.params.id)
+      .changePassword(req.body, req.params.id)
       .then((user) => {
         res.status(200).json(user);
       })
@@ -39,7 +35,6 @@ class UserController {
         res.status(500).json({ message: err });
       });
   };
-
 
   getByUsername = (req, res) => {
     this.user
@@ -84,6 +79,17 @@ class UserController {
       .delete(req.params.id)
       .then(() => {
         res.status(204).json();
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  };
+  updateFirstLogin = (req, res) => {
+    console.log("updateFirstLogin");
+    this.user
+      .updateFirstLogin(req.params.id)
+      .then((user) => {
+        res.status(200).json(user);
       })
       .catch((err) => {
         res.status(500).json({ message: err });

@@ -17,7 +17,8 @@ class User {
             username TEXT,
             password TEXT,
             role TEXT,
-            firstLogin INTEGER
+            firstLogin INTEGER,
+            active_token TEXT
         )
         `;
     db.run(createTable);
@@ -115,6 +116,22 @@ class User {
       );
     });
   }
+  updateTokenAndActivity(user) {
+    console.log("updateTokenAndActivity", user);
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE users SET active_token = ? WHERE id = ?`,
+        [user.active_token, user.id],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
 
   update(user) {
     return new Promise((resolve, reject) => {
@@ -139,7 +156,6 @@ class User {
   }
 
   getByUsername(username) {
-    console.log(`Looking up user with username: ${username}`);
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT * FROM users WHERE username = ?`,
@@ -152,8 +168,7 @@ class User {
               err
             );
             reject(err);
-          } else {
-            console.log(`Found user with username: ${username}`, user);
+          } else {        
             resolve(user);
           }
         }
@@ -162,7 +177,6 @@ class User {
   }
 
   getAll() {
-    console.log("getAll");
     return new Promise((resolve, reject) => {
       db.all(`SELECT * FROM users`, (err, users) => {
         if (err) {
@@ -173,8 +187,8 @@ class User {
       });
     });
   }
-
   getById(id) {
+
     return new Promise((resolve, reject) => {
       db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, user) => {
         if (err) {

@@ -1,5 +1,4 @@
 node_modules
 .idea
 package-lock.json
-Medias
-.DS_Store
+Database/db.sqlite

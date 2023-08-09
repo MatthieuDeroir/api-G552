@@ -1,9 +1,11 @@
 const User = require("../Models/userModel");
+const ActiveSession = require("../Models/activeSessionModel");
 const bcrypt = require("bcrypt");
 const config = require("../config");
 const verification = require("../Middlewares/signUpCheck");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const { log } = require("console");
 
 const signUp = async (req, res) => {
   console.log(req.body);
@@ -71,6 +73,7 @@ const signIn = async (req, res) => {
 
   try {
     const userController = new User();
+    const activeSessionModel = new ActiveSession();
     console.log(user.username);
     const foundUser = await userController.getByUsername(user.username);
     console.log("foundUser", foundUser);
@@ -84,17 +87,42 @@ const signIn = async (req, res) => {
             return res.status(500).json({ message: err });
           } else {
             if (result) {
-              /* if (foundUser.firstLogin === 1) {
-                console.log("First login");
-                
-                await userController.updateFirstLogin(foundUser.id);
-              } */
-              const secret = config.secret;
-              console.log(secret);
+              if (foundUser.firstLogin === 1) {
+                console.log("First login");  
+              }
 
-              const accessToken = jwt.sign({ id: foundUser.id }, secret, {
-                expiresIn: 2 * 60 * 60, // expires in 2 hours (2 * 60 * 60)
+              const activeSession = await activeSessionModel.getAll();
+             
+              // Si un utilisateur est déjà connecté
+              // if (activeSession && activeSession.activeToken) {
+              //   console.log("activeSession", activeSession);
+              //   if (activeSession.last_activity > 2) {
+              //     await activeSessionModel.updateOne({
+              //       active_token: null,
+              //       last_activity: null,
+              //     });
+              //   }
+              // }else {
+              //   console.log("Un autre utilisateur est déjà connecté");
+              //   return res.status(409).json({
+              //     error: "Un autre utilisateur est déjà connecté",
+              //   });
+              // }
+
+              const secret = config.secret;
+              const accessToken = jwt.sign({ id: foundUser.id }, secret);
+
+              await userController.updateTokenAndActivity({
+                id: foundUser.id,
+                active_token: accessToken,
               });
+
+              await activeSessionModel.updateOne({
+                active_token: accessToken,
+                activeUser: foundUser.id,
+                last_activity: new Date(),
+              });
+
               return res.status(200).send({
                 accessToken: accessToken,
                 user: foundUser,
@@ -118,12 +146,12 @@ const signIn = async (req, res) => {
   }
 };
 const modifyPassword = async (req, res) => {
+  console.log(req.body);
   const newUser = new User();
   const user = {
     id: req.params.id,
     newPassword: req.body.newPassword,
   };
-  console.log(user);
   try {
     const passwordRequirements = await verification.checkPasswordRequirements(
       user.newPassword
@@ -134,18 +162,16 @@ const modifyPassword = async (req, res) => {
       return res.status(400).json({ message: passwordRequirements.message });
     }
 
-    const modifyUserPassword = await newUser
-  .changePassword(user)
-  .then((user) => {
-    return newUser.updateFirstLogin(user.id);
-  })
-  .then(() => {
-    res.status(201).json(user);
-  })
-  .catch((err) => {
-    console.log(err);
-    return res.status(500).json({ message: err });
-  });
+     await newUser
+      .changePassword(user)
+      .then((user) => {
+        newUser.updateFirstLogin(user.id)
+        res.status(201).json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({ message: err });
+      });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
