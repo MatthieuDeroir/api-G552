@@ -94,20 +94,21 @@ const signIn = async (req, res) => {
               const activeSession = await activeSessionModel.getAll();
              
               // Si un utilisateur est déjà connecté
-             /*  if (activeSession && activeSession.activeToken) {
-                console.log("activeSession", activeSession);
-                if (activeSession.last_activity > 2) {
-                  await activeSessionModel.updateOne({
-                    active_token: null,
-                    last_activity: null,
-                  });
-                } 
-              }else {
-                console.log("Un autre utilisateur est déjà connecté");
-                return res.status(409).json({
-                  error: "Un autre utilisateur est déjà connecté",
-                });
-              } */
+              // if (activeSession && activeSession.activeToken) {
+              //   console.log("activeSession", activeSession);
+              //   if (activeSession.last_activity > 2) {
+              //     await activeSessionModel.updateOne({
+              //       active_token: null,
+              //       last_activity: null,
+              //     });
+              //   }
+              // }else {
+              //   console.log("Un autre utilisateur est déjà connecté");
+              //   return res.status(409).json({
+              //     error: "Un autre utilisateur est déjà connecté",
+              //   });
+              // }
+
 
               const secret = config.secret;
               const accessToken = jwt.sign({ id: foundUser.id }, secret);
