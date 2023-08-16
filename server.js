@@ -43,7 +43,7 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
-const scoringTennisRoutes = require("./Routes/ScoringTennisRoutes");
+const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
 
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
