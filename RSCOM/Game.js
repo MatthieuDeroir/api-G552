@@ -90,8 +90,6 @@ class Game {
             Possession: null,
             Warnings: null,
         }
-
-
     }
 
     static update = (_message) => {
