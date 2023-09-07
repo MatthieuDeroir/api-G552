@@ -15,8 +15,9 @@ class BadmintonController {
             });
     }
 
-    updateScoreById = (req, res) => {
-        this.badmintonScore.updateScoreById(req.params.id, req.body)
+    updateScore = (req, res) => {
+        console.log(req.body);
+        this.badmintonScore.updateScore(req.body)
             .then((badmintonScore) => {
                 res.status(200).json(badmintonScore);
             })

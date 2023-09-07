@@ -4,8 +4,7 @@ const ScoringBadmintonController = require('../../Controllers/Scoring/badmintonC
 const router = express.Router();
 const scoringBadmintonController = new ScoringBadmintonController();
 
-router.post('/:user/:id', scoringBadmintonController.create);
-router.put('/:id', scoringBadmintonController.updateScoreById);
+router.put('/', scoringBadmintonController.updateScore);
 router.get('/', scoringBadmintonController.getAll);
 router.get('/:id', scoringBadmintonController.getScoreById);
 router.delete('/:id', scoringBadmintonController.deleteScoreById);

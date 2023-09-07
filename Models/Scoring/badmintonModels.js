@@ -18,10 +18,9 @@ class BadmintonModels {
         sets_won_player2 INTEGER,
         server_name TEXT,
         timer INTEGER,
-        set_type INTEGER,
-        tie_break INTEGER,
         number_of_sets INTEGER,
-        points_per_set INTEGER
+        points_per_set INTEGER,
+        max_set_points INTEGER
     )
   `;
     db.run(createTable, [], (err) => {
@@ -37,10 +36,9 @@ class BadmintonModels {
           setsWonPlayer2: 0,
           server: "Visiteur",
           timer: 0,
-          setType: 7,
-          tieBreak: 0,
           numberOfSets: 3,
           pointsPerSet: 21,
+          maxSetPoints: 30,
         });
       }
     });
@@ -63,8 +61,8 @@ class BadmintonModels {
   create(score) {
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO badminton_score (player1_name, player2_name, score_player1, score_player2, sets_won_player1, sets_won_player2, server_name, timer, set_type, tie_break, number_of_sets, points_per_set)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO badminton_score (player1_name, player2_name, score_player1, score_player2, sets_won_player1, sets_won_player2, server_name, timer, number_of_sets, points_per_set, max_set_points)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           score.player1,
           score.player2,
@@ -74,10 +72,9 @@ class BadmintonModels {
           score.setsWonPlayer2,
           score.server,
           score.timer,
-          score.setType,
-          score.tieBreak,
           score.numberOfSets,
           score.pointsPerSet,
+          score.maxSetPoints,
         ],
         (err) => {
           if (err) {
@@ -114,24 +111,19 @@ class BadmintonModels {
     });
   }
 
-  updateScoreById(id, score) {
+  updateScore(score) {
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE badminton_score
-         SET score_player1 = ?, score_player2 = ?, sets_won_player1 = ?, sets_won_player2 = ?, server_name = ?, timer = ?, set_type = ?, tie_break = ?, number_of_sets = ?, points_per_set = ?
-         WHERE id = ?`,
+         SET score_player1 = ?, score_player2 = ?, sets_won_player1 = ?, sets_won_player2 = ?, server_name = ?
+         WHERE id = 1`,
         [
-          score.scorePlayer1,
-          score.scorePlayer2,
-          score.setsWonPlayer1,
-          score.setsWonPlayer2,
-          score.server,
-          score.timer,
-          score.setType,
-          score.tieBreak,
-          score.numberOfSets,
-          score.pointsPerSet,
-          id,
+          score.score_player1,
+          score.score_player2,
+          score.sets_won_player1,
+          score.sets_won_player2,
+          score.server_name,
+        ,
         ],
         (err) => {
           if (err) {
