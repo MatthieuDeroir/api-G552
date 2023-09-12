@@ -18,7 +18,7 @@ const webSocketSetup = require("./Sockets/Websocket.js");
 webSocketSetup(app);
 
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
-unixSocketSetup.startServer();
+/* unixSocketSetup.startServer(); */
 
 const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
@@ -43,7 +43,9 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
-// const scoringTennisRoutes = require("./Routes/ScoringTennisRoutes");
+
+const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
+const scoringBadmintonRoutes= require("./Routes/Scoring/badmintonRoutes");
 
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
@@ -56,7 +58,10 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
-// app.use("/tennis", scoringTennisRoutes);
+
+app.use("/tennis", scoringTennisRoutes);
+app.use("/badminton", scoringBadmintonRoutes);
+
 
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
