@@ -11,14 +11,13 @@ const config = {
     SerialPort: {
         MaxRetries: 10,
         RefreshInterval: 100,
-        BaudRate: 115200,
+        BaudRate: 38400,
         DataBits: 8,
         Parity: 'none',
         StopBits: 1,
-        FlowControl: 'none',
         Handshake:'none',
         Path:`/dev`,
-        Filter: `tty10`,
+        Filter: `ttyS0`,
         ReadTimeout: 2000,
         WriteTimeout: 2000,
     }

@@ -1,4 +1,6 @@
 const SerialPort = require('serialport');
+const config = require('../../config');
+
 
 class SerialPortDevice {
     constructor(portName) {
@@ -12,7 +14,7 @@ class SerialPortDevice {
         this.LogCOMM = false;
         this.messageStarted = false;
         this.bufferIndex = 0;
-        this.buffer = new Uint8Array(54);
+        this.buffer = new byteArray(54);
     }
 
     InitThread() {
@@ -67,7 +69,7 @@ class SerialPortDevice {
             this.messageStarted = true;
 
             this.bufferIndex = 0;
-            this.buffer = new Uint8Array(64);
+            this.buffer = new Uint8Array(54);
         }
 
         if (this.messageStarted) {
@@ -85,7 +87,7 @@ class SerialPortDevice {
 
                     // Send data to GameState (using setImmediate to handle asynchronous code)
                     setImmediate(() => {
-                        UI.MainWindow.Ref?.OnReceiveByteArrayFromConsole(this.buffer);
+                        //TODO: send data to gamestate using this.buffer (54 bytes) and sharedEmitter
                     });
                 }
 
@@ -124,7 +126,7 @@ class SerialPortDevice {
 
     Start() {
         this.SerialPort = new SerialPort(this.DevicePortName, {
-            baudRate: 115200,
+            baudRate: config.SerialPort.BaudRate,
             autoOpen: false
         });
         this.InitThread();

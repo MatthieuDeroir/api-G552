@@ -1,5 +1,6 @@
 const Frames = require('./Frame/Frame_index');
 const sharedEmitter = require('../Utils/SharedEmitter');
+
 class Game {
     static State = {
 
@@ -48,9 +49,9 @@ class Game {
                 Team: null,
                 RS: null,
             },
-            Timeout : {
-                Count : null,
-                Time : null,
+            Timeout: {
+                Count: null,
+                Time: null,
             },
             PenaltiesInProgress: null,
             Exclusion: {
@@ -77,9 +78,9 @@ class Game {
                 Team: null,
                 RS: null,
             },
-            Timeout : {
-                Count : null,
-                Time : null,
+            Timeout: {
+                Count: null,
+                Time: null,
             },
             PenaltiesInProgress: null,
 
@@ -90,17 +91,14 @@ class Game {
             Possession: null,
             Warnings: null,
         }
-
-
     }
 
     static update = (_message) => {
         if (this.isValid(_message)) {
             this.select(_message);
-        }
-        else
+        } else
             console.log('Invalid frame');
-            return null;
+        return null;
     }
 
     static isValid(_message) {
@@ -185,6 +183,30 @@ class Game {
 
     static Insert(GSI) {
         this.State = GSI;
+
+        // TODO : Insert into the game state the values of the GSI object that were
+        //  modified to avoid overwriting the whole object and losing the values that
+        //  were not modified or that didint belong to the frame that was just received.
+
+        if (GSI.Clock) {
+            this.State.Clock = GSI.Clock;
+        }
+        if (GSI.Timer) {
+            this.State.Timer = GSI.Timer;
+        }
+        if (GSI.Timer24s) {
+            this.State.Timer24s = GSI.Timer24s;
+        }
+        if (GSI.Guest) {
+            this.State.Guest = GSI.Guest;
+        }
+        if (GSI.Home) {
+            this.State.Home = GSI.Home;
+        }
+        if (GSI.Sport) {
+            this.State.Sport = GSI.Sport;
+        }
+        
     }
 
     static Send() {

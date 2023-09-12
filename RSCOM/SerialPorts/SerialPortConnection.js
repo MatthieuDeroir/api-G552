@@ -72,7 +72,7 @@ class SerialPortConnection {
         let ports = await fs.readdir(config.SerialPort.Path);
 
         ports.forEach(port => {
-            if (port === (config.SerialPort.Filter)) {
+            if (port.includes(config.SerialPort.Filter)) {
                 let PortName = port;
                 let found = false;
                 AllDevices.forEach(device => {
@@ -90,7 +90,7 @@ class SerialPortConnection {
                         LastReadTime: new Date()
                     };
                     AllDevices.push(device);
-                    // console.log("Added new COM Device : " + device.DevicePortName);
+                    console.log("Added new COM Device : " + device.DevicePortName);
                 }
             }
         });
@@ -101,7 +101,7 @@ class SerialPortConnection {
     async ConnectAvailablePorts() {
         for (const device of AllDevices) {
             if (!device.Started && device.DeviceExists) {
-                console.log("Connecting to : " + device.DevicePortName.replace(/\t/g, "\\t"));
+                // console.log("Connecting to : " + device.DevicePortName.replace(/\t/g, "\\t" + '\n'));
                 device.Started = true;
 
                 const options = {
@@ -109,7 +109,6 @@ class SerialPortConnection {
                     dataBits: config.SerialPort.DataBits,
                     parity: config.SerialPort.Parity,
                     stopBits: config.SerialPort.StopBits,
-                    flowControl: config.SerialPort.FlowControl,
                     readTimeout: config.SerialPort.ReadTimeout,
                     writeTimeout: config.SerialPort.WriteTimeout,
                     handshake: config.SerialPort.Handshake,
@@ -121,7 +120,7 @@ class SerialPortConnection {
                         console.log(`Error opening port: ${err.message}`);
                         device.Started = false;
                     } else {
-                        console.log(`Port open`);
+                        console.log(`${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
                                 console.log(`Data received from ${device.DevicePortName.replace(/\t/g, "\\t")} : ${data}`);

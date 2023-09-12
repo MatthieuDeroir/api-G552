@@ -30,19 +30,20 @@ sharedEmitter.on("data", (data) => {
 
 const authRoutes = require("./Routes/authRoutes");
 app.use("/auth", authRoutes);
-//TODO: Uncomment this line to activate token check
+//Uncomment this line to activate token check
 app.use(checkToken);
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
-const eventmediaRoutes = require("./Routes/eventmediaRoutes");
+const eventmediaRoutes = require("./Routes/eventMediaRoutes");
 const eventRoutes = require("./Routes/eventRoutes");
 const macroRoutes = require("./Routes/macroRoutes");
 const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
+
 const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
 const scoringBadmintonRoutes= require("./Routes/Scoring/badmintonRoutes");
 
@@ -57,8 +58,10 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
+
 app.use("/tennis", scoringTennisRoutes);
 app.use("/badminton", scoringBadmintonRoutes);
+
 
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
