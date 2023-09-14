@@ -27,6 +27,7 @@ class User {
   async create(user) {
     console.log("user", user);
     try {
+      
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
 
@@ -69,6 +70,18 @@ class User {
           eventAuto: true,
         });
       })();
+
+      const scoreInitial = {
+        team1: 0,
+        team2: 0,
+        fauteTeam1: 0,
+        fauteTeam2: 0,
+        nomTeam1: 'Visiteur',
+        nomTeam2: 'Locaux'
+      };
+      
+      const scoring = new Scoring();
+      await scoring.create(scoreInitial, userId);
 
       return;
     } catch (err) {
