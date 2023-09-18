@@ -5,6 +5,62 @@ const config = require("./config");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const checkToken = require("./Middlewares/signInCheck");
+const Game = require("./RSCOM/Game");
+const TestMessage = [
+    0xF8,
+    0x3A,
+    0x20,
+    0x20,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x20,
+    0x30,
+    0x30,
+    0x20,
+    0x30,
+    0x30,
+    0x31,
+    0x30,
+    0x30,
+    0x20,
+    0x20,
+    0x20,
+    0x30,
+    0x30,
+    0x20,
+    0x20,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x30,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x20,
+    0x30,
+    0x30,
+    0x20,
+    0x0D
+];
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -26,6 +82,18 @@ const sp = new SerialPortConnection();
 sp.StartReading();
 sharedEmitter.on("data", (data) => {
     console.log("data sent:", data);
+    Game.update(data);
+});
+
+setInterval(() => {
+    console.log("About to emit the data event");
+    sharedEmitter.emit("data", TestMessage);
+}, 1000);
+
+sharedEmitter.on("scoring", (scoring) => {
+    console.log(" sent:");
+    // TODO: send scoring to display with UNIX socket
+    unixSocketSetup.sendScoring(scoring);
 });
 
 const authRoutes = require("./Routes/authRoutes");
