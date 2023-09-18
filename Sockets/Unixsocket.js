@@ -10,7 +10,7 @@ const sharedEmitter = require("../Utils/SharedEmitter");
 
 function handleData(data) {
     if (data.mode === 'scoring') {
-        console.log('Handled score data :', data.gameState.chrono);
+        console.log('Handled score data :', data.gameState);
         // Do something with score data
     } else if (data.mode === 'media') {
         console.log('Received media data:', data.path, data.duration);
@@ -21,40 +21,49 @@ function handleData(data) {
 }
 
 const server = net.createServer((client) => {
-
-    // Handle 'score' event
-    sharedEmitter.on('scoring', (data) => {
+    // Define listener functions
+    function onScoring(data) {
+        console.log('Received score data:', data);
         try {
-            console.log('Received raw data:', data)
-            const jsonData = JSON.parse(data);
-            console.log('Parsed data to send :', jsonData);
-            handleData(jsonData);
-            if (jsonData.mode === 'scoring') {
-                client.write(data + '\n');  // data is already a string
-                console.log('Sent data:', jsonData)
-            } else if (jsonData.mode === 'media') {
-                client.write(JSON.stringify({ mode: 'media', path: jsonData.path, duration: jsonData.duration }) + '\n');
-                console.log('Sent data:', jsonData)
+            handleData(data);
+            if (data.mode === 'scoring') {
+                client.write(JSON.stringify(data) + '\n');
+                console.log('Sent data:', data)
+            } else if (data.mode === 'media') {
+                client.write(JSON.stringify({ mode: 'media', path: data.path, duration: data.duration }) + '\n');
+                console.log('Sent data:', data)
             }
         } catch (err) {
             console.error('Failed to send score data:', err);
         }
-    });
+    }
 
-
-    // Handle 'media' event
-    sharedEmitter.on('media', (data) => {
+    function onMedia(data) {
         try {
             client.write(JSON.stringify(data) + '\n');
         } catch (err) {
             console.error('Failed to send media data:', err);
         }
+    }
+
+    // Attach listeners to sharedEmitter
+    sharedEmitter.on('scoring', onScoring);
+    sharedEmitter.on('media', onMedia);
+
+    client.on('close', () => {
+        console.log('Client disconnected');
+        // Remove listeners to avoid duplicates
+        sharedEmitter.removeListener('scoring', onScoring);
+        sharedEmitter.removeListener('media', onMedia);
     });
 
-    console.log('Client connected');
-
-    client.on('end', () => {
-        console.log('Client disconnected');
+    client.on('data', (data) => {
+        try {
+            console.log('Received raw data:', data)
+            console.log('Client on data Received data:', data.toString())
+        } catch (err) {
+            console.error('Failed to parse JSON data:', err);
+        }
     });
 
     client.on('error', (err) => {
@@ -62,60 +71,19 @@ const server = net.createServer((client) => {
     });
 });
 
-let mode = "media";
+let mode = "scoring";
 let sport = "basketball";
 
 // Export the function to start the server
-/* module.exports = {
+module.exports = {
     startServer: function () {
         server.listen(socketPath, () => {
             console.log(`UnixSocket Server listening on ${socketPath}`);
-            let chrono = 0; // Initial chrono value
-            if (mode === "scoring") {
-                setInterval(() => {
-                    chrono += 1; // Increment chrono by 0.1 every 100 milliseconds
-                    const scoreData = {
-                        mode: "scoring",
-                        gameState: { chrono: chrono, sport: sport }, // Keep chrono to 1 decimal place
-                    };
-                    sharedEmitter.emit("scoring", JSON.stringify(scoreData));
-                    console.log("RS scoring data : ", scoreData);
-                }, 100);  // Increment and send score data every 0.1 seconds
-
-            } else if (mode === "media") {
-                setInterval(() => {
-                    const mediaData = {
-                        mode: 'media',
-                        medias: [ */
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/1.png",
-                            //     duration: 2,
-                            //     type: "image"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/1.mp4",
-                            //     duration: 3,
-                            //     type: "video"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/2.mp4",
-                            //     duration: 2,
-                            //     type: "video"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/3.mp4",
-                            //     duration: 3,
-                            //     type: "video"
-                            // }
-              /*           ]
-                    };
-                    sharedEmitter.emit("media", mediaData);
-                    console.log("Media data sent", mediaData);
-                }, 100000);  // send media data every 5 seconds
-            }
         });
-        server.on('error', (err) => {
-            console.error('Server error:', err);
-        });
+    },
+    sendScoring: function (data) {
+        console.log('UNIX Socket is sending data on data');
+        data.mode = "scoring";
+        sharedEmitter.emit('scoring', data);
     }
-} */
+}
