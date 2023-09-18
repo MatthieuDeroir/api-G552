@@ -64,7 +64,7 @@ class EventMediaController {
   };
 
     getAllByEvent = (req, res) => {
-        this.eventmedia.getAllByEvent(req.params.event_id)
+        this.eventmedia.getAllByEvent(req.params.eventId)
             .then((eventmedias) => {
                 res.status(200).json(eventmedias);
             })
