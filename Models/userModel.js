@@ -76,9 +76,17 @@ class User {
         team2: 0,
         fauteTeam1: 0,
         fauteTeam2: 0,
+        setsTeam1: 0,
+        setsTeam2: 0,
         nomTeam1: 'Visiteur',
         nomTeam2: 'Locaux'
       };
+      if (user.username === "badminton") {
+        scoreInitial.option1 = 3;
+        scoreInitial.option2 = 21;
+        scoreInitial.option3 = 30;
+        scoreInitial.option7 = 'Visiteur';
+      }
       
       const scoring = new Scoring();
       await scoring.create(scoreInitial, userId);
