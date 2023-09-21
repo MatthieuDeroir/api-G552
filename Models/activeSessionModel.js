@@ -108,7 +108,6 @@ class ActiveSession {
   }
 
   updateOne(session) {
-    console.log("updateOne", session);
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 1`,

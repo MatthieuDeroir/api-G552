@@ -24,10 +24,7 @@ const checkToken = async (req, res, next) => {
       return res.status(401).json({ error: 'Token invalide' });
     }
     const session = await activeSession.getFirst()
-    console.log("session", session);
     const inactivite = moment.duration(moment(new Date()).diff(session.last_activity)).asHours();
-    
-   console.log("inactivite", inactivite);
 
     if (inactivite > 2) {
       await userController.updateTokenAndActivity({ id: user.id , active_token: null });

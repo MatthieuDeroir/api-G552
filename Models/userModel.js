@@ -76,8 +76,6 @@ class User {
         team2: 0,
         fauteTeam1: 0,
         fauteTeam2: 0,
-        setsTeam1: 0,
-        setsTeam2: 0,
         nomTeam1: 'Visiteur',
         nomTeam2: 'Locaux'
       };
@@ -85,6 +83,8 @@ class User {
         scoreInitial.option1 = 3;
         scoreInitial.option2 = 21;
         scoreInitial.option3 = 30;
+        scoreInitial.option4 = 0;
+        scoreInitial.option5 = 0;
         scoreInitial.option7 = 'Visiteur';
       }
       

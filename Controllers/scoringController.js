@@ -12,8 +12,6 @@ class ScoringController {
       team2,
       fauteTeam1,
       fauteTeam2,
-      setsTeam1,
-      setsTeam2,
       nomTeam1,
       nomTeam2,
     } = req.body;
@@ -23,8 +21,6 @@ class ScoringController {
         team2,
         fauteTeam1,
         fauteTeam2,
-        setsTeam1,
-        setsTeam2,
         nomTeam1,
         nomTeam2,
       })
@@ -41,10 +37,9 @@ class ScoringController {
     const userId = req.params.id;
     const score = req.body;
 
-    console.log("score", score);
-    console.log("userId", userId);
+   
     scoring
-      .update({userId, score })
+      .update(userId, score)
       .then((scoring) => {
         res.status(200).json(scoring);
       })
@@ -52,6 +47,22 @@ class ScoringController {
         res.status(500).json({ message: err });
       });
   }
+
+  updateScore(req, res) {
+    const scoring = new Scoring();
+    const userId = req.params.id;
+    const score = req.body;
+    scoring
+
+      .updateScore(userId, score)
+      .then((scoring) => {
+        res.status(200).json(scoring);
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  }
+
   updateSettings(req, res) {
     const scoring = new Scoring();
     const userId = req.params.id;
