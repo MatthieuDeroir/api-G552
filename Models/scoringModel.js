@@ -35,7 +35,7 @@ class Scoring {
   create(score, userId) {
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO scoring (user_id, timer, score_team1, score_team2, faute_team1, faute_team2, nom_team1, nom_team2, option1, option2, option3, option4, option5, option6, option7, option8) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO scoring (user_id, timer, score_team1, score_team2, faute_team1, faute_team2, nom_team1, nom_team2, option1, option2, option3, option4, option5, option6, option7, option8) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           userId,
           score.timer,
@@ -142,6 +142,7 @@ class Scoring {
   }
 
   getByUserId(userId) {
+    console.log("getByUserId", userId);
     return new Promise((resolve, reject) => {
       db.all(
         `SELECT * FROM scoring WHERE user_id = ?`,

@@ -67,8 +67,8 @@ class TennisScore {
   create(score) {
     return new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO tennis_score (player1_name, player2_name, score_player1, score_player2, sets_won_player1, sets_won_player2, server_name, timer, set_type, deciding_point, tie_break, tie_break_in_final_set, number_of_sets, games_per_set)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO scoring (user_id, timer, score_team1, score_team2, faute_team1, faute_team2, nom_team1, nom_team2, option1, option2, option3, option4, option5, option6, option7, option8) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
         [
           score.player1,
           score.player2,
@@ -87,9 +87,9 @@ class TennisScore {
         ],
         (err) => {
           if (err) {
-            reject(err);
+            console.error("Erreur lors de la création de la table scoring:", err);
           } else {
-            resolve();
+            console.log("Table scoring créée ou déjà existante.");
           }
         }
       );
