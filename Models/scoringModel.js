@@ -66,7 +66,6 @@ class Scoring {
   }
 
   update(userId, score) {
-    console.log("update", userId, score);
     return new Promise((resolve, reject) => {
       const fieldsToUpdate = [];
       const values = [];

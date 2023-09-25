@@ -2,7 +2,6 @@ const Scoring = require("../Models/scoringModel");
 
 class ScoringController {
   constructor() {
-    console.log("TEST00");
     this.scoring = new Scoring();
   }
 
@@ -36,7 +35,6 @@ class ScoringController {
     const scoring = new Scoring();
     const userId = req.params.id;
     const score = req.body;
-
    
     scoring
       .update(userId, score)
@@ -49,6 +47,7 @@ class ScoringController {
   }
 
   updateScore(req, res) {
+    
     const scoring = new Scoring();
     const userId = req.params.id;
     const score = req.body;

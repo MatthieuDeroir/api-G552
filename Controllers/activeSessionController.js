@@ -28,7 +28,6 @@ class ActiveSessionController {
   };
 
   getByUserId = (req, res) => {
-    console.log("getByUserId", req);
     this.activeSession
       .getByUserId(req)
       .then((session) => {
