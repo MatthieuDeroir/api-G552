@@ -6,6 +6,10 @@ function Chrono(..._message) {
         Chrono = nBytesToNumber(_message[0]).toString() + nBytesToNumber(_message[1]).toString() + "." + nBytesToNumber(_message[2]).toString();
     } else {
         Chrono = nBytesToNumber(_message[0]).toString() +  nBytesToNumber(_message[1]).toString() + ":" + nBytesToNumber(_message[2]).toString() + nBytesToNumber(_message[3]).toString();
+
+        console.log(_message)
+
+        console.log(Chrono)
     }
     return Chrono;
 }

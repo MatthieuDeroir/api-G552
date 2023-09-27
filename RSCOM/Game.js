@@ -104,7 +104,7 @@ class Game {
 
     static isValid(_message) {
         console.log("Frame length: ", _message.length)
-        return _message[0] === 0xF8 && _message[52] === 0x0D;
+        return _message[0] === 0xF8 && _message[53] === 0x0D;
     }
 
     static select = (_message) => {
