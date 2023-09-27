@@ -3,6 +3,10 @@ function nBytesToNumber(...bytes) {
 
 
     for (let b in bytes) {
+        if (bytes[b] === 0x20 || bytes[b] === 0x32) {
+            num += 0;
+            continue;
+        }
         num += parseInt((bytes[b] - 0x30).toString()) * Math.pow(10, bytes.length - b - 1);
     }
 
