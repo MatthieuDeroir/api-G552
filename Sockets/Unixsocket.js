@@ -1,12 +1,12 @@
 const net = require('net');
 const fs = require('fs');
 const sharedEmitter = require("../Utils/SharedEmitter");
-/* const socketPath = '/tmp/_sysmes.sock'; */
+const socketPath = '/tmp/_sysmes.sock';
 
 // Check if the socket file already exists then delete it
-/* if (fs.existsSync(socketPath)) {
+ if (fs.existsSync(socketPath)) {
     fs.unlinkSync(socketPath);
-} */
+}
 
 function handleData(data) {
     if (data.mode === 'scoring') {
@@ -70,9 +70,6 @@ const server = net.createServer((client) => {
         console.error('Client error:', err);
     });
 });
-
-let mode = "scoring";
-let sport = "basketball";
 
 // Export the function to start the server
 module.exports = {

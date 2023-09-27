@@ -94,8 +94,8 @@ class Game {
     }
 
     static update = (_message) => {
-        console.log("update method was called with _message: ", _message);
         if (this.isValid(_message)) {
+            console.log('Valid frame');
             this.select(_message);
         } else
             console.log('Invalid frame');
@@ -103,6 +103,7 @@ class Game {
     }
 
     static isValid(_message) {
+        console.log("Frame length: ", _message.length)
         return _message[0] === 0xF8 && _message[52] === 0x0D;
     }
 

@@ -74,21 +74,22 @@ const webSocketSetup = require("./Sockets/Websocket.js");
 webSocketSetup(app);
 
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
-/* unixSocketSetup.startServer(); */
+unixSocketSetup.startServer();
 
 const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 
 sp.StartReading();
 sharedEmitter.on("data", (data) => {
-    console.log("data sent:", data);
+    console.log("## DATA RECEIVED ##");
+    console.log("...TRANSFER TO GAME...");
     Game.update(data);
 });
 
-setInterval(() => {
-    console.log("About to emit the data event");
-    sharedEmitter.emit("data", TestMessage);
-}, 1000);
+// setInterval(() => {
+//     console.log("About to emit the data event");
+//     sharedEmitter.emit("data", TestMessage);
+// }, 1000);
 
 sharedEmitter.on("scoring", (scoring) => {
     console.log(" sent:");
