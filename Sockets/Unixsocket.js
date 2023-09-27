@@ -23,7 +23,6 @@ function handleData(data) {
 const server = net.createServer((client) => {
     // Define listener functions
     function onScoring(data) {
-        console.log('Received score data:', data);
         try {
             handleData(data);
             if (data.mode === 'scoring') {
