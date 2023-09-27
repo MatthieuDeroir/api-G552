@@ -46,7 +46,7 @@ class MediaController {
           .create(req.file, id,username)
           .then((media) => {
             console.log('media', req.file);
-            fs.rename(req.file.path, '../../test/G552_frontend/public/medias/'+ username +'/' + req.file.filename, (erreur) => {
+            fs.rename(req.file.path, '../../Server/Frontend/public/medias/'+ username +'/' + req.file.filename, (erreur) => {
               if (erreur) {
                 console.error('Erreur lors du déplacement du fichier :', erreur);
               } else {

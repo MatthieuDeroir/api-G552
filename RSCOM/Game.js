@@ -197,7 +197,6 @@ class Game {
                     recursiveUpdate(mainObject[key], updateObject[key]);
                 } else {
                     // Directly update the property value in the main object
-                    console.log("key: ", key, " mainObject[key]: ", mainObject[key], "replaced with", "key: ", key, " updateObject[key]: ", updateObject[key]);
                     mainObject[key] = updateObject[key];
                 }
             }
