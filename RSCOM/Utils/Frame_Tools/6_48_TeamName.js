@@ -1,11 +1,14 @@
 const StringDecoder = require('string_decoder').StringDecoder;
 
 function TeamName(startIndex, _message) {
-    const UTF16 = new StringDecoder('utf16le');
-    console.log(_message.slice(startIndex, startIndex + 18));
+    // Création d'un buffer à partir du message
+    const buffer = Buffer.from(_message);
 
-    return UTF16.write(Buffer.from(_message.slice(startIndex, startIndex + 18)));
+    // Décodage en utf32le
+    const decodedMessage = buffer.slice(startIndex, startIndex + 18 * 4).toString('utf32le');
 
+    console.log(decodedMessage);
+    return decodedMessage;
 }
 
 module.exports = TeamName;
