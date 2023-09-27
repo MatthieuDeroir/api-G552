@@ -95,23 +95,19 @@ class User {
         scoreInitial.option7 = 'Visiteur';
       }
 
-      if (user.username === "basketball") {
-        scoreInitial.option1 = 0;
-        scoreInitial.option2 = 0;
-        scoreInitial.option3 = 0;
-        scoreInitial.option4 = 0;
-        scoreInitial.option7 = 'Visiteur';
-      }
       if (user.username === "volleyball") {
         scoreInitial.option1 = 5;
         scoreInitial.option2 = 25;
         scoreInitial.option3 = 15;
         scoreInitial.option4 = 0;
         scoreInitial.option5 = 0;
+        scoreInitial.option7 = 'Visiteur';
       }
-
-
       if (user.username === "futsal") {
+        scoreInitial.option1 = 0;
+        scoreInitial.option2 = 0;
+      }
+      if (user.username === "handball") {
         scoreInitial.option1 = 0;
         scoreInitial.option2 = 0;
       }

@@ -4,6 +4,7 @@ const EventEmitter = require("events");
 class Mode {
   constructor() {
     this.createTable();
+    this.insertFirstRow();
     this.events = new EventEmitter();
   }
 
@@ -31,7 +32,21 @@ class Mode {
         `;
     db.run(createTable);
   }
-
+insertFirstRow() {
+    db.get(`SELECT COUNT(*) as count FROM modes`, (err, row) => {
+      if (err) {
+        console.error(err.message);
+      } else {
+        if (row.count === 0) {
+          db.run(`INSERT INTO modes (mode, event_id) VALUES (?, ?)`, [null, null], (err) => {
+            if (err) {
+              console.error(err.message);
+            }
+          });
+        }
+      }
+    });
+  }
   create(mode) {
     return new Promise((resolve, reject) => {
       db.run(

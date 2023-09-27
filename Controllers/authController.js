@@ -88,27 +88,23 @@ const signIn = async (req, res) => {
           } else {
             if (result) {
               if (foundUser.firstLogin === 1) {
-                console.log("First login");  
+                console.log("First login");
               }
 
               const activeSession = await activeSessionModel.getAll();
-             
-              // Si un utilisateur est déjà connecté
-              // if (activeSession && activeSession.activeToken) {
-              //   console.log("activeSession", activeSession);
-              //   if (activeSession.last_activity > 2) {
-              //     await activeSessionModel.updateOne({
-              //       active_token: null,
-              //       last_activity: null,
-              //     });
-              //   }
-              // }else {
-              //   console.log("Un autre utilisateur est déjà connecté");
-              //   return res.status(409).json({
-              //     error: "Un autre utilisateur est déjà connecté",
-              //   });
-              // }
-
+              if (!activeSession.activeToken) {
+                if (activeSession.last_activity > 2) {
+                  await activeSessionModel.updateOne({
+                    active_token: null,
+                    last_activity: null,
+                  });
+                }
+              } else {
+                console.log("Un autre utilisateur est déjà connecté");
+                return res.status(409).json({
+                  error: "Un autre utilisateur est déjà connecté",
+                });
+              }
 
               const secret = config.secret;
               const accessToken = jwt.sign({ id: foundUser.id }, secret);
@@ -120,7 +116,7 @@ const signIn = async (req, res) => {
 
               await activeSessionModel.updateOne({
                 active_token: accessToken,
-                activeUser: foundUser.id,
+                userId: foundUser.id,
                 last_activity: new Date(),
               });
 
@@ -163,10 +159,10 @@ const modifyPassword = async (req, res) => {
       return res.status(400).json({ message: passwordRequirements.message });
     }
 
-     await newUser
+    await newUser
       .changePassword(user)
       .then((user) => {
-        newUser.updateFirstLogin(user.id)
+        newUser.updateFirstLogin(user.id);
         res.status(201).json(user);
       })
       .catch((err) => {

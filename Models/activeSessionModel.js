@@ -65,6 +65,22 @@ class ActiveSession {
       );
     });
   }
+  logout() {
+    console.log("logout");
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE activeSessions SET userId = ? ,activeToken = ?, last_activity = ? WHERE id = 1`,
+        [null,null, null],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
   getAll() {
     return new Promise((resolve, reject) => {
       db.all(`SELECT * FROM activeSessions`, (err, sessions) => {
@@ -110,8 +126,8 @@ class ActiveSession {
   updateOne(session) {
     return new Promise((resolve, reject) => {
       db.run(
-        `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 1`,
-        [session.active_token, session.last_activity],
+        `UPDATE activeSessions SET userId = ?, activeToken = ?, last_activity = ? WHERE id = 1`,
+        [session.userId, session.active_token, session.last_activity],
         (err) => {
           if (err) {
             reject(err);

@@ -31,7 +31,7 @@ const checkToken = async (req, res, next) => {
       return res.status(401).json({ error: 'Déconnecté en raison d\'inactivité' });
     }
 
-    await activeSession.updateOne({last_activity:  new Date(), active_token: token });
+    await activeSession.updateOne({userId: user.id ,last_activity:  new Date(), active_token: token });
 
     next();
   } catch (err) {
