@@ -1,5 +1,5 @@
 const express = require('express');
-const EventMediaController = require('../Controllers/eventMediaController');
+const EventMediaController = require('../Controllers/eventmediaController');
 
 const router = express.Router();
 const eventMediaController = new EventMediaController();
