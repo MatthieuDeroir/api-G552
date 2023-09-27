@@ -115,6 +115,8 @@ class SerialPortConnection {
                     path: `${config.SerialPort.Path}/${device.DevicePortName}`
                 };
 
+                device.buffer = Buffer.alloc(0);
+
                 device.SerialPort = new SerialPort(options, (err) => {
                     if (err) {
                         console.log(`Error opening port: ${err.message}`);
@@ -123,9 +125,22 @@ class SerialPortConnection {
                         console.log(`${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
-                                console.log(`Data received from ${device.DevicePortName.replace(/\t/g, "\\t")} : ${data}`);
+                                // Ajouter des données au buffer du device
+                                device.buffer = Buffer.concat([device.buffer, data]);
+
+                                // Vérifier si le buffer contient suffisamment de données
+                                while (device.buffer.length >= 54) {
+                                    // Extraire les 54 premiers octets du buffer
+                                    const frame = device.buffer.slice(0, 54);
+
+                                    // Émettre un événement avec la trame de données complète
+                                    sharedEmitter.emit('data', frame);
+
+                                    // Mettre à jour le buffer pour enlever les données utilisées
+                                    device.buffer = device.buffer.slice(54);
+                                }
+
                                 device.LastReadTime = new Date();
-                                sharedEmitter.emit('data', data);
                             } catch (err) {
                                 console.log(`Error handling data from ${device.DevicePortName.replace(/\t/g, "\\t")}: ${err}`);
                             }
