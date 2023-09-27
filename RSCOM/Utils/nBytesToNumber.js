@@ -3,7 +3,7 @@ function nBytesToNumber(...bytes) {
 
 
     for (let b in bytes) {
-        if (bytes[b] === 0x20 || bytes[b] === 0x32) {
+        if (bytes[b] === 0x32) {
             num += 0;
             continue;
         }
