@@ -57,7 +57,7 @@ const server = net.createServer((client) => {
 
     client.on('data', (data) => {
         try {
-            console.log('Received raw data:', data)
+            // console.log('Received raw data:', data)
             // console.log('Client on data Received data:', data.toString())
         } catch (err) {
             console.error('Failed to parse JSON data:', err);
