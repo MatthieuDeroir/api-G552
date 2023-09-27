@@ -81,8 +81,8 @@ const sp = new SerialPortConnection();
 
 sp.StartReading();
 sharedEmitter.on("data", (data) => {
-    console.log("## DATA RECEIVED ##");
-    console.log("...TRANSFER TO GAME...");
+    // console.log("## DATA RECEIVED ##");
+    // console.log("...TRANSFER TO GAME...");
     Game.update(data);
 });
 
@@ -92,8 +92,6 @@ sharedEmitter.on("data", (data) => {
 // }, 1000);
 
 sharedEmitter.on("scoring", (scoring) => {
-    console.log(" sent:");
-    // TODO: send scoring to display with UNIX socket
     unixSocketSetup.sendScoring(scoring);
 });
 

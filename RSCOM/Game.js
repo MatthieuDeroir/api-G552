@@ -103,12 +103,12 @@ class Game {
     }
 
     static isValid(_message) {
-        console.log("Frame length: ", _message.length)
+        // console.log("Frame length: ", _message.length)
         return _message[0] === 0xF8 && _message[53] === 0x0D;
     }
 
     static select = (_message) => {
-        console.log("select method was called with _message: ", _message);
+        // console.log("select method was called with _message: ", _message);
         let toInsert = null;
         switch (_message[1]) {
             case 0x3A:
@@ -206,7 +206,7 @@ class Game {
     }
 
     static Send() {
-        console.log("Send method was called");
+        // console.log("Send method was called");
         sharedEmitter.emit('scoring', this.State);
     }
 

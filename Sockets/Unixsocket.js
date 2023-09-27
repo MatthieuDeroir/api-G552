@@ -10,7 +10,7 @@ const socketPath = '/tmp/_sysmes.sock';
 
 function handleData(data) {
     if (data.mode === 'scoring') {
-        console.log('Handled score data');
+        // console.log('Handled score data');
         // Do something with score data
     } else if (data.mode === 'media') {
         console.log('Received media data');
@@ -58,7 +58,7 @@ const server = net.createServer((client) => {
     client.on('data', (data) => {
         try {
             console.log('Received raw data:', data)
-            console.log('Client on data Received data:', data.toString())
+            // console.log('Client on data Received data:', data.toString())
         } catch (err) {
             console.error('Failed to parse JSON data:', err);
         }
@@ -77,7 +77,7 @@ module.exports = {
         });
     },
     sendScoring: function (data) {
-        console.log('UNIX Socket is sending data on data');
+        // console.log('UNIX Socket is sending data on data');
         data.mode = "scoring";
         sharedEmitter.emit('scoring', data);
     }
