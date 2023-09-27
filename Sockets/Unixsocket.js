@@ -10,10 +10,10 @@ const socketPath = '/tmp/_sysmes.sock';
 
 function handleData(data) {
     if (data.mode === 'scoring') {
-        console.log('Handled score data :', data.gameState);
+        console.log('Handled score data');
         // Do something with score data
     } else if (data.mode === 'media') {
-        console.log('Received media data:', data.path, data.duration);
+        console.log('Received media data');
         // Do something with media data
     } else {
         console.warn('Received unknown data mode:', data.mode);
@@ -28,7 +28,6 @@ const server = net.createServer((client) => {
             handleData(data);
             if (data.mode === 'scoring') {
                 client.write(JSON.stringify(data) + '\n');
-                console.log('Sent data:', data)
             } else if (data.mode === 'media') {
                 client.write(JSON.stringify({ mode: 'media', path: data.path, duration: data.duration }) + '\n');
                 console.log('Sent data:', data)
