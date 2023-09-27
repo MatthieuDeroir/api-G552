@@ -9,7 +9,7 @@ const config = {
     SerialPort: {
         MaxRetries: 10,
         RefreshInterval: 100,
-        BaudRate: 38400,
+        BaudRate: 19200,
         DataBits: 8,
         Parity: 'none',
         StopBits: 1,
