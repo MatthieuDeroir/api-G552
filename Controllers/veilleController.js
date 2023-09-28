@@ -27,7 +27,6 @@ class VeilleController {
   }
 
   getById = (req, res) => {
-    console.log(req.params.id);
     this.veille.getById(req.params.id)
       .then((veille) => {
         if (veille) {

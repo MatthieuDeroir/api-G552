@@ -6,7 +6,6 @@ class EventController {
     }
 
     create = (req, res) => {
-        console.log(req.body);
         this.event.create(req.body)
             .then((event) => {
                 sharedEmitter.emit('created', event);
@@ -39,7 +38,6 @@ class EventController {
     }
 
     getById= (req, res) => {
-        console.log(req.params.id);
         this.event.getById(req.params.id)
             .then((event) => {
                 if (event) {

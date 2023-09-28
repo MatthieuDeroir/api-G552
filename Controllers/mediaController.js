@@ -41,11 +41,11 @@ class MediaController {
         sharedEmitter.emit('created', req.file.filename);
         res.status(201).json({ message: "File uploaded successfully" });
         const id = req.params.id;
-        console.log(req.file.path);
+
         this.media
           .create(req.file, id,username)
           .then((media) => {
-            console.log('media', req.file);
+
             fs.rename(req.file.path, '../../Server/Frontend/public/medias/'+ username +'/' + req.file.filename, (erreur) => {
               if (erreur) {
                 console.error('Erreur lors du déplacement du fichier :', erreur);

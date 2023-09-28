@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const config = require("../config");
 const verification = require("../Middlewares/signUpCheck");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 const fs = require("fs");
 const { log } = require("console");
 
@@ -92,18 +93,23 @@ const signIn = async (req, res) => {
               }
 
               const activeSession = await activeSessionModel.getAll();
-              if (!activeSession.activeToken) {
-                if (activeSession.last_activity > 2) {
-                  await activeSessionModel.updateOne({
-                    active_token: null,
-                    last_activity: null,
-                  });
-                }
-              } else {
+              console.log(activeSession[0].activeToken);
+              const inactivity = moment
+                .duration(moment(new Date()).diff(activeSession.last_activity))
+                .asHours();
+              console.log(inactivity);
+              if (activeSession[0].activeToken !== null && inactivity < 2) {
+                console.log("tetst");
+
+              /*   await activeSessionModel.updateOne({
+                  active_token: null,
+                  last_activity: null,
+                }); */
                 console.log("Un autre utilisateur est déjà connecté");
                 return res.status(409).json({
                   error: "Un autre utilisateur est déjà connecté",
                 });
+                
               }
 
               const secret = config.secret;

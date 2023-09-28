@@ -9,13 +9,11 @@ class EventMediaController {
   }
 
   create = (req, res) => {
-    console.log("create", req.body);
     const { mediaId, eventId, duration, userId, media_pos_in_event } = req.body;
   
     // Vérifier si la mediaId correspond à une vidéo
     this.media.getById(mediaId)
       .then((media) => {
-        console.log("media", media);
         if (media && media.type === "video") {
           // Obtenir la durée de la vidéo en utilisant fluent-ffmpeg
           ffmpeg.ffprobe('../../Server/Frontend/public/'+media.path, (err, metadata) => {
@@ -23,9 +21,9 @@ class EventMediaController {
               console.log(err);
               res.status(500).json({ message: err });
             } else {
-              console.log("metadata", metadata);
+
               const videoDuration = metadata.format.duration; // Durée de la vidéo en secondes
-              console.log("videoDuration", videoDuration);
+
               // Ajouter la durée de la vidéo à l'événement
               this.eventmedia
                 .create({
@@ -113,7 +111,6 @@ class EventMediaController {
       });
   };
   updateMediaPositions = (req, res) => {
-    console.log("updateMediaPositions", req.body);
     const datas = req.body;
     const promises = datas.map((dataPosition) => {
       const event_media_id = dataPosition.event_media_id;
