@@ -9,7 +9,7 @@ const { log } = require("console");
 
 const signUp = async (req, res) => {
   console.log(req.body);
-  const folderName = `../../Front/G552_frontend/public/medias/${req.body.username}`;
+  const folderName = `../../Server/Frontend/public/medias/${req.body.username}`;
   const user = {
     username: req.body.username,
     password: req.body.password,

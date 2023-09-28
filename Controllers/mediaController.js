@@ -10,7 +10,7 @@ class MediaController {
     this.storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const username = req.params.user;
-        const userFolder = `../../uploads/`;
+        const userFolder = `../../Server/uploads/`;
         cb(null, userFolder);
       },
       filename: (req, file, cb) => {
@@ -121,7 +121,7 @@ class MediaController {
       .getById(req.params.id)
       .then((file) => {
         const filePath = file.path;
-        fs.unlink("../../test/G552_frontend/public/" + filePath, (err) => {
+        fs.unlink("../../Server/Frontend/public/" + filePath, (err) => {
           if (err) {
             {
               this.media

@@ -18,7 +18,7 @@ class EventMediaController {
         console.log("media", media);
         if (media && media.type === "video") {
           // Obtenir la durée de la vidéo en utilisant fluent-ffmpeg
-          ffmpeg.ffprobe('../../Front/G552_frontend/public'+media.path, (err, metadata) => {
+          ffmpeg.ffprobe('../../Server/Frontend/public/'+media.path, (err, metadata) => {
             if (err) {
               console.log(err);
               res.status(500).json({ message: err });
