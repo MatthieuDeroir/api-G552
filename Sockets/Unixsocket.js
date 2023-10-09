@@ -137,11 +137,11 @@ function handleData(data) {
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
-        console.log('Received data:', data)
+        console.log('Received data:', data.gameState)
         try {
             handleData(data);
 
-            if (data.gameState.mode === 9) {
+            if (data?.gameState === 9) {
                 client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
