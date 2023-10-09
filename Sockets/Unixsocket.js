@@ -162,7 +162,7 @@ const server = net.createServer((client) => {
 
     client.on('data', (data) => {
         try {
-            console.log('Received raw data:', data)
+            console.log('Received raw data:', data.toString())
             const parsedData = JSON.parse(data.toString());
             sharedEmitter.emit('data-received', parsedData);
         } catch (err) {
