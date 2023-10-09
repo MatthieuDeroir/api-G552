@@ -95,13 +95,14 @@ class Game {
     }
 
     static update = (_message) => {
-        if (this.isValid(_message)) {
-            // console.log('Valid frame');
-            this.select(_message);
-        } else
-            console.log(_message)
-            console.log('Invalid frame');
-        return null;
+        this.select(_message);
+        // if (this.isValid(_message)) {
+        //     // console.log('Valid frame');
+        //
+        // } else
+        //     console.log(_message)
+        //     console.log('Invalid frame');
+        // return null;
     }
 
     static isValid(_message) {
