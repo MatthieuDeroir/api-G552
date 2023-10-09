@@ -47,7 +47,7 @@ class MacroController {
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            const event = await event.getById(macro.event_id).then((event) => {
+            const event = await this.event.getById(macro.event_id).then((event) => {
                 console.log("event", event);
             });
 
