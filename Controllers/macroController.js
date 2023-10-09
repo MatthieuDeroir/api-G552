@@ -1,17 +1,22 @@
 const Macro = require("../Models/macroModel");
 const db = require("../Database/db");
-const activeSession = require("../Models/activeSessionModel").ActiveSession;
-const user = require("../Models/userModel").User;
-const event = require("../Models/eventModel").Event;
-const eventmedia = require("../Models/eventmediaModel").EventMedia;
-const media = require("../Models/mediaModel").Media;
+const ActiveSession = require("../Models/activeSessionModel");
+const User = require("../Models/userModel");
+const Event = require("../Models/eventModel");
+const Eventmedia = require("../Models/eventmediaModel");
+const mMedia = require("../Models/mediaModel");
 
 class MacroController {
     constructor() {
+        const activeSession = new ActiveSession();
+        const user = new User();
+        const event = new Event();
+        const eventmedia = new EventMedia();
+        const media = new Media();
         this.macro = new Macro();
     }
 
-    static async getMacrosByButton(buttonId) {
+    async getMacrosByButton(buttonId) {
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
