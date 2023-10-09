@@ -27,21 +27,21 @@ const sp = new SerialPortConnection();
 
 sp.StartReading();
 sharedEmitter.on("data", (data) => {
-    console.log("## DATA RECEIVED ##");
-    console.log("...TRANSFER TO GAME...");
-    console.log("Data: ", data)
+    // console.log("## DATA RECEIVED ##");
+    // console.log("...TRANSFER TO GAME...");
+    // console.log("Data: ", data)
     Game.update(data);
 });
 
 sharedEmitter.on("scoring", async (scoring) => {
     try {
-        console.log("Scoring Mode:", scoring.Mode);
-        const macrosData = await MacroController.getMacrosByButton(scoring.Mode);
-        console.log("Macros for button:", macrosData);
+        // console.log("Scoring Mode:", scoring.Mode);
+        // const macrosData = await MacroController.getMacrosByButton(scoring.Mode);
+        // console.log("Macros for button:", macrosData);
 
         unixSocketSetup.sendData(scoring);
     } catch (error) {
-        console.error("Erreur lors de la récupération des macros:", error.message);
+        // console.error("Erreur lors de la récupération des macros:", error.message);
     }
 });
 

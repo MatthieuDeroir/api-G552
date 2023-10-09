@@ -29,10 +29,10 @@
 //                 client.write(JSON.stringify(data) + '\n');
 //             } else if (data.mode === 'media') {
 //                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-//                 console.log('Sent data:', data)
+//                 console.log('Sent gameState', data)
 //             }
 //         } catch (err) {
-//             console.error('Failed to send score data:', err);
+//             console.error('Failed to send score gameState', err);
 //         }
 //     }
 //
@@ -40,7 +40,7 @@
 //         try {
 //             client.write(JSON.stringify(data) + '\n');
 //         } catch (err) {
-//             console.error('Failed to send media data:', err);
+//             console.error('Failed to send media gameState', err);
 //         }
 //     }
 //
@@ -57,10 +57,10 @@
 //
 //     client.on('data', (data) => {
 //         try {
-//             // console.log('Received raw data:', data)
-//             // console.log('Client on data Received data:', data.toString())
+//             // console.log('Received raw gameState', data)
+//             // console.log('Client on data Received gameState', data.toString())
 //         } catch (err) {
-//             console.error('Failed to parse JSON data:', err);
+//             console.error('Failed to parse JSON gameState', err);
 //         }
 //     });
 //
@@ -86,7 +86,7 @@
 //                     try {
 //                         client.write(JSON.stringify({ mode: 'diaporama', medias }) + '\n');
 //                     } catch (err) {
-//                         console.error('Failed to send media data:', err);
+//                         console.error('Failed to send media gameState', err);
 //                     }
 //                 })
 //                 .catch(err => {
@@ -152,13 +152,13 @@ const server = net.createServer((client) => {
                 console.log("Points", data.Guest.Points)
                 console.log("TimeOut", data.Guest.Timeout.Count)
 
-                // console.log('Sent score data:', data)
+                // console.log('Sent score gameState', data)
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-                // console.log('Sent diaporama data:', data);
+                // console.log('Sent diaporama gameState', data);
             }
         } catch (err) {
-            console.error('Failed to send data:', err);
+            console.error('Failed to send gameState', err);
         }
     }
 
@@ -172,11 +172,11 @@ const server = net.createServer((client) => {
 
     client.on('scoring', (data) => {
         try {
-            console.log('Received raw data:', data)
+            console.log('Received raw gameState', data)
             const parsedData = JSON.parse(data.toString());
             sharedEmitter.emit('data-received', parsedData);
         } catch (err) {
-            console.error('Failed to parse JSON data:', err);
+            console.error('Failed to parse JSON gameState', err);
         }
     });
 
@@ -192,7 +192,7 @@ module.exports = {
             console.log(`UnixSocket Server listening on ${socketPath}`);
         });
     },
-    sendData: function (data) {
+    sendgameState function (data) {
         sharedEmitter.emit('data-received', data);
     }
 }
