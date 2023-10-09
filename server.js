@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const checkToken = require("./Middlewares/signInCheck");
 const Game = require("./RSCOM/Game");
+const MacroController = require("./Controllers/macroController");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -32,9 +33,18 @@ sharedEmitter.on("data", (data) => {
     Game.update(data);
 });
 
-sharedEmitter.on("scoring", (scoring) => {
-    unixSocketSetup.sendData(scoring);
+sharedEmitter.on("scoring", async (scoring) => {
+    try {
+        console.log("Scoring Mode:", scoring.Mode);
+        const macrosData = await MacroController.getMacrosByButton(scoring.Mode);
+        console.log("Macros for button:", macrosData);
+
+        unixSocketSetup.sendData(scoring);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des macros:", error.message);
+    }
 });
+
 
 sharedEmitter.on("media", (media) => {
     unixSocketSetup.sendMedia(media);
