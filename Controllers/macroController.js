@@ -3,8 +3,8 @@ const db = require("../Database/db");
 const ActiveSession = require("../Models/activeSessionModel");
 const User = require("../Models/userModel");
 const Event = require("../Models/eventModel");
-const Eventmedia = require("../Models/eventmediaModel");
-const mMedia = require("../Models/mediaModel");
+const EventMedia = require("../Models/eventmediaModel");
+const Media = require("../Models/mediaModel");
 
 class MacroController {
     constructor() {
