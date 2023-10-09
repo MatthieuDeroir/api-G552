@@ -1,4 +1,5 @@
 const iconv = require('iconv-lite');
+const Iconv = require('iconv').Iconv;
 
 function TeamName(startIndex, _message) {
     // Creation of a buffer from the message
@@ -8,7 +9,7 @@ function TeamName(startIndex, _message) {
     const slicedBuffer = buffer.slice(startIndex, startIndex + 18 * 4);
 
     // Decode using utf32le with iconv-lite
-    const decodedMessage = iconv.decode(slicedBuffer, 'utf32');
+    const decodedMessage = iconv.decode(slicedBuffer, 'utf-32le');
 
     console.log(decodedMessage);
     return decodedMessage;
