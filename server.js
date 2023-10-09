@@ -33,7 +33,7 @@ sharedEmitter.on("data", (data) => {
 });
 
 sharedEmitter.on("scoring", (scoring) => {
-    unixSocketSetup.sendScoring(scoring);
+    unixSocketSetup.sendData(scoring);
 });
 
 sharedEmitter.on("media", (media) => {
