@@ -13,8 +13,7 @@ function TeamName(startIndex, _message) {
     console.log('Decoded Message:' + decodedMessage);
 
     // Check if utf32le is supported by iconv-lite
-    console.log(iconv.encodingExists('utf32le'));
-
+    console.log('utf32 supported: ' + iconv.encodingExists('utf32'));
 
     return decodedMessage;
 }
