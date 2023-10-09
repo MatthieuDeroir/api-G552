@@ -143,7 +143,7 @@ class Game {
                 toInsert = Frames._0x39.build(_message);
                 break;
             case 0x62:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x62_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x62_PlayerNames.build(_message);
@@ -152,7 +152,7 @@ class Game {
                 toInsert = Frames._0x74.build(_message);
                 break;
             case 0x77:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 &&_message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x77_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x77_PlayerNames.build(_message);

@@ -7,7 +7,7 @@ const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
  */
 
 // This class is used to process and build the 0x62 frame
-class Frame_0x62_PlayerNames {
+class Frame_0x77_PlayerNames {
     // This static method is used to build the 0x62 frame
     static build(_message) {
         let reEncodedMessage = Encode(_message);
@@ -26,4 +26,4 @@ class Frame_0x62_PlayerNames {
 
 // Export the Frame_0x62_PlayerNames class
 module
-    .exports = Frame_0x62_PlayerNames;
+    .exports = Frame_0x77_PlayerNames;
