@@ -21,7 +21,7 @@ class MacroController {
         // if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
-        const lastActivity = activeSession.last_activity;
+        // const lastActivity = activeSession.last_activity;
 
         // if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
