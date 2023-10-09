@@ -144,7 +144,7 @@ const server = net.createServer((client) => {
                 client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-                console.log('Sent data:', data);
+                console.log('Sent diaporama data:', data);
             }
 
         } catch (err) {
@@ -157,7 +157,6 @@ const server = net.createServer((client) => {
 
     client.on('close', () => {
         console.log('Client disconnected');
-        // Remove listeners to avoid duplicates
         sharedEmitter.removeListener('data-received', onDataReceived);
     });
 
