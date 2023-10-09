@@ -20,7 +20,7 @@ class MacroController {
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
-        const activeSession = await activeSession.getFirst();
+        const activeSession = await this.activeSession.getFirst();
         if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
