@@ -1,5 +1,5 @@
 const iconv = require('iconv-lite');
-// const Iconv = require('iconv').Iconv;
+const Iconv = require('iconv').Iconv;
 
 function TeamName(startIndex, _message) {
     // Creation of a buffer from the message
