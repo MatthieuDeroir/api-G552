@@ -144,7 +144,7 @@ const server = net.createServer((client) => {
                 client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-                console.log('Sent diaporama data:', data);
+                // console.log('Sent diaporama data:', data);
             }
         } catch (err) {
             console.error('Failed to send data:', err);
