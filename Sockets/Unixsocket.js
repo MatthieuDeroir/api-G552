@@ -143,11 +143,15 @@ const server = net.createServer((client) => {
             if (data?.Mode === 9) {
                 client.write(JSON.stringify(data) + '\n');
                 console.log("Mode", data.Mode)
+                console.log("Period", data.Period)
                 console.log("Timer", data.Timer.Value)
                 console.log("Home", data.Home.TeamName)
+                console.log("TimeOut", data.Home.Timeout)
                 console.log("Points", data.Home.Points)
                 console.log("Guest", data.Guest.TeamName)
                 console.log("Points", data.Guest.Points)
+                console.log("TimeOut", data.Guest.Timeout)
+
                 // console.log('Sent score data:', data)
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
