@@ -18,12 +18,12 @@ class MacroController {
         const activeSession = await ActiveSession.getFirst().then((session) => {
             console.log("session", session);
         });
-        if (!activeSession) throw new Error("No active session found");
+        // if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
         const lastActivity = activeSession.last_activity;
 
-        if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
+        // if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
         const userId = activeSession.userId;
 
