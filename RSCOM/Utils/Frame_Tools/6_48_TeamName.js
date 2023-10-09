@@ -10,6 +10,7 @@ function TeamName(startIndex, _message) {
 
     // Decode using utf32le with iconv-lite
     const decodedMessage = iconv.decode(slicedBuffer, 'utf32le');
+    console.log('Decoded Message:' + decodedMessage);
 
     const iconv = require('iconv-lite');
 
@@ -17,7 +18,6 @@ function TeamName(startIndex, _message) {
     console.log(iconv.encodingExists('utf32le'));
 
 
-    console.log(decodedMessage);
     return decodedMessage;
 }
 
