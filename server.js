@@ -32,7 +32,7 @@ sharedEmitter.on("data", (data) => {
     Game.update(data);
 });
 
-sharedEmitter.on("scoring", (scoring) => {
+sharedEmitter.on("gamedata", (scoring) => {
     unixSocketSetup.sendData(scoring);
 });
 
