@@ -137,6 +137,7 @@ function handleData(data) {
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
+        console.log('Received data:', data)
         try {
             handleData(data);
 
