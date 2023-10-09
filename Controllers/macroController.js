@@ -15,7 +15,9 @@ class MacroController {
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
-        const activeSession = await ActiveSession.getFirst();
+        const activeSession = await ActiveSession.getFirst().then((session) => {
+            console.log("session", session);
+        });
         if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
@@ -26,21 +28,31 @@ class MacroController {
         const userId = activeSession.userId;
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
-        const macros = await Macro.getByUserId(userId);
-        const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId);
+        const macros = await Macro.getByUserId(userId).then((macros) => {
+            console.log("macros", macros);
+        });
+        const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId).then((userMacrosForButton) => {
+            console.log("userMacrosForButton", userMacrosForButton);
+        };
 
         let results = [];
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            const event = await Event.getById(macro.event_id);
+            const event = await Event.getById(macro.event_id).then((event) => {
+                console.log("event", event);
+            });
 
             // 4. Récupérer les médias pour l'event
-            const mediaList = await EventMedia.getAllByEvent(event.id);
+            const mediaList = await EventMedia.getAllByEvent(event.id).then((mediaList) => {
+                console.log("mediaList", mediaList);
+            });
             let medias = [];
 
             for (let mediaInfo of mediaList) {
-                const media = await Media.getById(mediaInfo.media_id);
+                const media = await Media.getById(mediaInfo.media_id).then((media) => {
+                    console.log("media", media);
+                });
                 medias.push({
                     order: mediaInfo.media_pos_in_event,
                     path: media.path,
@@ -54,6 +66,8 @@ class MacroController {
                 medias: medias
             });
         }
+
+        console.log("results", results)
 
         return results;
     }
