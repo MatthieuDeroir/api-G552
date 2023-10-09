@@ -2,7 +2,6 @@ const Macro = require("../Models/macroModel");
 const db = require("../Database/db");
 const ActiveSession = require("./activeSessionModel");
 const User = require("./userModel");
-const Macro = require("./macroModel");
 const Event = require("./eventModel");
 const EventMedia = require("./eventMediaModel");
 const Media = require("./mediaModel");
