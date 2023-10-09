@@ -192,7 +192,7 @@ module.exports = {
             console.log(`UnixSocket Server listening on ${socketPath}`);
         });
     },
-    sendgameState function (data) {
+    sendData: function (data) {
         sharedEmitter.emit('data-received', data);
     }
 }
