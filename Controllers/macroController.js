@@ -15,10 +15,8 @@ class MacroController {
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
-        const activeSession = await ActiveSession.getFirst().then((session) => {
-            console.log("session", session);
-        });
-        // if (!activeSession) throw new Error("No active session found");
+        const activeSession = await ActiveSession.getFirst();
+        if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
         // const lastActivity = activeSession.last_activity;
@@ -26,6 +24,8 @@ class MacroController {
         // if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
         const userId = activeSession.userId;
+
+        console.log("userId", userId);
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
         const macros = await Macro.getByUserId(userId).then((macros) => {
