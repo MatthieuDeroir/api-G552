@@ -177,7 +177,7 @@ class Game {
                 break;
             default:
                 toInsert = "Unknown Frame: " + _message[1];
-                console.log("Unknown Frame: " + _message[1] + ", " + _message.length + " bytes");
+                console.log("Unknown Frame: " + _message[1]);
                 break;
         }
         this.updateState(toInsert);
