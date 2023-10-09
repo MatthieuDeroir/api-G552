@@ -131,6 +131,7 @@ class SerialPortConnection {
                                 // While there's enough data in the buffer to process
                                 while (device.buffer.length >= 54) {
                                     // Check if buffer starts with 0xf8
+                                    //TODO: Check if this is the correct way to check for 0xf8
                                     if (device.buffer[0] === 0xf8) {
                                         // Extract the 54-byte frame from the buffer
                                         const frame = device.buffer.slice(0, 54);
