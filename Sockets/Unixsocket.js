@@ -137,15 +137,15 @@ function handleData(data) {
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
-        console.log('Received data:', data)
         try {
             handleData(data);
 
-            if (data?.gameState === 9) {
+            if (data?.Mode === 9) {
                 client.write(JSON.stringify(data) + '\n');
+                console.log('Sent score data:', data)
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-                console.log('Sent diaporama data:', data);
+                // console.log('Sent diaporama data:', data);
             }
         } catch (err) {
             console.error('Failed to send data:', err);
