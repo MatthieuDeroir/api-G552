@@ -105,7 +105,9 @@ class Game {
     }
 
     static isValid(_message) {
-        // console.log("Frame length: ", _message.length)
+        console.log("Frame length: ", _message.length)
+        console.log("First : ", _message[0])
+        console.log("Last : ", _message[_message.length - 1])
         return _message[0] === 0xF8;
     }
 
