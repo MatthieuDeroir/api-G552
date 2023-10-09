@@ -26,9 +26,9 @@ const sp = new SerialPortConnection();
 
 sp.StartReading();
 sharedEmitter.on("data", (data) => {
-    // console.log("## DATA RECEIVED ##");
-    // console.log("...TRANSFER TO GAME...");
-    // console.log("Data: ", data)
+    console.log("## DATA RECEIVED ##");
+    console.log("...TRANSFER TO GAME...");
+    console.log("Data: ", data)
     Game.update(data);
 });
 
