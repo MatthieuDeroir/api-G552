@@ -56,7 +56,7 @@ class Macro {
             );
         });
     }
-    static getByUserId(userId) {
+    getByUserId(userId) {
         return new Promise((resolve, reject) => {
             db.all("SELECT * FROM macro WHERE user_id = ?", [userId], (err, macros) => {
                 if (err) {
