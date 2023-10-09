@@ -140,7 +140,7 @@ const server = net.createServer((client) => {
         try {
             handleData(data);
 
-            if (data.mode === 9) {
+            if (data.gameState.mode === 9) {
                 client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
