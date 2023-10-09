@@ -9,7 +9,8 @@ class Frame_0x77_TeamNames {
         let reEncodedMessage = Encode(_message);
         return {
             insertType: 'DirectConsoleData',
-            Home: { TeamName: Tools.TeamName(6, reEncodedMessage) }
+            Home: { TeamName: Tools.TeamName(6, reEncodedMessage) },
+            Guest: { TeamName: Tools.TeamName(22, reEncodedMessage) }
         };
     }
 }
