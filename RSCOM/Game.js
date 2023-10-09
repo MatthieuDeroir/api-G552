@@ -99,6 +99,7 @@ class Game {
             // console.log('Valid frame');
             this.select(_message);
         } else
+            console.log(_message)
             console.log('Invalid frame');
         return null;
     }
