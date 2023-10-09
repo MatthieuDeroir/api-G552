@@ -8,11 +8,11 @@ const Media = require("../Models/mediaModel");
 
 class MacroController {
     constructor() {
-        const activeSession = new ActiveSession();
-        const user = new User();
-        const event = new Event();
-        const eventmedia = new EventMedia();
-        const media = new Media();
+        this.activeSession = new ActiveSession();
+        this.user = new User();
+        this.event = new Event();
+        this.eventmedia = new EventMedia();
+        this.media = new Media();
         this.macro = new Macro();
     }
 
