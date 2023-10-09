@@ -1,10 +1,10 @@
 const Macro = require("../Models/macroModel");
 const db = require("../Database/db");
 const activeSession = require("../Models/activeSessionModel").ActiveSession;
-const User = require("../Models/userModel");
-const Event = require("../Models/eventModel");
-const EventMedia = require("../Models/eventmediaModel");
-const Media = require("../Models/mediaModel");
+const user = require("../Models/userModel").User;
+const event = require("../Models/eventModel").Event;
+const eventmedia = require("../Models/eventmediaModel").EventMedia;
+const media = require("../Models/mediaModel").Media;
 
 class MacroController {
     constructor() {
@@ -41,18 +41,18 @@ class MacroController {
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            const event = await Event.getById(macro.event_id).then((event) => {
+            const event = await event.getById(macro.event_id).then((event) => {
                 console.log("event", event);
             });
 
             // 4. Récupérer les médias pour l'event
-            const mediaList = await EventMedia.getAllByEvent(event.id).then((mediaList) => {
+            const mediaList = await eventmedia.getAllByEvent(event.id).then((mediaList) => {
                 console.log("mediaList", mediaList);
             });
             let medias = [];
 
             for (let mediaInfo of mediaList) {
-                const media = await Media.getById(mediaInfo.media_id).then((media) => {
+                const media = await media.getById(mediaInfo.media_id).then((media) => {
                     console.log("media", media);
                 });
                 medias.push({

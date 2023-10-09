@@ -73,7 +73,7 @@ class Event {
     });
   }
 
-  static getById(id) {
+  getById(id) {
     return new Promise((resolve, reject) => {
       db.get(`SELECT * FROM events WHERE id = ?`, [id], (err, event) => {
         if (err) {

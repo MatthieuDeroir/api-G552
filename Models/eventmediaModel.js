@@ -38,7 +38,7 @@ class EventMedia {
     });
   }
 
-  static getAllByEvent(eventId) {
+  getAllByEvent(eventId) {
     console.log("getAllByEvent", eventId);
     return new Promise((resolve, reject) => {
       db.all(
