@@ -33,7 +33,7 @@ class MacroController {
         });
         const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId).then((userMacrosForButton) => {
             console.log("userMacrosForButton", userMacrosForButton);
-        };
+        });
 
         let results = [];
 
