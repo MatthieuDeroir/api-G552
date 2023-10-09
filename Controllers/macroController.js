@@ -1,6 +1,6 @@
 const Macro = require("../Models/macroModel");
 const db = require("../Database/db");
-const ActiveSession = require("../Models/activeSessionModel");
+const activeSession = require("../Models/activeSessionModel").ActiveSession;
 const User = require("../Models/userModel");
 const Event = require("../Models/eventModel");
 const EventMedia = require("../Models/eventmediaModel");
@@ -15,7 +15,7 @@ class MacroController {
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
-        const activeSession = await ActiveSession.getFirst();
+        const activeSession = await activeSession.getFirst();
         if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();

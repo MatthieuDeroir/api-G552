@@ -77,7 +77,7 @@ class ActiveSession {
     });
   }
 
-  static async getFirst() {
+  async getFirst() {
     return new Promise((resolve, reject) => {
       db.get(`SELECT * FROM activeSessions ORDER BY id ASC LIMIT 1`, (err, session) => {
         if (err) {
