@@ -121,7 +121,7 @@ class Media {
     });
   }
 
-  getById(id) {
+  static getById(id) {
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT *
