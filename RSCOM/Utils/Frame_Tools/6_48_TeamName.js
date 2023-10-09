@@ -9,7 +9,7 @@ function TeamName(startIndex, _message) {
     const slicedBuffer = buffer.slice(startIndex, startIndex + 18 * 2);
 
     // Decode using utf32le with iconv-lite
-    const decodedMessage = iconv.decode(slicedBuffer, 'utf16le');
+    const decodedMessage = iconv.decode(slicedBuffer, 'utf16');
     console.log('Decoded Message:' + decodedMessage);
 
     return decodedMessage;
