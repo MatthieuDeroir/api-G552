@@ -125,19 +125,29 @@ class SerialPortConnection {
                         console.log(`${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
                             try {
-                                // Ajouter des données au buffer du device
+                                // Append new data to device buffer
                                 device.buffer = Buffer.concat([device.buffer, data]);
 
-                                // Vérifier si le buffer contient suffisamment de données
+                                // While there's enough data in the buffer to process
                                 while (device.buffer.length >= 54) {
-                                    // Extraire les 54 premiers octets du buffer
-                                    const frame = device.buffer.slice(0, 54);
+                                    // Check if buffer starts with 0xf8
+                                    if (device.buffer[0] === 0xf8) {
+                                        // Extract the 54-byte frame from the buffer
+                                        const frame = device.buffer.slice(0, 54);
 
-                                    // Émettre un événement avec la trame de données complète
-                                    sharedEmitter.emit('data', frame);
+                                        // Emit an event with the complete data frame
+                                        sharedEmitter.emit('data', frame);
 
-                                    // Mettre à jour le buffer pour enlever les données utilisées
-                                    device.buffer = device.buffer.slice(54);
+                                        // Update the buffer to remove the used data
+                                        device.buffer = device.buffer.slice(54);
+                                    } else {
+                                        // If buffer doesn't start with 0xf8, find the next occurrence of 0xf8
+                                        let nextIndex = device.buffer.indexOf(0xf8);
+
+                                        // If 0xf8 is found, trim the buffer up to that point
+                                        // If not found, clear the buffer
+                                        device.buffer = nextIndex !== -1 ? device.buffer.slice(nextIndex) : Buffer.alloc(0);
+                                    }
                                 }
 
                                 device.LastReadTime = new Date();
@@ -145,6 +155,7 @@ class SerialPortConnection {
                                 console.log(`Error handling data from ${device.DevicePortName.replace(/\t/g, "\\t")}: ${err}`);
                             }
                         });
+
                         device.SerialPort.on('close', () => {
                             console.log(`${device.DevicePortName.replace(/\t/g, "\\t")} is closed`);
                             device.Started = false;
