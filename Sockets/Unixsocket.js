@@ -160,7 +160,7 @@ const server = net.createServer((client) => {
         sharedEmitter.removeListener('data-received', onDataReceived);
     });
 
-    client.on('gamedata', (data) => {
+    client.on('scoring', (data) => {
         try {
             console.log('Received raw data:', data)
             const parsedData = JSON.parse(data.toString());
