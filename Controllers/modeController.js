@@ -29,7 +29,7 @@ class ModeController {
     update = (req, res) => {
         this.mode.update(req.body , req.params.id)
             .then(() => {
-                sharedEmitter.emit('updated', req.body);
+                sharedEmitter.emit('mode-updated', req.body);
                 res.status(200).json({ message: 'Modes updated successfully' });
             })
             .catch((err) => {

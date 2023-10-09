@@ -69,6 +69,37 @@ const server = net.createServer((client) => {
     });
 });
 
+
+
+let fetchMediaInterval;
+sharedEmitter.on('mode-updated', (data) => {
+    if (data.mode === 'diaporama') {
+        // Supposons que l'ID de l'événement est également passé dans data
+        const eventId = data.eventId;
+        const eventMedia = new EventMedia(); // Créez une instance de EventMedia pour appeler getAllByEvent
+        if(fetchMediaInterval) clearInterval(fetchMediaInterval); // Clear existing interval if any
+        fetchMediaInterval = setInterval(() => {
+            eventMedia.getAllByEvent(eventId)
+                .then(medias => {
+                    console.log("Fetched medias:", medias);
+                    // Convertir les médias en JSON et les envoyer via le socket client
+                    try {
+                        client.write(JSON.stringify({ mode: 'diaporama', medias }) + '\n');
+                    } catch (err) {
+                        console.error('Failed to send media data:', err);
+                    }
+                })
+                .catch(err => {
+                    console.error("Erreur lors de la récupération des médias par événement: ", err);
+                });
+        }, 10000); // Remplacez 10000 par le temps souhaité en ms entre chaque fetch
+    }
+    else if (fetchMediaInterval) {
+        // Si le mode n'est pas diaporama, clear l'intervalle
+        clearInterval(fetchMediaInterval);
+    }
+});
+
 // Export the function to start the server
 module.exports = {
     startServer: function () {
@@ -78,7 +109,6 @@ module.exports = {
     },
     sendScoring: function (data) {
         // console.log('UNIX Socket is sending data on data');
-        data.mode = "scoring";
         sharedEmitter.emit('scoring', data);
     }
 }

@@ -12,6 +12,7 @@ const Game = require("../Game");
 class Frame_0x3A {
     static build(_message) {
         return {
+            Mode: nBytesToNumber(_message[2]),
 
             InsertType: "DirectConsoleData",
             Sport: eSport.TableTennis,

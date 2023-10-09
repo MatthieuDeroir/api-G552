@@ -3,6 +3,7 @@ const {sharedEmitter} = require('./SerialPorts/SerialPortConnection');
 
 class Game {
     static State = {
+        Mode: null,
 
         Sport: null,
 

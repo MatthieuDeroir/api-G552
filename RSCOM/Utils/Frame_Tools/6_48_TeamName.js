@@ -1,4 +1,5 @@
 const StringDecoder = require('string_decoder').StringDecoder;
+const iconv = require('iconv-lite');
 
 function TeamName(startIndex, _message) {
     // Création d'un buffer à partir du message

@@ -10,6 +10,7 @@ const eSport = require("../Utils/Enums/eSport");
 class Frame_0x39 {
     static build(_message) {
         return {
+            Mode: nBytesToNumber(_message[2]),
             insertType: 'DirectConsoleData',
             Sport: eSport.Tennis,
 
