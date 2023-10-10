@@ -93,9 +93,9 @@ const signIn = async (req, res) => {
               }
 
               const activeSession = await activeSessionModel.getAll();
-              console.log(activeSession[0].activeToken);
+              console.log(activeSession[0].last_activity);
               const inactivity = moment
-                .duration(moment(new Date()).diff(activeSession.last_activity))
+                .duration(moment(new Date()).diff(activeSession[0].last_activity))
                 .asHours();
               console.log(inactivity);
               if (activeSession[0].activeToken !== null && inactivity < 2) {

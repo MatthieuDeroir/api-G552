@@ -50,7 +50,7 @@ class User {
 
       // Create 10 macros for the new user
       const macroPromises = [];
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 0; i <= 15; i++) {
         macroPromises.push(new Macro().create(i, null, userId));
       }
       await Promise.all(macroPromises);
@@ -162,7 +162,6 @@ class User {
     });
   }
   updateTokenAndActivity(user) {
-    console.log("updateTokenAndActivity", user);
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE users SET active_token = ? WHERE id = ?`,
