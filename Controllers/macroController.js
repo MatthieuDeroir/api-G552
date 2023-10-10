@@ -54,6 +54,7 @@ class MacroController {
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
         let macro = new Macro();
+        //TODO: Créer toutes les macros pour les boutons
         const macros = await macro.getByUserId(userId)
 
         // console.log("macros", macros[0]);
