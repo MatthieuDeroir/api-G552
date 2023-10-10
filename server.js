@@ -36,22 +36,16 @@ sharedEmitter.on("data", (data) => {
 sharedEmitter.on("scoring", async (scoring) => {
     try {
         const macro = new MacroController();
-        console.log("Scoring Mode:", scoring.Mode);
+        // console.log("Scoring Mode:", scoring.Mode);
         if (scoring.Mode === 9) {
-            console.log("Scoring Data:", scoring);
-
+            // console.log("Scoring Data:", scoring);
             unixSocketSetup.sendData(scoring);
-
         } else {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
-
             macrosData[0].Mode = scoring.Mode;
-
             unixSocketSetup.sendMedia(macrosData[0]);
-            console.log("Media Data:", macrosData[0]);
-
+            // console.log("Media Data:", macrosData[0]);
         }
-
     } catch (error) {
         console.error("Erreur lors de la récupération des macros:", error.message);
     }
