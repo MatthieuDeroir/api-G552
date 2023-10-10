@@ -82,9 +82,9 @@ class MacroController {
 
             if (mediaList.length > 1) {
                 for (let mediaInfo of mediaList) {
-                    const media = await this.media.getById(mediaInfo.media_id).then((media) => {
-                        console.log("media", media);
-                    });
+                    const media = await this.media.getById(mediaInfo.media_id);
+                    console.log("media", media);
+
                     medias.push({
                         order: mediaInfo.media_pos_in_event,
                         path: media.path,
@@ -92,9 +92,9 @@ class MacroController {
                     });
                 }
             } else {
-                const media = await this.media.getById(mediaList[0].media_id).then((media) => {
-                    console.log("media", media);
-                });
+                const media = await this.media.getById(mediaList[0].media_id);
+                console.log("media", media);
+
                 medias.push({
                     order: mediaList[0].media_pos_in_event,
                     path: media.path,
