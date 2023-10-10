@@ -33,7 +33,7 @@ sharedEmitter.on("data", (data) => {
     Game.update(data);
 });
 
-let previousScoringData = { Timer: { Value: 0 } };
+let previousScoringTimer = { Timer: { Value: 0 } };
 let previousMacrosData = null;
 
 sharedEmitter.on("scoring", async (scoring) => {
@@ -42,9 +42,16 @@ sharedEmitter.on("scoring", async (scoring) => {
         // console.log("Scoring Mode:", scoring.Mode);
 
         if (scoring.Mode === 9) {
-            unixSocketSetup.sendData(scoring);
-            previousMacrosData = null;
-
+            // Only send data if it's different from the previous scoring timer
+            if (JSON.stringify(scoring.Timer) !== JSON.stringify(previousScoringTimer.Timer)) {
+                unixSocketSetup.sendData(scoring);
+                previousScoringTimer = scoring; // Update the cache
+                previousMacrosData = null;
+            } else {
+                console.log("Scoring timer :", scoring.Timer.Value)
+                console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
+                console.log("Scoring timer was the same as the previous one, not sending data...")
+            }
         } else if (scoring.Mode !== 9 || scoring.Mode !== null){
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
@@ -52,7 +59,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
                 console.log("Medias datas were different from the previous one, sending data...")
                 unixSocketSetup.sendMedia(macrosData[0]);
-                previousScoringData = null;
+                previousScoringTimer = { Timer: { Value: 0 } };
                 previousMacrosData = macrosData[0]; // Update the cache
             }
             // console.log("Media Data:", macrosData[0]);
