@@ -10,7 +10,7 @@ const MacroController = require("./Controllers/macroController");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.listen(config.portAPI, () => {
     console.log(`API Server started on ${config.ip}:${config.portAPI}`);
@@ -22,7 +22,7 @@ webSocketSetup(app);
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
 unixSocketSetup.startServer();
 
-const { SerialPortConnection, sharedEmitter } = require("./RSCOM/SerialPorts/SerialPortConnection");
+const {SerialPortConnection, sharedEmitter} = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
 
 sp.StartReading();
@@ -49,16 +49,17 @@ sharedEmitter.on("scoring", async (scoring) => {
 
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
-        } else if (scoring.Mode !== 9 || scoring.Mode !== null){
+            previousMacrosData = null;
+        } else if (scoring.Mode !== 9 || scoring.Mode !== null) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
             // Only send data if it's different from the previous macros data
-            if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
-                console.log("Medias datas were different from the previous one, sending data...")
-                unixSocketSetup.sendMedia(macrosData[0]);
-                previousScoring = 0;
-                previousMacrosData = macrosData[0]; // Update the cache
-            }
+            // if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
+            //     console.log("Medias datas were different from the previous one, sending data...")
+            unixSocketSetup.sendMedia(macrosData[0]);
+            // previousScoring = 0;
+            // previousMacrosData = macrosData[0]; // Update the cache
+            // }
             // console.log("Media Data:", macrosData[0]);
         }
     } catch (error) {
@@ -88,7 +89,7 @@ const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
 
 const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
-const scoringBadmintonRoutes= require("./Routes/Scoring/badmintonRoutes");
+const scoringBadmintonRoutes = require("./Routes/Scoring/badmintonRoutes");
 const {logPlugin} = require("@babel/preset-env/lib/debug");
 
 app.use("/activeSessions", activeSessionsRoutes);
@@ -110,7 +111,6 @@ app.use("/badminton", scoringBadmintonRoutes);
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
 });
-
 
 
 module.exports = app;
