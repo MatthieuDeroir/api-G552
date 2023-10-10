@@ -50,7 +50,7 @@ sharedEmitter.on("scoring", async (scoring) => {
                 previousMacrosData = null;
                 previousScoringData = scoring; // Update the cache
             }
-        } else {
+        } else if (scoring.Mode !== 9 || scoring.Mode !== null){
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
             // Only send data if it's different from the previous macros data
