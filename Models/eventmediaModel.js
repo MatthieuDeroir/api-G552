@@ -49,8 +49,10 @@ class EventMedia {
         [eventId],
         (err, medias) => {
           if (err) {
+            console.log(err);
             reject(err);
           } else {
+            console.log("medias", medias);
             resolve(medias);
           }
         }

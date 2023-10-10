@@ -73,10 +73,12 @@ sharedEmitter.on("media", (media) => {
 });
 
 const authRoutes = require("./Routes/authRoutes");
+const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
+app.use("/activeSessions", activeSessionsRoutes);
 app.use("/auth", authRoutes);
 //Uncomment this line to activate token check
 app.use(checkToken);
-const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
+
 const userRoutes = require("./Routes/userRoutes");
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
@@ -88,11 +90,6 @@ const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
 
-const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
-const scoringBadmintonRoutes = require("./Routes/Scoring/badmintonRoutes");
-const {logPlugin} = require("@babel/preset-env/lib/debug");
-
-app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
 app.use("/users", userRoutes);
 app.use("/medias", mediaRoutes);
@@ -104,8 +101,7 @@ app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
 
-app.use("/tennis", scoringTennisRoutes);
-app.use("/badminton", scoringBadmintonRoutes);
+
 
 
 app.get("/", (req, res) => {

@@ -27,6 +27,7 @@ class User {
   async create(user) {
     console.log("user", user);
     try {
+      
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
 
@@ -49,7 +50,7 @@ class User {
 
       // Create 10 macros for the new user
       const macroPromises = [];
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 0; i <= 15; i++) {
         macroPromises.push(new Macro().create(i, null, userId));
       }
       await Promise.all(macroPromises);
@@ -69,6 +70,50 @@ class User {
           eventAuto: true,
         });
       })();
+
+      const scoreInitial = {
+        team1: 0,
+        team2: 0,
+        fauteTeam1: 0,
+        fauteTeam2: 0,
+        nomTeam1: 'Visiteur',
+        nomTeam2: 'Locaux'
+      };
+      if (user.username === "badminton") {
+        scoreInitial.option1 = 3;
+        scoreInitial.option2 = 21;
+        scoreInitial.option3 = 30;
+        scoreInitial.option4 = 0;
+        scoreInitial.option5 = 0;
+        scoreInitial.option7 = 'Visiteur';
+      }
+      if (user.username === "basketball") {
+        scoreInitial.option1 = 0;
+        scoreInitial.option2 = 0;
+        scoreInitial.option3 = 0;
+        scoreInitial.option4 = 0;
+        scoreInitial.option7 = 'Visiteur';
+      }
+
+      if (user.username === "volleyball") {
+        scoreInitial.option1 = 5;
+        scoreInitial.option2 = 25;
+        scoreInitial.option3 = 15;
+        scoreInitial.option4 = 0;
+        scoreInitial.option5 = 0;
+        scoreInitial.option7 = 'Visiteur';
+      }
+      if (user.username === "futsal") {
+        scoreInitial.option1 = 0;
+        scoreInitial.option2 = 0;
+      }
+      if (user.username === "handball") {
+        scoreInitial.option1 = 0;
+        scoreInitial.option2 = 0;
+      }
+      
+      const scoring = new Scoring();
+      await scoring.create(scoreInitial, userId);
 
       return;
     } catch (err) {
@@ -117,7 +162,6 @@ class User {
     });
   }
   updateTokenAndActivity(user) {
-    console.log("updateTokenAndActivity", user);
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE users SET active_token = ? WHERE id = ?`,

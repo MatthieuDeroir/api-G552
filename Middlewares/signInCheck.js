@@ -24,17 +24,16 @@ const checkToken = async (req, res, next) => {
       return res.status(401).json({ error: 'Token invalide' });
     }
     const session = await activeSession.getFirst()
-    console.log("session", session);
     const inactivite = moment.duration(moment(new Date()).diff(session.last_activity)).asHours();
-    
-   console.log("inactivite", inactivite);
-
+      // Vérifier si l'utilisateur est déjà connecté
+      if (session.activeToken !== user.active_token) {
+        return res.status(401).json({ error: 'L\'utilisateur est déjà connecté avec un token différent.' });
+      }
     if (inactivite > 2) {
       await userController.updateTokenAndActivity({ id: user.id , active_token: null });
       return res.status(401).json({ error: 'Déconnecté en raison d\'inactivité' });
     }
-
-    await activeSession.updateOne({last_activity:  new Date(), active_token: token });
+    await activeSession.updateOne({userId: user.id ,last_activity:  new Date(), active_token: token });
 
     next();
   } catch (err) {

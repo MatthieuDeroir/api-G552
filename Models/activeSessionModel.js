@@ -50,7 +50,7 @@ class ActiveSession {
   }
 
   async create(session) {
-    console.log("session", session);
+
     return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO activeSessions (userId, activeToken, last_activity) VALUES (?, ?, ?)`,
@@ -60,6 +60,22 @@ class ActiveSession {
             reject(err);
           } else {
             resolve(this.lastID);
+          }
+        }
+      );
+    });
+  }
+  logout() {
+    console.log("logout");
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE activeSessions SET userId = NULL ,activeToken = NULL, last_activity = NULL WHERE id = 1`,
+       
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
           }
         }
       );
@@ -108,11 +124,10 @@ class ActiveSession {
   }
 
   updateOne(session) {
-    console.log("updateOne", session);
     return new Promise((resolve, reject) => {
       db.run(
-        `UPDATE activeSessions SET activeToken = ?, last_activity = ? WHERE id = 1`,
-        [session.active_token, session.last_activity],
+        `UPDATE activeSessions SET userId = ?, activeToken = ?, last_activity = ? WHERE id = 1`,
+        [session.userId, session.active_token, session.last_activity],
         (err) => {
           if (err) {
             reject(err);

@@ -6,9 +6,23 @@ class ScoringController {
   }
 
   create(req, res) {
-    const { team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 } = req.body;
+    const {
+      team1,
+      team2,
+      fauteTeam1,
+      fauteTeam2,
+      nomTeam1,
+      nomTeam2,
+    } = req.body;
     this.scoring
-      .create({ team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 })
+      .create({
+        team1,
+        team2,
+        fauteTeam1,
+        fauteTeam2,
+        nomTeam1,
+        nomTeam2,
+      })
       .then((scoring) => {
         res.status(201).json(scoring);
       })
@@ -19,11 +33,41 @@ class ScoringController {
 
   update(req, res) {
     const scoring = new Scoring();
-    const id = req.params.id;
-    const { team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 } = req.body;
-    console.log(req.body);
+    const userId = req.params.id;
+    const score = req.body;
+   
     scoring
-      .update({ id, team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2 })
+      .update(userId, score)
+      .then((scoring) => {
+        res.status(200).json(scoring);
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  }
+
+  updateScore(req, res) {
+    
+    const scoring = new Scoring();
+    const userId = req.params.id;
+    const score = req.body;
+    scoring
+
+      .updateScore(userId, score)
+      .then((scoring) => {
+        res.status(200).json(scoring);
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  }
+
+  updateSettings(req, res) {
+    const scoring = new Scoring();
+    const userId = req.params.id;
+    const score = req.body;
+    scoring
+      .updateSettings(userId, score)
       .then((scoring) => {
         res.status(200).json(scoring);
       })
@@ -44,25 +88,11 @@ class ScoringController {
       });
   }
 
-  getById(req, res) {
-    const id = req.params.id;
-    this.scoring
-      .getById(id)
-      .then((scoring) => {
-        if (scoring) {
-          res.status(200).json(scoring);
-        } else {
-          res.status(404).json({ message: "Scoring not found" });
-        }
-      })
-      .catch((err) => {
-        res.status(500).json({ message: err });
-      });
-  }
-
   getByUserId(req, res) {
-    const userId = req.params.userId;
-    this.scoring
+    const scoring = new Scoring();
+    const userId = req.params.id;
+
+    scoring
       .getByUserId(userId)
       .then((scorings) => {
         res.status(200).json(scorings);

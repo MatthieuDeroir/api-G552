@@ -16,19 +16,20 @@ class ActiveSessionController {
       });
   };
 
-  update = (req, res) => {
+  logout = (req, res) => {
+    console.log("logout");
     this.activeSession
-      .update(req.body)
+      .logout(req)
       .then((session) => {
-        res.status(200).json(session);
+        res.status(201).json(session);
       })
       .catch((err) => {
         res.status(500).json({ message: err });
       });
   };
 
+  
   getByUserId = (req, res) => {
-    console.log("getByUserId", req);
     this.activeSession
       .getByUserId(req)
       .then((session) => {
@@ -40,6 +41,7 @@ class ActiveSessionController {
   };
 
   getAll = (req, res) => {
+    console.log("getAll");
     this.activeSession
       .getAll()
       .then((sessions) => {
@@ -72,8 +74,7 @@ class ActiveSessionController {
           reject(err);
         });
     });
-  }
-
+  };
 }
 
 module.exports = ActiveSessionController;
