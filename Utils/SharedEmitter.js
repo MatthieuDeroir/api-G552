@@ -9,5 +9,7 @@ sharedEmitter.on('updated', (data) => {
     console.log('RSCOM updated:', data);
 });
 
+console.log("SharedEmitter file is loaded");
+
 module.exports = sharedEmitter;
 // utils/SharedEmitter.js

@@ -1,121 +1,205 @@
+// const net = require('net');
+// const fs = require('fs');
+// const sharedEmitter = require("../Utils/SharedEmitter");
+// const socketPath = '/tmp/_sysmes.sock';
+//
+// // Check if the socket file already exists then delete it
+//  if (fs.existsSync(socketPath)) {
+//     fs.unlinkSync(socketPath);
+// }
+//
+// function handleData(data) {
+//     if (data.mode === 'scoring') {
+//         // console.log('Handled score data');
+//         // Do something with score data
+//     } else if (data.mode === 'media') {
+//         console.log('Received media data');
+//         // Do something with media data
+//     } else {
+//         console.warn('Received unknown data mode:', data.mode);
+//     }
+// }
+//
+// const server = net.createServer((client) => {
+//     // Define listener functions
+//     function onScoring(data) {
+//         try {
+//             handleData(data);
+//             if (data.mode === 'scoring') {
+//                 client.write(JSON.stringify(data) + '\n');
+//             } else if (data.mode === 'media') {
+//                 client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
+//                 console.log('Sent gameState', data)
+//             }
+//         } catch (err) {
+//             console.error('Failed to send score gameState', err);
+//         }
+//     }
+//
+//     function onMedia(data) {
+//         try {
+//             client.write(JSON.stringify(data) + '\n');
+//         } catch (err) {
+//             console.error('Failed to send media gameState', err);
+//         }
+//     }
+//
+//     // Attach listeners to sharedEmitter
+//     sharedEmitter.on('scoring', onScoring);
+//     sharedEmitter.on('media', onMedia);
+//
+//     client.on('close', () => {
+//         console.log('Client disconnected');
+//         // Remove listeners to avoid duplicates
+//         sharedEmitter.removeListener('scoring', onScoring);
+//         sharedEmitter.removeListener('media', onMedia);
+//     });
+//
+//     client.on('data', (data) => {
+//         try {
+//             // console.log('Received raw gameState', data)
+//             // console.log('Client on data Received gameState', data.toString())
+//         } catch (err) {
+//             console.error('Failed to parse JSON gameState', err);
+//         }
+//     });
+//
+//     client.on('error', (err) => {
+//         console.error('Client error:', err);
+//     });
+// });
+//
+//
+//
+// let fetchMediaInterval;
+// sharedEmitter.on('mode-updated', (data) => {
+//     if (data.mode === 'diaporama') {
+//         // Supposons que l'ID de l'événement est également passé dans data
+//         const eventId = data.eventId;
+//         const eventMedia = new EventMedia(); // Créez une instance de EventMedia pour appeler getAllByEvent
+//         if(fetchMediaInterval) clearInterval(fetchMediaInterval); // Clear existing interval if any
+//         fetchMediaInterval = setInterval(() => {
+//             eventMedia.getAllByEvent(eventId)
+//                 .then(medias => {
+//                     console.log("Fetched medias:", medias);
+//                     // Convertir les médias en JSON et les envoyer via le socket client
+//                     try {
+//                         client.write(JSON.stringify({ mode: 'diaporama', medias }) + '\n');
+//                     } catch (err) {
+//                         console.error('Failed to send media gameState', err);
+//                     }
+//                 })
+//                 .catch(err => {
+//                     console.error("Erreur lors de la récupération des médias par événement: ", err);
+//                 });
+//         }, 10000); // Remplacez 10000 par le temps souhaité en ms entre chaque fetch
+//     }
+//     else if (fetchMediaInterval) {
+//         // Si le mode n'est pas diaporama, clear l'intervalle
+//         clearInterval(fetchMediaInterval);
+//     }
+// });
+//
+// // Export the function to start the server
+// module.exports = {
+//     startServer: function () {
+//         server.listen(socketPath, () => {
+//             console.log(`UnixSocket Server listening on ${socketPath}`);
+//         });
+//     },
+//     sendScoring: function (data) {
+//         // console.log('UNIX Socket is sending data on data');
+//         sharedEmitter.emit('scoring', data);
+//     }
+// }
+
+
 const net = require('net');
 const fs = require('fs');
 const sharedEmitter = require("../Utils/SharedEmitter");
-/* const socketPath = '/tmp/_sysmes.sock'; */
+const socketPath = '/tmp/_sysmes.sock';
+
 
 // Check if the socket file already exists then delete it
-/* if (fs.existsSync(socketPath)) {
+if (fs.existsSync(socketPath)) {
     fs.unlinkSync(socketPath);
-} */
+}
 
 function handleData(data) {
-    if (data.mode === 'scoring') {
-        console.log('Handled score data :', data.gameState.chrono);
-        // Do something with score data
-    } else if (data.mode === 'media') {
-        console.log('Received media data:', data.path, data.duration);
-        // Do something with media data
+
+    if (data.mode === 9) {
+        // Handle score data
+        console.log('Handled score data')
     } else {
-        console.warn('Received unknown data mode:', data.mode);
+        // console.log('Received media data');
+        // Handle media data
     }
 }
 
 const server = net.createServer((client) => {
 
-    // Handle 'score' event
-    sharedEmitter.on('scoring', (data) => {
+    function onDataReceived(data) {
         try {
-            console.log('Received raw data:', data)
-            const jsonData = JSON.parse(data);
-            console.log('Parsed data to send :', jsonData);
-            handleData(jsonData);
-            if (jsonData.mode === 'scoring') {
-                client.write(data + '\n');  // data is already a string
-                console.log('Sent data:', jsonData)
-            } else if (jsonData.mode === 'media') {
-                client.write(JSON.stringify({ mode: 'media', path: jsonData.path, duration: jsonData.duration }) + '\n');
-                console.log('Sent data:', jsonData)
+            handleData(data);
+
+            if (data?.Mode === 9) {
+                client.write(JSON.stringify(data) + '\n');
+                console.log("Mode", data.Mode)
+                console.log("Period", data.Period)
+                console.log("Timer", data.Timer.Value)
+                console.log("Home", data.Home.TeamName)
+                console.log("TimeOut", data.Home.Timeout.Count)
+                console.log("Points", data.Home.Points)
+                console.log("Guest", data.Guest.TeamName)
+                console.log("Points", data.Guest.Points)
+                console.log("TimeOut", data.Guest.Timeout.Count)
+
+                // console.log('Sent score gameState', data)
+            } else {
+                client.write(JSON.stringify(data) + '\n');
+                // console.log("Mode:", data.Mode);
             }
         } catch (err) {
-            console.error('Failed to send score data:', err);
+            console.error('Failed to send gameState', err);
         }
-    });
+    }
 
+    // Attach listeners to sharedEmitter
+    sharedEmitter.on('data-received', onDataReceived);
 
-    // Handle 'media' event
-    sharedEmitter.on('media', (data) => {
-        try {
-            client.write(JSON.stringify(data) + '\n');
-        } catch (err) {
-            console.error('Failed to send media data:', err);
-        }
-    });
-
-    console.log('Client connected');
-
-    client.on('end', () => {
+    client.on('close', () => {
         console.log('Client disconnected');
+        sharedEmitter.removeListener('data-received', onDataReceived);
+    });
+
+    client.on('scoring', (data) => {
+        try {
+            console.log('Received raw gameState', data)
+            const parsedData = JSON.parse(data.toString());
+            sharedEmitter.emit('data-received', parsedData);
+        } catch (err) {
+            console.error('Failed to parse JSON gameState', err);
+        }
     });
 
     client.on('error', (err) => {
         console.error('Client error:', err);
     });
+
 });
 
-let mode = "media";
-let sport = "basketball";
-
-// Export the function to start the server
-/* module.exports = {
+module.exports = {
     startServer: function () {
         server.listen(socketPath, () => {
             console.log(`UnixSocket Server listening on ${socketPath}`);
-            let chrono = 0; // Initial chrono value
-            if (mode === "scoring") {
-                setInterval(() => {
-                    chrono += 1; // Increment chrono by 0.1 every 100 milliseconds
-                    const scoreData = {
-                        mode: "scoring",
-                        gameState: { chrono: chrono, sport: sport }, // Keep chrono to 1 decimal place
-                    };
-                    sharedEmitter.emit("scoring", JSON.stringify(scoreData));
-                    console.log("RS scoring data : ", scoreData);
-                }, 100);  // Increment and send score data every 0.1 seconds
-
-            } else if (mode === "media") {
-                setInterval(() => {
-                    const mediaData = {
-                        mode: 'media',
-                        medias: [ */
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/1.png",
-                            //     duration: 2,
-                            //     type: "image"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/1.mp4",
-                            //     duration: 3,
-                            //     type: "video"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/2.mp4",
-                            //     duration: 2,
-                            //     type: "video"
-                            // },
-                            // {
-                            //     path: "/home/linaro/Server/Backend/Medias/3.mp4",
-                            //     duration: 3,
-                            //     type: "video"
-                            // }
-              /*           ]
-                    };
-                    sharedEmitter.emit("media", mediaData);
-                    console.log("Media data sent", mediaData);
-                }, 100000);  // send media data every 5 seconds
-            }
         });
-        server.on('error', (err) => {
-            console.error('Server error:', err);
-        });
+    },
+    sendData: function (data) {
+        // console.log('UNIX Socket is sending scoring')
+        sharedEmitter.emit('data-received', data);
+    },
+    sendMedia: function (data) {
+        // console.log('UNIX Socket is sending media')
+        sharedEmitter.emit('data-received', data);
     }
-} */
+}

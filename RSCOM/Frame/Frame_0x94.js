@@ -9,6 +9,7 @@ const eSport = require('../Utils/Enums/eSport');
 class Frame_0x94 {
     static build(_message) {
         const GSI = {
+            Mode: nBytesToNumber(_message[2]),
             insertType: 'DirectConsoleData',
             Sport: eSport.Hockey,
 

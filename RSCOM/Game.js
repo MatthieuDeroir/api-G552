@@ -1,8 +1,9 @@
 const Frames = require('./Frame/Frame_index');
-const sharedEmitter = require('../Utils/SharedEmitter');
+const {sharedEmitter} = require('./SerialPorts/SerialPortConnection');
 
 class Game {
     static State = {
+        Mode: null,
 
         Sport: null,
 
@@ -41,7 +42,7 @@ class Game {
             TeamName: null,
             Points: null,
             TotalPoints: null,
-            PointsInSet: null,
+            PointsInSets: null,
             SetsWon: null,
             Service: null,
             Fouls: {
@@ -70,7 +71,7 @@ class Game {
             TeamName: null,
             Points: null,
             TotalPoints: null,
-            PointsInSet: null,
+            PointsInSets: null,
             SetsWon: null,
             Service: null,
             Fouls: {
@@ -94,19 +95,25 @@ class Game {
     }
 
     static update = (_message) => {
-        if (this.isValid(_message)) {
-            this.select(_message);
-        } else
-            console.log('Invalid frame');
-        return null;
+        this.select(_message);
+        // if (this.isValid(_message)) {
+        //     // console.log('Valid frame');
+        //
+        // } else
+        //     console.log(_message)
+        //     console.log('Invalid frame');
+        // return null;
     }
 
     static isValid(_message) {
-        return _message[0] === 0xF8 && _message[53] === 0x0D;
+        console.log("Frame length: ", _message.length)
+        console.log("First : ", _message[0])
+        console.log("Last : ", _message[_message.length - 1])
+        return _message[0] === 248;
     }
 
     static select = (_message) => {
-        console.log("select method was called with _message: ", _message);
+        // console.log("select method was called with _message: ", _message);
         let toInsert = null;
         switch (_message[1]) {
             case 0x3A:
@@ -140,7 +147,7 @@ class Game {
                 toInsert = Frames._0x39.build(_message);
                 break;
             case 0x62:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x62_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x62_PlayerNames.build(_message);
@@ -149,7 +156,7 @@ class Game {
                 toInsert = Frames._0x74.build(_message);
                 break;
             case 0x77:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 &&_message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x77_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x77_PlayerNames.build(_message);
@@ -173,7 +180,7 @@ class Game {
                 console.log("Unknown Frame: " + _message[1]);
                 break;
         }
-        this.Insert(toInsert);
+        this.updateState(toInsert);
         this.Send();
     };
 
@@ -181,36 +188,30 @@ class Game {
         return this.State;
     }
 
-    static Insert(GSI) {
-        this.State = GSI;
+    static updateState(toInsert) {
+        // Recursive function to compare and update the game state
+        function recursiveUpdate(mainObject, updateObject) {
+            for (let key in updateObject) {
+                // If the current property in the update object is an object itself
+                if (typeof updateObject[key] === 'object' && updateObject[key] !== null) {
+                    // Ensure the main object has this property defined
+                    if (!mainObject[key]) {
+                        mainObject[key] = {};
+                    }
+                    // Recursive call
+                    recursiveUpdate(mainObject[key], updateObject[key]);
+                } else {
+                    // Directly update the property value in the main object
+                    mainObject[key] = updateObject[key];
+                }
+            }
+        }
 
-        // TODO : Insert into the game state the values of the GSI object that were
-        //  modified to avoid overwriting the whole object and losing the values that
-        //  were not modified or that didint belong to the frame that was just received.
-
-        if (GSI.Clock) {
-            this.State.Clock = GSI.Clock;
-        }
-        if (GSI.Timer) {
-            this.State.Timer = GSI.Timer;
-        }
-        if (GSI.Timer24s) {
-            this.State.Timer24s = GSI.Timer24s;
-        }
-        if (GSI.Guest) {
-            this.State.Guest = GSI.Guest;
-        }
-        if (GSI.Home) {
-            this.State.Home = GSI.Home;
-        }
-        if (GSI.Sport) {
-            this.State.Sport = GSI.Sport;
-        }
-        
+        recursiveUpdate(this.State, toInsert);
     }
 
     static Send() {
-        console.log(this.State);
+        // console.log("Send method was called");
         sharedEmitter.emit('scoring', this.State);
     }
 

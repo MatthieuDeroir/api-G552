@@ -9,6 +9,7 @@ const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 class Frame_0x9A {
     static build(_message){
         return {
+            Mode: nBytesToNumber(_message[2]),
             insertType: 'DirectConsoleData',
             Chrono: {
                 Value: Tools.Chrono(_message[4], _message[5], _message[6], _message[7]),

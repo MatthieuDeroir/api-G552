@@ -1,7 +1,7 @@
 const nBytesToNumber = require('../Utils/nBytesToNumber');
 const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 const nBytesToTables = require("../Utils/nBytesToTables");
-const { eSport } = require("../Utils/Enums/eSport");
+const eSport  = require("../Utils/Enums/eSport");
 
 const Game = require("../Game");
 
@@ -12,9 +12,11 @@ const Game = require("../Game");
 class Frame_0x3A {
     static build(_message) {
         return {
+            Mode: nBytesToNumber(_message[2]),
 
             InsertType: "DirectConsoleData",
             Sport: eSport.TableTennis,
+            Set: nBytesToNumber(_message[14]),
 
             Chrono: {
                 Value: Tools.Chrono(_message[4], _message[5], _message[6], _message[7]),
