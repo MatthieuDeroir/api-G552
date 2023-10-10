@@ -129,7 +129,7 @@ function handleData(data) {
         // Handle score data
         console.log('Handled score data')
     } else {
-        console.log('Received media data');
+        // console.log('Received media data');
         // Handle media data
     }
 }
@@ -155,7 +155,7 @@ const server = net.createServer((client) => {
                 // console.log('Sent score gameState', data)
             } else {
                 client.write(JSON.stringify(data) + '\n');
-                console.log(data)
+                console.log("Mode:", data.Mode);
             }
         } catch (err) {
             console.error('Failed to send gameState', err);
