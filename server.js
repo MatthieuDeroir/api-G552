@@ -47,10 +47,13 @@ sharedEmitter.on("scoring", async (scoring) => {
                 unixSocketSetup.sendData(scoring);
                 previousScoringTimer = scoring; // Update the cache
                 previousMacrosData = null;
-            } else {
-                console.log("Scoring timer :", scoring.Timer.Value)
+                console.log("NEW Scoring timer :", scoring.Timer.Value)
                 console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
-                console.log("Scoring timer was the same as the previous one, not sending data...")
+                console.log("Scoring timer was not same as the previous one, sending data...")
+            } else {
+                console.log("SAME Scoring timer :", scoring.Timer.Value)
+                console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
+                console.log("Scoring timer was the same as the previous one, NOT sending data...")
             }
         } else if (scoring.Mode !== 9 || scoring.Mode !== null){
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
