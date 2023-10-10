@@ -40,6 +40,7 @@ sharedEmitter.on("scoring", async (scoring) => {
     try {
         const macro = new MacroController();
         // console.log("Scoring Mode:", scoring.Mode);
+        console.log(previousScoringTimer.Timer.Value)
 
         if (scoring.Mode === 9) {
             // Only send data if it's different from the previous scoring timer
