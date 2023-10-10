@@ -41,18 +41,11 @@ sharedEmitter.on("scoring", async (scoring) => {
         const macro = new MacroController();
         // console.log("Scoring Mode:", scoring.Mode);
         // console.log(scoring, "?", previousScoring)
-        scoring === previousScoring ? console.log('.') : console.log('{!}');
+        // scoring === previousScoring ? console.log('.') : console.log('{!}');
+
 
         if (scoring.Mode === 9) {
-            // Only send data if it's different from the previous scoring timer
-            if (JSON.stringify(scoring) !== JSON.stringify(previousScoring)) {
-                unixSocketSetup.sendData(scoring)
-
-                previousScoring = scoring;
-                previousMacrosData = null;
-            } else {
-                // console.log("...")
-            }
+            unixSocketSetup.sendData(scoring);
         } else if (scoring.Mode !== 9 || scoring.Mode !== null){
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
