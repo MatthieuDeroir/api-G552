@@ -36,6 +36,11 @@ class MacroController {
 
         console.log("userId", userId);
 
+        let events = await this.event.getByUserId(userId);
+
+        console.log("events", events)
+
+
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
         let macro = new Macro();
         const macros = await macro.getByUserId(userId)
@@ -55,8 +60,8 @@ class MacroController {
             // 3. Récupérer l'event associé à la macro
             console.log("macro", macro)
             const event = await this.event.getById(macro.event_id)
-
-            console.log("event", event);
+            if (!event) throw new Error("No event found for this macro");
+            console.log("events", event);
 
 
             // 4. Récupérer les médias pour l'event
