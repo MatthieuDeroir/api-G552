@@ -34,13 +34,13 @@ class MacroController {
         if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
-        // const lastActivity = activeSession.last_activity;
+        const lastActivity = activeSession.last_activity;
 
-        // if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
+        if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
         const users = await this.user.getAll();
 
-        // console.log("users", users)
+        console.log("users", users)
 
         const userId = activeSession.userId;
         //TODO: Update when ActiveSession is fixed
@@ -49,7 +49,7 @@ class MacroController {
 
         let events = await this.event.getByUserId(userId);
 
-        // console.log("events", events)
+        console.log("events", events)
 
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
@@ -57,27 +57,27 @@ class MacroController {
         //TODO: Créer toutes les macros pour les boutons
         const macros = await macro.getByUserId(userId)
 
-        // console.log("macros", macros[0]);
+        console.log("macros", macros[0]);
 
 
         const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId)
 
-        // console.log("userMacrosForButton", userMacrosForButton);
+        console.log("userMacrosForButton", userMacrosForButton);
 
 
         let results = [];
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            // console.log("macro", macro)
+            console.log("macro", macro)
             const event = await this.event.getById(macro.event_id)
             if (!event) throw new Error("No event found for this macro");
-            // console.log("events", event);
+            console.log("events", event);
 
 
             // 4. Récupérer les médias pour l'event
             const mediaList = await this.eventmedia.getAllByEvent(event.id);
-            // console.log("mediaList", mediaList);
+            console.log("mediaList", mediaList);
             let medias = [];
 
             if (!mediaList) throw new Error("No media found for this event");
@@ -85,7 +85,7 @@ class MacroController {
             if (mediaList.length > 1) {
                 for (let mediaInfo of mediaList) {
                     const media = await this.media.getById(mediaInfo.id);
-                    // console.log("media", media);
+                    console.log("media", media);
 
                     medias.push({
                         order: mediaInfo.media_pos_in_event,
@@ -95,7 +95,7 @@ class MacroController {
                 }
             } else {
                 const media = await this.media.getById(mediaList[0].id);
-                // console.log("media", media);
+                console.log("media", media);
 
                 medias.push({
                     order: mediaList[0].media_pos_in_event,
@@ -112,7 +112,7 @@ class MacroController {
             });
         }
 
-        // console.log("results", results)
+        console.log("results", results)
 
         return results;
     }
