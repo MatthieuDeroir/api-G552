@@ -6,8 +6,6 @@ const config = {
     portWS: 8080,
     secret: "12846AE79A162BA5AE1DB56743A36",
 
-
-
     SerialPort: {
         MaxRetries: 10,
         RefreshInterval: 100,

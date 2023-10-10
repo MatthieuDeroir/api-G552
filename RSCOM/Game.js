@@ -3,6 +3,7 @@ const {sharedEmitter} = require('./SerialPorts/SerialPortConnection');
 
 class Game {
     static State = {
+        Mode: null,
 
         Sport: null,
 
@@ -94,20 +95,25 @@ class Game {
     }
 
     static update = (_message) => {
-        console.log("update method was called with _message: ", _message);
-        if (this.isValid(_message)) {
-            this.select(_message);
-        } else
-            console.log('Invalid frame');
-        return null;
+        this.select(_message);
+        // if (this.isValid(_message)) {
+        //     // console.log('Valid frame');
+        //
+        // } else
+        //     console.log(_message)
+        //     console.log('Invalid frame');
+        // return null;
     }
 
     static isValid(_message) {
-        return _message[0] === 0xF8 && _message[52] === 0x0D;
+        console.log("Frame length: ", _message.length)
+        console.log("First : ", _message[0])
+        console.log("Last : ", _message[_message.length - 1])
+        return _message[0] === 248;
     }
 
     static select = (_message) => {
-        console.log("select method was called with _message: ", _message);
+        // console.log("select method was called with _message: ", _message);
         let toInsert = null;
         switch (_message[1]) {
             case 0x3A:
@@ -141,7 +147,7 @@ class Game {
                 toInsert = Frames._0x39.build(_message);
                 break;
             case 0x62:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x62_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x62_PlayerNames.build(_message);
@@ -150,7 +156,7 @@ class Game {
                 toInsert = Frames._0x74.build(_message);
                 break;
             case 0x77:
-                if (_message[2] === 0x20 && _message[4] === 0x20 && _message[5] === 0x20)
+                if (_message[3] === 0x20 &&_message[4] === 0x20 && _message[5] === 0x20)
                     toInsert = Frames._0x77_TeamNames.build(_message);
                 else
                     toInsert = Frames._0x77_PlayerNames.build(_message);
@@ -196,7 +202,6 @@ class Game {
                     recursiveUpdate(mainObject[key], updateObject[key]);
                 } else {
                     // Directly update the property value in the main object
-                    console.log("key: ", key, " mainObject[key]: ", mainObject[key], "replaced with", "key: ", key, " updateObject[key]: ", updateObject[key]);
                     mainObject[key] = updateObject[key];
                 }
             }
@@ -206,7 +211,7 @@ class Game {
     }
 
     static Send() {
-        console.log("Send method was called");
+        // console.log("Send method was called");
         sharedEmitter.emit('scoring', this.State);
     }
 

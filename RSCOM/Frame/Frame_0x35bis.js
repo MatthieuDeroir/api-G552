@@ -11,6 +11,7 @@ const eSport = require("../Utils/Enums/eSport");
 class Frame_0x35 {
     static build(_message) {
         return {
+            Mode: nBytesToNumber(_message[2]),
             insertType: 'DirectConsoleData',
             Sport: eSport.Boxe,
 

@@ -14,7 +14,7 @@ class Button {
                     INTEGER
                     PRIMARY
                         KEY,
-                name  
+                name
                     TEXT
             )
         `;
