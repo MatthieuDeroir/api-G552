@@ -45,7 +45,7 @@ class MacroController {
         const userId = activeSession.userId;
         //TODO: Update when ActiveSession is fixed
         // const userId = 3;
-        // console.log("userId", userId);
+        console.log("userId", userId);
 
         let events = await this.event.getByUserId(userId);
 
