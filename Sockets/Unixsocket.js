@@ -193,9 +193,11 @@ module.exports = {
         });
     },
     sendData: function (data) {
+        console.log('UNIX Socket is sending scoring')
         sharedEmitter.emit('data-received', data);
     },
     sendMedia: function (data) {
+        console.log('UNIX Socket is sending media')
         sharedEmitter.emit('data-received', data);
     }
 }
