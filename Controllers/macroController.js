@@ -58,7 +58,6 @@ class MacroController {
         console.log("macros", macros[0]);
 
 
-
         const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId)
 
         console.log("userMacrosForButton", userMacrosForButton);
@@ -75,14 +74,13 @@ class MacroController {
 
 
             // 4. Récupérer les médias pour l'event
-            const mediaList = await this.eventmedia.getAllByEvent(event.id).then((mediaList) => {
-                console.log("mediaList", mediaList);
-            });
+            const mediaList = await this.eventmedia.getAllByEvent(event.id);
+            console.log("mediaList", mediaList);
             let medias = [];
 
             if (!mediaList) throw new Error("No media found for this event");
 
-            if (mediaList.length > 1){
+            if (mediaList.length > 1) {
                 for (let mediaInfo of mediaList) {
                     const media = await this.media.getById(mediaInfo.media_id).then((media) => {
                         console.log("media", media);
@@ -137,7 +135,7 @@ class MacroController {
             });
     }
 
-    getById= (req, res) => {
+    getById = (req, res) => {
         this.macro.getById(req.params.id)
             .then((macro) => {
                 if (macro) {
@@ -151,7 +149,7 @@ class MacroController {
             });
     }
 
-    delete= (req, res) => {
+    delete = (req, res) => {
         this.macro.delete(req.params.id)
             .then(() => {
                 res.status(204).json();
