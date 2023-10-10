@@ -154,8 +154,8 @@ const server = net.createServer((client) => {
 
                 // console.log('Sent score gameState', data)
             } else {
-                client.write(JSON.stringify({ mode: 'diaporama', path: data.path, duration: data.duration }) + '\n');
-                // console.log('Sent diaporama gameState', data);
+                client.write(JSON.stringify(data) + '\n');
+                console.log(data)
             }
         } catch (err) {
             console.error('Failed to send gameState', err);
