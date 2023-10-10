@@ -46,7 +46,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
 
             console.log("Media Data:", macrosData);
-            unixSocketSetup.sendMedia(macrosData.concat(scoring.Mode));
+            unixSocketSetup.sendMedia(macrosData.push(scoring.Mode));
         }
 
     } catch (error) {
