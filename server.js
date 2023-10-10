@@ -46,6 +46,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             if (JSON.stringify(scoring) !== JSON.stringify(previousScoringData)) {
                 console.log("Scoring datas were different from the previous one, sending data...")
                 unixSocketSetup.sendData(scoring);
+                previousMacrosData = null;
                 previousScoringData = scoring; // Update the cache
             }
         } else {
@@ -56,6 +57,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
                 console.log("Medias datas were different from the previous one, sending data...")
                 unixSocketSetup.sendMedia(macrosData[0]);
+                previousScoringData = null;
                 previousMacrosData = macrosData[0]; // Update the cache
             }
             // console.log("Media Data:", macrosData[0]);
