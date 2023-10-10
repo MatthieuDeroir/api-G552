@@ -44,7 +44,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         if (scoring.Mode === 9) {
             // Only send data if it's different from the previous scoring data
             console.log(JSON.stringify(scoring) !== JSON.stringify(previousScoringData))
-            if (JSON.stringify(scoring) !== JSON.stringify(previousScoringData)) {
+            if (JSON.stringify(scoring) != JSON.stringify(previousScoringData)) {
                 console.log("Scoring datas were different from the previous one, sending data...")
                 unixSocketSetup.sendData(scoring);
                 previousMacrosData = null;
