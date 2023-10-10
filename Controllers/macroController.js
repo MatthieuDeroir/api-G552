@@ -80,16 +80,30 @@ class MacroController {
             });
             let medias = [];
 
-            for (let mediaInfo of mediaList) {
-                const media = await this.media.getById(mediaInfo.media_id).then((media) => {
+            if (!mediaList) throw new Error("No media found for this event");
+
+            if (mediaList.length > 1){
+                for (let mediaInfo of mediaList) {
+                    const media = await this.media.getById(mediaInfo.media_id).then((media) => {
+                        console.log("media", media);
+                    });
+                    medias.push({
+                        order: mediaInfo.media_pos_in_event,
+                        path: media.path,
+                        duration: mediaInfo.media_dur_in_event
+                    });
+                }
+            } else {
+                const media = await this.media.getById(mediaList[0].media_id).then((media) => {
                     console.log("media", media);
                 });
                 medias.push({
-                    order: mediaInfo.media_pos_in_event,
+                    order: mediaList[0].media_pos_in_event,
                     path: media.path,
-                    duration: mediaInfo.media_dur_in_event
+                    duration: mediaList[0].media_dur_in_event
                 });
             }
+
 
             // 5. Ajouter au tableau final
             results.push({
