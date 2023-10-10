@@ -26,7 +26,7 @@ class MacroController {
 
         const allActiveSessions = await this.activeSession.getAll();
 
-        // console.log("allActiveSessions", allActiveSessions)
+        console.log("allActiveSessions", allActiveSessions)
 
         // 1. Vérifier la session active
         const activeSession = await this.activeSession.getFirst();
