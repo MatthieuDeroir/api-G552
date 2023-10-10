@@ -51,9 +51,7 @@ sharedEmitter.on("scoring", async (scoring) => {
                 console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
                 console.log("Scoring timer was not same as the previous one, sending data...")
             } else {
-                console.log("SAME Scoring timer :", scoring.Timer.Value)
-                console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
-                console.log("Scoring timer was the same as the previous one, NOT sending data...")
+                // console.log("...")
             }
         } else if (scoring.Mode !== 9 || scoring.Mode !== null){
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
