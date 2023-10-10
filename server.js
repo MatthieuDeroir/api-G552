@@ -33,7 +33,7 @@ sharedEmitter.on("data", (data) => {
     Game.update(data);
 });
 
-let previousScoringData = null;
+let previousScoringData = { Timer: { Value: 0 } };
 let previousMacrosData = null;
 
 sharedEmitter.on("scoring", async (scoring) => {
