@@ -92,7 +92,7 @@ class MacroController {
                     });
                 }
             } else {
-                const media = await this.media.getById(mediaList[0].media_id);
+                const media = await this.media.getById(mediaList[0].id);
                 console.log("media", media);
 
                 medias.push({
