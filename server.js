@@ -41,6 +41,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         const macro = new MacroController();
         // console.log("Scoring Mode:", scoring.Mode);
         console.log(scoring.Timer.Value, "?", previousScoringTimer.Timer.Value)
+        scoring.Timer.Value === previousScoringTimer.Timer.Value ? console.log('.') : console.log('{!}');
 
         if (scoring.Mode === 9) {
             // Only send data if it's different from the previous scoring timer
@@ -92,6 +93,7 @@ const modeRoutes = require("./Routes/modeRoutes");
 
 const scoringTennisRoutes = require("./Routes/Scoring/tennisRoutes");
 const scoringBadmintonRoutes= require("./Routes/Scoring/badmintonRoutes");
+const {logPlugin} = require("@babel/preset-env/lib/debug");
 
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/scores", scoringRoutes);
