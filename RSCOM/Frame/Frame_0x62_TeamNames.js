@@ -13,7 +13,7 @@ class Frame_0x62_TeamNames {
         return {
             insertType: 'DirectConsoleData',
             Home: { TeamName: Tools.TeamName(6, _message) },
-            Guest: { TeamName: Tools.TeamName(34, _message) }
+            Guest: { TeamName: Tools.TeamName(30, _message) }
         };
     }
 }
