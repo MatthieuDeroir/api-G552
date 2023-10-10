@@ -111,7 +111,7 @@ class MacroController {
             });
         }
 
-        console.log("results", results)
+        // console.log("results", results)
 
         return results;
     }
