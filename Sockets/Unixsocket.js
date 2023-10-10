@@ -194,5 +194,8 @@ module.exports = {
     },
     sendData: function (data) {
         sharedEmitter.emit('data-received', data);
+    },
+    sendMedia: function (data) {
+        sharedEmitter.emit('data-received', data);
     }
 }
