@@ -84,7 +84,7 @@ class MacroController {
 
             if (mediaList.length > 1) {
                 for (let mediaInfo of mediaList) {
-                    const media = await this.media.getById(mediaInfo.media_id);
+                    const media = await this.media.getById(mediaInfo.id);
                     // console.log("media", media);
 
                     medias.push({
