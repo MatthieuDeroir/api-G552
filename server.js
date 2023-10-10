@@ -33,17 +33,29 @@ sharedEmitter.on("data", (data) => {
     Game.update(data);
 });
 
+let previousScoringData = null;
+let previousMacrosData = null;
+
 sharedEmitter.on("scoring", async (scoring) => {
     try {
         const macro = new MacroController();
         // console.log("Scoring Mode:", scoring.Mode);
+
         if (scoring.Mode === 9) {
-            // console.log("Scoring Data:", scoring);
-            unixSocketSetup.sendData(scoring);
+            // Only send data if it's different from the previous scoring data
+            if (JSON.stringify(scoring) !== JSON.stringify(previousScoringData)) {
+                unixSocketSetup.sendData(scoring);
+                previousScoringData = scoring; // Update the cache
+            }
         } else {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
-            unixSocketSetup.sendMedia(macrosData[0]);
+
+            // Only send data if it's different from the previous macros data
+            if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
+                unixSocketSetup.sendMedia(macrosData[0]);
+                previousMacrosData = macrosData[0]; // Update the cache
+            }
             // console.log("Media Data:", macrosData[0]);
         }
     } catch (error) {

@@ -119,12 +119,14 @@ const fs = require('fs');
 const sharedEmitter = require("../Utils/SharedEmitter");
 const socketPath = '/tmp/_sysmes.sock';
 
+
 // Check if the socket file already exists then delete it
 if (fs.existsSync(socketPath)) {
     fs.unlinkSync(socketPath);
 }
 
 function handleData(data) {
+
     if (data.mode === 9) {
         // Handle score data
         console.log('Handled score data')
