@@ -30,6 +30,7 @@ class MacroController {
 
         // 1. Vérifier la session active
         const activeSession = await this.activeSession.getFirst();
+
         if (!activeSession) throw new Error("No active session found");
 
         const now = Date.now();
@@ -41,8 +42,8 @@ class MacroController {
 
         console.log("users", users)
 
-        const userId = activeSession.userId;
-
+        // const userId = activeSession.userId;
+        const userId = 3;
         console.log("userId", userId);
 
         let events = await this.event.getByUserId(userId);
