@@ -32,6 +32,10 @@ class MacroController {
 
         // if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
+        const users = await this.user.getAll();
+
+        console.log("users", users)
+
         const userId = activeSession.userId;
 
         console.log("userId", userId);
@@ -45,7 +49,7 @@ class MacroController {
         let macro = new Macro();
         const macros = await macro.getByUserId(userId)
 
-        console.log("macros", macros);
+        console.log("macros", macros[0]);
 
 
 
