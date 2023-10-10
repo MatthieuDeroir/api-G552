@@ -46,7 +46,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             // Only send data if it's different from the previous scoring timer
             if (JSON.stringify(scoring.Timer) !== JSON.stringify(previousScoringTimer.Timer)) {
                 unixSocketSetup.sendData(scoring);
-                previousScoringTimer = scoring; // Update the cache
+                // previousScoringTimer = scoring; // Update the cache
                 previousMacrosData = null;
                 console.log("NEW Scoring timer :", scoring.Timer.Value)
                 console.log("Previous scoring timer :", previousScoringTimer.Timer.Value)
