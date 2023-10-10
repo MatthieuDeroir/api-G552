@@ -5,6 +5,7 @@ const User = require("../Models/userModel");
 const Event = require("../Models/eventModel");
 const EventMedia = require("../Models/eventmediaModel");
 const Media = require("../Models/mediaModel");
+const {logPlugin} = require("@babel/preset-env/lib/debug");
 
 class MacroController {
     constructor() {
@@ -17,6 +18,9 @@ class MacroController {
     }
 
     async getMacrosByButton(buttonId) {
+        if (buttonId === undefined) throw new Error("No button id given");
+        else if (buttonId === 9) return console.log("Button id is :", buttonId, " Scoring Mode activated");
+
         const TWO_HOURS = 2 * 60 * 60 * 1000; // 2 heures en millisecondes
 
         // 1. Vérifier la session active
@@ -38,6 +42,8 @@ class MacroController {
 
         console.log("macros", macros);
 
+
+
         const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId)
 
         console.log("userMacrosForButton", userMacrosForButton);
@@ -47,12 +53,14 @@ class MacroController {
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            const event = await this.event.getById(macro.event_id).then((event) => {
-                console.log("event", event);
-            });
+            console.log("macro", macro)
+            const event = await this.event.getById(macro.event_id)
+
+            console.log("event", event);
+
 
             // 4. Récupérer les médias pour l'event
-            const mediaList = await eventmedia.getAllByEvent(event.id).then((mediaList) => {
+            const mediaList = await this.eventmedia.getAllByEvent(event.id).then((mediaList) => {
                 console.log("mediaList", mediaList);
             });
             let medias = [];
