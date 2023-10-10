@@ -38,7 +38,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         const macro = new MacroController();
         console.log("Scoring Mode:", scoring.Mode);
         const macrosData = await macro.getMacrosByButton(scoring.Mode);
-        console.log("Macros for button:", macrosData);
+        // console.log("Macros for button:", macrosData);
 
         unixSocketSetup.sendData(scoring);
     } catch (error) {
