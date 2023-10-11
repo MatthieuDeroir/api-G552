@@ -43,7 +43,6 @@ sharedEmitter.on("scoring", async (scoring) => {
         // console.log(scoring, "?", previousScoring)
         // scoring === previousScoring ? console.log('.') : console.log('{!}');
         //TODO: Parse, Save and Check if the scoring is different from the previous one
-        console.log("mode", scoring.Mode)
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
@@ -52,7 +51,6 @@ sharedEmitter.on("scoring", async (scoring) => {
             previousMacrosData = null;
         } else if (scoring.Mode === 3 || scoring.Mode === 4 || scoring.Mode === 5 || scoring.Mode === 6 || scoring.Mode === 7 || scoring.Mode === 8) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
-            console.log("Macro:", macrosData)
             macrosData[0].Mode = scoring.Mode;
             // Only send data if it's different from the previous macros data
             // if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {

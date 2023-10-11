@@ -30,7 +30,7 @@ class Frame_0x33 {
                 Horn24s_Status: Tools.sHorn(_message[50]),
             },
 
-            Period: nBytesToNumber(_message[11]),
+            Period: nBytesToNumber(_message[14]),
 
             Home: {
                 Points: nBytesToNumber(_message[9], _message[10]),
