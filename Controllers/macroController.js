@@ -26,7 +26,7 @@ class MacroController {
 
         const allActiveSessions = await this.activeSession.getAll();
 
-        console.log("allActiveSessions", allActiveSessions)
+        // console.log("allActiveSessions", allActiveSessions)
 
         // 1. Vérifier la session active
         const activeSession = await this.activeSession.getFirst();
@@ -40,16 +40,16 @@ class MacroController {
 
         const users = await this.user.getAll();
 
-        console.log("users", users)
+        // console.log("users", users)
 
         const userId = activeSession.userId;
         //TODO: Update when ActiveSession is fixed
         // const userId = 3;
-        console.log("userId", userId);
+        // console.log("userId", userId);
 
         let events = await this.event.getByUserId(userId);
 
-        console.log("events", events)
+        // console.log("events", events)
 
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
@@ -57,22 +57,22 @@ class MacroController {
         //TODO: Créer toutes les macros pour les boutons
         const macros = await macro.getByUserId(userId)
 
-        console.log("macros", macros[0]);
+        // console.log("macros", macros[0]);
 
 
         const userMacrosForButton = macros.filter(macro => macro.button_id === buttonId)
 
-        console.log("userMacrosForButton", userMacrosForButton);
+        // console.log("userMacrosForButton", userMacrosForButton);
 
 
         let results = [];
 
         for (let macro of userMacrosForButton) {
             // 3. Récupérer l'event associé à la macro
-            console.log("macro", macro)
+            // console.log("macro", macro)
             const event = await this.event.getById(macro.event_id)
-            if (!event) throw new Error("No event found for this macro") return null;
-            console.log("events", event);
+            if (!event) throw new Error("No event found for this macro");
+            // console.log("events", event);
 
 
             // 4. Récupérer les médias pour l'event

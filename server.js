@@ -57,6 +57,7 @@ sharedEmitter.on("scoring", async (scoring) => {
                 console.log("No event for this macro, sending Mode", scoring.Mode)
 
             } else {
+                console.log("macrodata", macrosData)
                 macrosData[0].Mode = scoring.Mode;
                 unixSocketSetup.sendMedia(macrosData[0]);
                 unixSocketSetup.sendData(scoring);
