@@ -129,7 +129,6 @@ function handleData(data) {
 
     if (data.mode === 9) {
         // Handle score data
-        console.log('Handled score data')
     } else {
         // console.log('Received media data');
         // Handle media data
@@ -141,7 +140,6 @@ let previousDataMode = null;
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
-        console.log("Mode", data.Mode)
 
         try {
             handleData(data);
