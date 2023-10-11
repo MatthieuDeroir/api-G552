@@ -75,7 +75,6 @@ class Frame_0x33 {
                     Individual: Tools.IndividualFouls(34, 12, _message),
                 },
                 Possession: Tools.Possession(_message[3]).Guest,
-                TimeoutCounts: nBytesToNumber(_message[18]),
                 Timeout: {
                     Count: nBytesToNumber(_message[18]),
                     Time: Tools.TimeOut(nBytesToNumber(_message[21]), nBytesToNumber(_message[46]), nBytesToNumber(_message[47])),
