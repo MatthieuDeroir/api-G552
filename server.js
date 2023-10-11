@@ -57,18 +57,18 @@ sharedEmitter.on("scoring", async (scoring) => {
                 console.log("No event for this macro, sending Mode", scoring.Mode)
 
             } else {
-                macrosData[0].Mode = scoring.Mode;
-                unixSocketSetup.sendMedia(macrosData[0]);
-                unixSocketSetup.sendData(scoring);
+                // Only send data if it's different from the previous macros data
+                if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
+                    console.log("Medias datas were different from the previous one, sending data...")
+                    macrosData[0].Mode = scoring.Mode;
+                    unixSocketSetup.sendMedia(macrosData[0]);
+                    unixSocketSetup.sendData(scoring);
+                    previousMacrosData = macrosData[0]; // Update the cache
+                }
+                console.log("Media Data:", macrosData[0]);
             }
-            // Only send data if it's different from the previous macros data
-            // if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
-            //     console.log("Medias datas were different from the previous one, sending data...")
 
-            // previousScoring = 0;
-            // previousMacrosData = macrosData[0]; // Update the cache
-            // }
-            // console.log("Media Data:", macrosData[0]);
+
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des macros:", error.message);
