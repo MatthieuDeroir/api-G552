@@ -51,22 +51,22 @@ sharedEmitter.on("scoring", async (scoring) => {
             previousMacrosData = null;
         } else if (scoring.Mode === 3 || scoring.Mode === 4 || scoring.Mode === 5 || scoring.Mode === 6 || scoring.Mode === 7 || scoring.Mode === 8) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
-            if (!macrosData) {
-                scoring.Mode = 9;
+            if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
+                console.log("Medias datas were different from the previous one, sending data...")
+                macrosData[0].Mode = scoring.Mode;
+                unixSocketSetup.sendMedia(macrosData[0]);
                 unixSocketSetup.sendData(scoring);
-                console.log("No event for this macro, sending Mode", scoring.Mode)
-
-            } else {
-                // Only send data if it's different from the previous macros data
-                if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
-                    console.log("Medias datas were different from the previous one, sending data...")
-                    macrosData[0].Mode = scoring.Mode;
-                    unixSocketSetup.sendMedia(macrosData[0]);
-                    unixSocketSetup.sendData(scoring);
-                    previousMacrosData = macrosData[0]; // Update the cache
-                }
-                console.log("Media Data:", macrosData[0]);
+                previousMacrosData = macrosData[0]; // Update the cache
             }
+            // if (!macrosData) {
+            //     scoring.Mode = 9;
+            //     unixSocketSetup.sendData(scoring);
+            //     console.log("No event for this macro, sending Mode", scoring.Mode)
+            //
+            // } else {
+            //     // Only send data if it's different from the previous macros data
+            //
+            // }
 
 
         }
