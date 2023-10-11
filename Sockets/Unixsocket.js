@@ -139,20 +139,21 @@ function handleData(data) {
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
+        console.log("Mode", data.Mode)
+
         try {
             handleData(data);
 
             if (data?.Mode === 9) {
                 client.write(JSON.stringify(data) + '\n');
-                console.log("Mode", data.Mode)
-                console.log("Period", data.Period)
-                console.log("Timer", data.Timer.Value)
-                console.log("Home", data.Home.TeamName)
-                console.log("TimeOut", data.Home.Timeout.Count)
-                console.log("Points", data.Home.Points)
-                console.log("Guest", data.Guest.TeamName)
-                console.log("Points", data.Guest.Points)
-                console.log("TimeOut", data.Guest.Timeout.Count)
+                // console.log("Period", data.Period)
+                // console.log("Timer", data.Timer.Value)
+                // console.log("Home", data.Home.TeamName)
+                // console.log("TimeOut", data.Home.Timeout.Count)
+                // console.log("Points", data.Home.Points)
+                // console.log("Guest", data.Guest.TeamName)
+                // console.log("Points", data.Guest.Points)
+                // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
             } else {
