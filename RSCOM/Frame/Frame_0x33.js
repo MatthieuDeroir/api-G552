@@ -7,6 +7,27 @@ const eSport = require("../Utils/Enums/eSport");
     * 0x33 : Basketball
  */
 
+// console.log("Start:",_message[0])
+// console.log("Sport:",_message[1])
+// console.log("[X]", _message[2])
+// console.log("Possession", _message[3])
+// console.log("Chrono:", _message[4], _message[5], _message[6], _message[7])
+// console.log("Home Points", _message[8], _message[9], _message[10])
+// console.log("Guest Points", _message[11], _message[12], _message[13])
+// console.log("Period:", _message[14])
+// console.log("Home Fouls:", _message[15])
+// console.log("Guest Fouls:", _message[16])
+// console.log("Home Timeout:", _message[17])
+// console.log("Guest Timeout:", _message[18])
+// console.log("Klaxon:", _message[19], _message[20])
+// console.log("Timer:", _message[21])
+// console.log("Timeout Chrono:", _message[21], _message[46], _message[47])
+
+
+
+
+
+
 class Frame_0x33 {
     static build(_message) {
         return {
@@ -40,7 +61,6 @@ class Frame_0x33 {
                     Individual: Tools.IndividualFouls(22, 12, _message),
                 },
                 Possession: Tools.Possession(_message[3]).Home,
-                TimeoutCounts: nBytesToNumber(_message[17]),
                 Timeout: {
                     Count: nBytesToNumber(_message[17]),
                     Time: Tools.TimeOut(nBytesToNumber(_message[21]), nBytesToNumber(_message[46]), nBytesToNumber(_message[47])),
