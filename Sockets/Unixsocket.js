@@ -136,6 +136,8 @@ function handleData(data) {
     }
 }
 
+let previousDataMode = null;
+
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
@@ -158,7 +160,7 @@ const server = net.createServer((client) => {
                 // console.log('Sent score gameState', data)
             }else if (data?.Mode === 0,1,2,16,17,18,19,20) {
                 client.write(JSON.stringify(data) + '\n');
-            }else if (data?.Mode === 3,4,5,6,7,8){
+            }else if (data?.Mode === 3,4,5,6,7,8 && data?.Mode !== previousDataMode) {
                 console.log("+")
                 client.write(JSON.stringify(data) + '\n');
             } else {
