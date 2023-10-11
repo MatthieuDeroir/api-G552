@@ -124,7 +124,6 @@ class SerialPortConnection {
                     } else {
                         console.log(`${device.DevicePortName} open`);
                         device.SerialPort.on('data', data => {
-                            console.log("Data:", data);
                             try {
                                 // Append new data to device buffer
                                 device.buffer = Buffer.concat([device.buffer, data]);
