@@ -71,7 +71,7 @@ class MacroController {
             // 3. Récupérer l'event associé à la macro
             console.log("macro", macro)
             const event = await this.event.getById(macro.event_id)
-            if (!event) throw new Error("No event found for this macro");
+            if (!event) throw new Error("No event found for this macro") return null;
             console.log("events", event);
 
 
