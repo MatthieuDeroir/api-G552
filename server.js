@@ -50,6 +50,11 @@ sharedEmitter.on("scoring", async (scoring) => {
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
+
+
+        } else if (scoring.Mode === 0, 1, 2, 10, 11, 12, 13, 14, 15) {
+            unixSocketSetup.sendData(scoring);
+            previousMacrosData = null;
         } else if (scoring.Mode !== 9 || scoring.Mode !== null) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             macrosData[0].Mode = scoring.Mode;
@@ -100,8 +105,6 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
-
-
 
 
 app.get("/", (req, res) => {
