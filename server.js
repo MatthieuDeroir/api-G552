@@ -52,7 +52,7 @@ sharedEmitter.on("scoring", async (scoring) => {
             previousMacrosData = null;
 
 
-        } else if (scoring.Mode === 0, 1, 2, 10, 11, 12, 13, 14, 15) {
+        } else if (scoring.Mode === 0, 1, 2, 16, 17, 18, 19, 20) {
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
         } else if (scoring.Mode !== 9 || scoring.Mode !== null) {
