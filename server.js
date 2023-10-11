@@ -53,6 +53,7 @@ sharedEmitter.on("scoring", async (scoring) => {
 
 
         } else if (scoring.Mode === 0, 1, 2, 16, 17, 18, 19, 20) {
+            console.log("STATIC MEDIA!")
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
         } else if (scoring.Mode !== 9 || scoring.Mode !== null) {

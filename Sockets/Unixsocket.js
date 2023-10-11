@@ -156,6 +156,9 @@ const server = net.createServer((client) => {
                 // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
+            }else if (data?.Mode === 0,1,2,16,17,18,19,20){
+                console.log("bloup");
+                client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify(data) + '\n');
                 // console.log("Mode:", data.Mode);
