@@ -77,7 +77,7 @@ class MacroController {
 
             // 4. Récupérer les médias pour l'event
             const mediaList = await this.eventmedia.getAllByEvent(event.id);
-            console.log("mediaList", mediaList);
+            // console.log("mediaList", mediaList);
             let medias = [];
 
             if (!mediaList) throw new Error("No media found for this event");
@@ -85,7 +85,7 @@ class MacroController {
             if (mediaList.length > 1) {
                 for (let mediaInfo of mediaList) {
                     const media = await this.media.getById(mediaInfo.id);
-                    console.log("media", media);
+                    // console.log("media", media);
 
                     medias.push({
                         order: mediaInfo.media_pos_in_event,
@@ -95,7 +95,7 @@ class MacroController {
                 }
             } else {
                 const media = await this.media.getById(mediaList[0].id);
-                console.log("media", media);
+                // console.log("media", media);
 
                 medias.push({
                     order: mediaList[0].media_pos_in_event,
@@ -112,7 +112,7 @@ class MacroController {
             });
         }
 
-        console.log("results", results)
+        // console.log("results", results)
 
         return results;
     }
