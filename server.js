@@ -49,7 +49,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         } else if (scoring.Mode === 0, 1, 2, 16, 17, 18, 19, 20) {
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
-        } else if (scoring.Mode == 3,4,5,6,7,8) {
+        } else if (scoring.Mode === 3,4,5,6,7,8) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             console.log("Macro:", macrosData)
             macrosData[0].Mode = scoring.Mode;
