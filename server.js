@@ -73,6 +73,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des macros:", error.message);
+        scoring.Mode = 9;
         unixSocketSetup.sendData(scoring);
     }
 });
