@@ -55,7 +55,7 @@ sharedEmitter.on("scoring", async (scoring) => {
                 console.log("Medias datas were different from the previous one, sending data...")
                 macrosData[0].Mode = scoring.Mode;
                 unixSocketSetup.sendMedia(macrosData[0]);
-                unixSocketSetup.sendData(scoring);
+                // unixSocketSetup.sendData(scoring);
                 previousMacrosData = macrosData[0]; // Update the cache
             }
             // if (!macrosData) {
