@@ -156,7 +156,10 @@ const server = net.createServer((client) => {
                 // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
-            }else if (data?.Mode === 0,1,2,16,17,18,19,20){
+            }else if (data?.Mode === 0,1,2,16,17,18,19,20) {
+                client.write(JSON.stringify(data) + '\n');
+            }else if (data?.Mode === 3,4,5,6,7,8){
+                console.log("+")
                 client.write(JSON.stringify(data) + '\n');
             } else {
                 client.write(JSON.stringify(data) + '\n');
