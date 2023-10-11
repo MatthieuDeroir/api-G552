@@ -15,7 +15,7 @@ const config = {
         StopBits: 1,
         Handshake:'none',
         Path:`/dev`,
-        Filter: `ttyFIQ`,
+        Filter: `ttyS0`,
         ReadTimeout: 2000,
         WriteTimeout: 2000,
     }
