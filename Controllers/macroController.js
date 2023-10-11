@@ -90,6 +90,7 @@ class MacroController {
                     medias.push({
                         order: mediaInfo.media_pos_in_event,
                         path: media.path,
+                        type: media.type,
                         duration: mediaInfo.media_dur_in_event
                     });
                 }
