@@ -38,18 +38,9 @@ class MacroController {
 
         if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
-        const users = await this.user.getAll();
-
-        // console.log("users", users)
-
         const userId = activeSession.userId;
-        //TODO: Update when ActiveSession is fixed
-        // const userId = 3;
-        // console.log("userId", userId);
 
         let events = await this.event.getByUserId(userId);
-
-        // console.log("events", events)
 
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
