@@ -75,9 +75,7 @@ const signIn = async (req, res) => {
   try {
     const userController = new User();
     const activeSessionModel = new ActiveSession();
-    console.log(user.username);
     const foundUser = await userController.getByUsername(user.username);
-    console.log("foundUser", foundUser);
     if (foundUser) {
       bcrypt.compare(
         user.password,
