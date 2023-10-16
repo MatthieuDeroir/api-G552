@@ -3,7 +3,7 @@ const Encode = require('../Utils/Encode');
 const Tools = require('../Utils/Frame_Tools/Frame_Tools_index');
 
 /*
-    * 0x62 : Player Names and shirt numbers of the players
+    * 0x77 : Player Names and shirt numbers of the players
  */
 
 // This class is used to process and build the 0x62 frame
@@ -24,6 +24,6 @@ class Frame_0x77_PlayerNames {
     }
 }
 
-// Export the Frame_0x62_PlayerNames class
+// Export the Frame_0x77_PlayerNames class
 module
     .exports = Frame_0x77_PlayerNames;

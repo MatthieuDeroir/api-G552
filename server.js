@@ -34,7 +34,7 @@ sharedEmitter.on("data", (data) => {
 });
 
 let previousScoring = 0;
-let previousMacrosData = null;
+let previousMacrosDataMode = null;
 
 sharedEmitter.on("scoring", async (scoring) => {
     try {
@@ -42,25 +42,34 @@ sharedEmitter.on("scoring", async (scoring) => {
         // console.log("Scoring Mode:", scoring.Mode);
         // console.log(scoring, "?", previousScoring)
         // scoring === previousScoring ? console.log('.') : console.log('{!}');
-
-
         //TODO: Parse, Save and Check if the scoring is different from the previous one
-
-
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
             previousMacrosData = null;
-        } else if (scoring.Mode !== 9 || scoring.Mode !== null) {
+        } else if (scoring.Mode === 0 || scoring.Mode === 1 || scoring.Mode === 2 || scoring.Mode === 16 || scoring.Mode === 17 || scoring.Mode === 18 || scoring.Mode === 19 || scoring.Mode === 20) {
+            unixSocketSetup.sendData(scoring);
+            previousMacrosData = null;
+        } else if (scoring.Mode === 3 || scoring.Mode === 4 || scoring.Mode === 5 || scoring.Mode === 6 || scoring.Mode === 7 || scoring.Mode === 8) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
-            macrosData[0].Mode = scoring.Mode;
-            // Only send data if it's different from the previous macros data
-            // if (JSON.stringify(macrosData[0]) !== JSON.stringify(previousMacrosData)) {
-            //     console.log("Medias datas were different from the previous one, sending data...")
-            unixSocketSetup.sendMedia(macrosData[0]);
-            // previousScoring = 0;
-            // previousMacrosData = macrosData[0]; // Update the cache
+            if (scoring.Mode !== previousMacrosDataMode) {
+                console.log(scoring.Mode, "!==", previousMacrosDataMode)
+                console.log("Medias datas were different from the previous one, sending data...")
+                macrosData[0].Mode = scoring.Mode;
+                previousMacrosDataMode = scoring.Mode; // Update the cache
+                unixSocketSetup.sendMedia(macrosData[0]);
+                // unixSocketSetup.sendData(scoring);
+            }
+            // if (!macrosData) {
+            //     scoring.Mode = 9;
+            //     unixSocketSetup.sendData(scoring);
+            //     console.log("No event for this macro, sending Mode", scoring.Mode)
+            //
+            // } else {
+            //     // Only send data if it's different from the previous macros data
+            //
             // }
-            // console.log("Media Data:", macrosData[0]);
+
+
         }
     } catch (error) {
         console.error("Erreur lors de la récupération des macros:", error.message);
@@ -100,8 +109,6 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
-
-
 
 
 app.get("/", (req, res) => {
