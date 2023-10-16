@@ -18,12 +18,12 @@ class User {
             password TEXT,
             role TEXT,
             firstLogin INTEGER,
-            active_token TEXT
+            active_token TEXT,
+            language TEXT DEFAULT 'fr'
         )
         `;
     db.run(createTable);
   }
-
   async create(user) {
     console.log("user", user);
     try {
@@ -31,10 +31,11 @@ class User {
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
 
+      // Insérer la langue dans la base de données
       await new Promise((resolve, reject) => {
         db.run(
-          `INSERT INTO users (username, password, role, firstLogin) VALUES (?, ?, ?, ?)`,
-          [user.username, hash, user.role, 1],
+          `INSERT INTO users (username, password, role, firstLogin, language) VALUES (?, ?, ?, ?, ?)`,
+          [user.username, hash, user.role, 1, user.language], // Ajout de user.language ici
           function (err) {
             if (err) {
               reject(err);
@@ -45,6 +46,7 @@ class User {
           }
         );
       });
+
 
       console.log("newUser", userId);
 
@@ -144,6 +146,24 @@ class User {
       });
     });
   }
+
+  updateLanguage(language,id) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE users SET language = ? WHERE id = ?`,
+        [language.language, id],
+        (err) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+
+          }
+        }
+      );
+    });
+  }
+
 
   updateFirstLogin(userId) {
     console.log("updateFirstLogin", userId);

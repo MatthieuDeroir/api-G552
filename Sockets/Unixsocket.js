@@ -129,35 +129,39 @@ function handleData(data) {
 
     if (data.mode === 9) {
         // Handle score data
-        console.log('Handled score data')
     } else {
         // console.log('Received media data');
         // Handle media data
     }
 }
 
+let previousDataMode = null;
+
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
+
         try {
             handleData(data);
 
             if (data?.Mode === 9) {
                 client.write(JSON.stringify(data) + '\n');
-                console.log("Mode", data.Mode)
-                console.log("Period", data.Period)
-                console.log("Timer", data.Timer.Value)
-                console.log("Home", data.Home.TeamName)
-                console.log("TimeOut", data.Home.Timeout.Count)
-                console.log("Points", data.Home.Points)
-                console.log("Guest", data.Guest.TeamName)
-                console.log("Points", data.Guest.Points)
-                console.log("TimeOut", data.Guest.Timeout.Count)
+                // console.log("Period", data.Period)
+                // console.log("Timer", data.Timer.Value)
+                // console.log("Home", data.Home.TeamName)
+                // console.log("TimeOut", data.Home.Timeout.Count)
+                // console.log("Points", data.Home.Points)
+                // console.log("Guest", data.Guest.TeamName)
+                // console.log("Points", data.Guest.Points)
+                // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
-            } else {
+            }else if (data?.Mode === 0 || data?.Mode === 1 || data?.Mode === 2 || data?.Mode === 16 || data?.Mode === 17 || data?.Mode === 18 || data?.Mode === 19 || data?.Mode === 20) {
                 client.write(JSON.stringify(data) + '\n');
-                // console.log("Mode:", data.Mode);
+            }else if (data?.Mode !== previousDataMode && (data?.Mode === 3 || data?.Mode === 4 || data?.Mode === 5 || data?.Mode === 6 || data?.Mode === 7 || data?.Mode === 8)) {
+                previousDataMode = data?.Mode;
+                console.log("+")
+                client.write(JSON.stringify(data) + '\n');
             }
         } catch (err) {
             console.error('Failed to send gameState', err);
