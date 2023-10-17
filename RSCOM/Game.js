@@ -131,7 +131,6 @@ class Game {
                 break;
             case 0x33:
                 toInsert = Frames._0x33.build(_message);
-                console.log(toInsert)
                 break;
             case 0x35:
                 toInsert = Frames._0x35.build(_message);
