@@ -43,6 +43,7 @@ sharedEmitter.on("scoring", async (scoring) => {
         // console.log(scoring, "?", previousScoring)
         // scoring === previousScoring ? console.log('.') : console.log('{!}');
         //TODO: Parse, Save and Check if the scoring is different from the previous one
+        console.log("Scoring Mode:", scoring.Mode);
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
             previousMacrosDataMode = null;
