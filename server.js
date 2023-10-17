@@ -45,10 +45,10 @@ sharedEmitter.on("scoring", async (scoring) => {
         //TODO: Parse, Save and Check if the scoring is different from the previous one
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
-            previousMacrosData = null;
+            previousMacrosDataMode = null;
         } else if (scoring.Mode === 0 || scoring.Mode === 1 || scoring.Mode === 2 || scoring.Mode === 16 || scoring.Mode === 17 || scoring.Mode === 18 || scoring.Mode === 19 || scoring.Mode === 20) {
             unixSocketSetup.sendData(scoring);
-            previousMacrosData = null;
+            previousMacrosDataMode = null;
         } else if (scoring.Mode === 3 || scoring.Mode === 4 || scoring.Mode === 5 || scoring.Mode === 6 || scoring.Mode === 7 || scoring.Mode === 8) {
             const macrosData = await macro.getMacrosByButton(scoring.Mode);
             if (scoring.Mode !== previousMacrosDataMode) {
