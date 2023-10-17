@@ -46,7 +46,7 @@ class MediaController {
                     .create(req.file, id, username)
                     .then((media) => {
 
-                        fs.rename(req.file.path, '../../Server/Frontend/public/medias/' + username + '/' + req.file.filename, (erreur) => {
+                        fs.rename(req.file.path, '../../Server/Frontend/build/medias/' + username + '/' + req.file.filename, (erreur) => {
                             if (erreur) {
                                 console.error('Erreur lors du déplacement du fichier :', erreur);
                             } else {
@@ -121,7 +121,7 @@ class MediaController {
             .getById(req.params.id)
             .then((file) => {
                 const filePath = file.path;
-                fs.unlink("../../Server/Frontend/public/" + filePath, (err) => {
+                fs.unlink("../../Server/Frontend/build/" + filePath, (err) => {
                     if (err) {
                         {
                             this.media
