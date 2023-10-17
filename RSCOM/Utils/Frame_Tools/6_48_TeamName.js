@@ -11,7 +11,9 @@ function TeamName(startIndex, _message) {
     // const slicedBuffer = buffer.slice(startIndex, startIndex + 18 * 2);
 
     // Decode using utf32le with iconv-lite
-    const decodedMessage = iconv.decode(slicedBuffer, 'utf16');
+    const decodedMessage = iconv.decode(slicedBuffer, 'utf16').replace(/[^a-zA-Z0-9]/g, '');
+
+    // remove any character that is not a letter or a number
     console.log('Decoded Message:' + decodedMessage);
 
     return decodedMessage;
