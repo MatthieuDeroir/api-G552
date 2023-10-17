@@ -10,7 +10,7 @@ class MediaController {
         this.storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 const username = req.params.user;
-                const userFolder = `../../Server/uploads/`;
+                const userFolder = `/home/linaro/Server/uploads/`;
                 cb(null, userFolder);
             },
             filename: (req, file, cb) => {
@@ -46,7 +46,7 @@ class MediaController {
                     .create(req.file, id, username)
                     .then((media) => {
 
-                        fs.rename(req.file.path, '../../Server/Frontend/build/medias/' + username + '/' + req.file.filename, (erreur) => {
+                        fs.rename(req.file.path, '/home/linaro/Server/Frontend/build/medias/' + username + '/' + req.file.filename, (erreur) => {
                             if (erreur) {
                                 console.error('Erreur lors du déplacement du fichier :', erreur);
                             } else {
@@ -121,7 +121,7 @@ class MediaController {
             .getById(req.params.id)
             .then((file) => {
                 const filePath = file.path;
-                fs.unlink("../../Server/Frontend/build/" + filePath, (err) => {
+                fs.unlink("/home/linaro/Server/Frontend/build/" + filePath, (err) => {
                     if (err) {
                         {
                             this.media
