@@ -30,7 +30,7 @@ const handleScoring = async (scoring) => {
             } else {
                 macrosData = await macro.getMacrosByButton(mode);
             }
-            console.log("macrosData", macrosData)
+            // console.log("macrosData", macrosData)
             if (macrosData === 9){
                 console.log("No event for this macro, sending Mode", scoring.Mode);
                 scoring.Mode = 9;
@@ -47,7 +47,7 @@ const handleScoring = async (scoring) => {
             }
         };
 
-        console.log("Scoring Mode:", scoring.Mode);
+        // console.log("Scoring Mode:", scoring.Mode);
 
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
