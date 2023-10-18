@@ -19,15 +19,17 @@ const handleScoring = async (scoring) => {
         const macroModes = [3, 4, 5, 6, 7, 8, 21];
 
         const handleImmediateMode = (mode) => {
-            if (mode > 16) {
-                scoring.Mode = scoring.Mode - 6;
-            }
             unixSocketSetup.sendData(scoring);
             previousMacrosDataMode = mode;
         };
 
         const handleMacroMode = async (mode) => {
-            const macrosData = await macro.getMacrosByButton(mode);
+            let macrosData = null;
+            if (mode === 21){
+                macrosData = await macro.getMacrosByButton(15);
+            } else {
+                macrosData = await macro.getMacrosByButton(mode);
+            }
             console.log("macrosData", macrosData)
             if (macrosData === 9){
                 console.log("No event for this macro, sending Mode", scoring.Mode);
