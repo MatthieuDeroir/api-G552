@@ -42,7 +42,7 @@ const handleScoring = async (scoring) => {
             }
         };
 
-        // console.log("Scoring Mode:", scoring.Mode);
+        console.log("Scoring Mode:", scoring.Mode);
 
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
