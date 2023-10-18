@@ -96,6 +96,7 @@ class Game {
 
     static update = (_message) => {
         this.select(_message);
+        // TODO: Check if the frame is valid
         // if (this.isValid(_message)) {
         //     // console.log('Valid frame');
         //
