@@ -158,8 +158,7 @@ const server = net.createServer((client) => {
                 // console.log('Sent score gameState', data)
             }else if (data?.Mode === 0 || data?.Mode === 1 || data?.Mode === 2 || data?.Mode === 16 || data?.Mode === 17 || data?.Mode === 18 || data?.Mode === 19 || data?.Mode === 20) {
                 client.write(JSON.stringify(data) + '\n');
-            }else if (data?.Mode !== previousDataMode && (data?.Mode === 3 || data?.Mode === 4 || data?.Mode === 5 || data?.Mode === 6 || data?.Mode === 7 || data?.Mode === 8 || data?.Mode === 15 || data?.Mode === 21)) {
-                previousDataMode = data?.Mode;
+            }else if ((data?.Mode === 3 || data?.Mode === 4 || data?.Mode === 5 || data?.Mode === 6 || data?.Mode === 7 || data?.Mode === 8 || data?.Mode === 15 || data?.Mode === 21)) {
                 console.log("+")
                 client.write(JSON.stringify(data) + '\n');
             }
