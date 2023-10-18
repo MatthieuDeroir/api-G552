@@ -19,6 +19,9 @@ const handleScoring = async (scoring) => {
         const macroModes = [3, 4, 5, 6, 7, 8, 21];
 
         const handleImmediateMode = (mode) => {
+            if (mode > 16) {
+                scoring.Mode = scoring.Mode - 6;
+            }
             unixSocketSetup.sendData(scoring);
             previousMacrosDataMode = mode;
         };
