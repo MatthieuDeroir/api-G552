@@ -20,13 +20,10 @@ const handleScoring = async (scoring) => {
 
         const handleImmediateMode = (mode) => {
             unixSocketSetup.sendData(scoring);
-            previousMacrosDataMode = null;
+            previousMacrosDataMode = mode;
         };
 
         const handleMacroMode = async (mode) => {
-            scoring.Mode = 9;
-            unixSocketSetup.sendData(scoring);
-            scoring.Mode = mode;
             const macrosData = await macro.getMacrosByButton(mode);
             if (macrosData && macrosData[0]) {
                 macrosData[0].Mode = mode;
@@ -41,7 +38,7 @@ const handleScoring = async (scoring) => {
 
         if (scoring.Mode === 9) {
             unixSocketSetup.sendData(scoring);
-            previousMacrosDataMode = null;
+            previousMacrosDataMode = 9;
         } else if (immediateModes.includes(scoring.Mode)) {
             handleImmediateMode(scoring.Mode);
         } else if (macroModes.includes(scoring.Mode)) {
