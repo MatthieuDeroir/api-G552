@@ -109,6 +109,7 @@ class MacroController {
 
         return results;
     }
+
     catch(error) {
         console.error(error.message);  // This will log the error message.
         return 9;
@@ -149,7 +150,7 @@ getById = (req, res) => {
         });
 }
 
-delete = (req, res) => {
+deleteMacro = (req, res) => {
     this.macro.delete(req.params.id)
         .then(() => {
             res.status(204).json();
@@ -189,7 +190,5 @@ getByEventId = (req, res) => {
         });
 }
 
-
-}
 
 module.exports = MacroController;
