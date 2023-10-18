@@ -200,6 +200,7 @@ module.exports = {
     },
     sendData: function (data) {
         // console.log('UNIX Socket is sending scoring')
+        console.log("Mode", data.Mode)
         sharedEmitter.emit('data-received', data);
     },
     sendMedia: function (data) {
