@@ -165,8 +165,10 @@ const server = net.createServer((client) => {
                 console.log("+")
                 client.write(JSON.stringify(data) + '\n');
             }
+
         } catch (err) {
             console.error('Failed to send gameState', err);
+
         }
     }
 
