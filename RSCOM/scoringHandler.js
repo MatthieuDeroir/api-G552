@@ -25,7 +25,13 @@ const handleScoring = async (scoring) => {
 
         const handleMacroMode = async (mode) => {
             const macrosData = await macro.getMacrosByButton(mode);
-            if (macrosData && macrosData[0] && macrosData !== 9) {
+            console.log("macrosData", macrosData)
+            if (macrosData === 9){
+                console.log("No event for this macro, sending Mode", scoring.Mode);
+                scoring.Mode = 9;
+                unixSocketSetup.sendData(scoring);
+            }
+            else if (macrosData && macrosData[0]) {
                 macrosData[0].Mode = mode;
                 previousMacrosDataMode = mode; // Update the cache
                 unixSocketSetup.sendMedia(macrosData[0]);
