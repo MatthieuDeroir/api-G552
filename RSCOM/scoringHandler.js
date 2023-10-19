@@ -27,7 +27,7 @@ const handleScoring = async (scoring) => {
         const macroModes = [3, 4, 5, 6, 7, 8, 21];
         const stopModes = [22, 23];
 
-        console.log("Handle Scoring:", scoring.Mode)
+        // console.log("Handle Scoring:", scoring.Mode)
 
         const handleImmediateMode = (mode) => {
             unixSocketSetup.sendData(scoring);
