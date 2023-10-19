@@ -195,6 +195,7 @@ const server = net.createServer((client) => {
 
             if (scoreModes.includes(data?.Mode) || stopModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
+                previousData = data;
                 client.write(JSON.stringify(data) + '\n');
                 // console.log("Period", data.Period)
                 // console.log("Timer", data.Timer.Value)
@@ -208,6 +209,7 @@ const server = net.createServer((client) => {
                 // console.log('Sent score gameState', data)
             } else if (immediateModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
+                previousData = data;
                 client.write(JSON.stringify(data) + '\n');
             } else if (!deepEqual(data, previousData) && macroModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
