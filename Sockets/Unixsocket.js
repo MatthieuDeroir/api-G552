@@ -141,10 +141,16 @@ const server = net.createServer((client) => {
 
     function onDataReceived(data) {
 
+        const scoreModes = [9];
+        const immediateModes = [0, 1, 2, 16, 17, 18, 19, 20];
+        const macroModes = [3, 4, 5, 6, 7, 8, 21];
+        const stopModes = [22, 23];
+
         try {
             handleData(data);
 
-            if (data?.Mode === 9) {
+
+            if (scoreModes.includes(data?.Mode) || stopModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 client.write(JSON.stringify(data) + '\n');
                 // console.log("Period", data.Period)
@@ -157,10 +163,10 @@ const server = net.createServer((client) => {
                 // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
-            }else if (data?.Mode === 0 || data?.Mode === 1 || data?.Mode === 2 || data?.Mode === 16 || data?.Mode === 17 || data?.Mode === 18 || data?.Mode === 19 || data?.Mode === 20) {
+            }else if (immediateModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 client.write(JSON.stringify(data) + '\n');
-            }else if (data?.Mode !== previousDataMode && (data?.Mode === 3 || data?.Mode === 4 || data?.Mode === 5 || data?.Mode === 6 || data?.Mode === 7 || data?.Mode === 8 || data?.Mode === 15 || data?.Mode === 21)) {
+            }else if (data?.Mode !== previousDataMode && macroModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 console.log("+")
                 client.write(JSON.stringify(data) + '\n');

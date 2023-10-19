@@ -11,11 +11,12 @@ function TeamName(startIndex, _message) {
     // const slicedBuffer = buffer.slice(startIndex, startIndex + 18 * 2);
 
     // Decode using utf32le with iconv-lite
-    // remove any character that is not a letter or a number or a letter with an accent or space
+    // keep only the character that are in the French alphabet and the space
+    console.log('Sliced Buffer:' + slicedBuffer)
 
+    console.log(iconv.decode(slicedBuffer, 'utf16le'))
 
-    const decodedMessage = iconv.decode(slicedBuffer, 'utf16').replace(/[^a-zA-Z0-9À-ÿ]/g, '');
-
+    const decodedMessage = iconv.decode(slicedBuffer, 'utf16le').replace(/[^a-zA-Z0-9À-ÿ ]/g, '');
 
     console.log('Decoded Message:' + decodedMessage);
 
