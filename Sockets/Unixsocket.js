@@ -135,37 +135,43 @@ function handleData(data) {
     }
 }
 
-function isObject(value) {
-    return value && typeof value === 'object' && value.constructor === Object;
-}
-function deepEqual(object1, object2) {
-    // Check if either object is null or undefined before proceeding
-    if (object1 == null || object2 == null) {
-        return object1 === object2;
-    }
+function deepEqual(a, b) {
+    if (a === b) return true;
 
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-
-    if (keys1.length !== keys2.length) {
+    if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
         return false;
     }
 
-    for (const key of keys1) {
-        const val1 = object1[key];
-        const val2 = object2[key];
+    let keysA = Object.keys(a), keysB = Object.keys(b);
 
-        const areObjects = isObject(val1) && isObject(val2);
-        if (
-            (areObjects && !deepEqual(val1, val2)) ||
-            (!areObjects && val1 !== val2)
-        ) {
+    if (keysA.length !== keysB.length) return false;
+
+    for (let key of keysA) {
+        if (!keysB.includes(key)) return false;
+        if (Array.isArray(a[key]) && Array.isArray(b[key])) {
+            if (!arraysAreEqual(a[key], b[key])) return false;
+        } else if (typeof a[key] === 'object' && typeof b[key] === 'object') {
+            if (!deepEqual(a[key], b[key])) return false;
+        } else if (a[key] !== b[key]) {
             return false;
         }
     }
 
     return true;
 }
+
+function arraysAreEqual(arrA, arrB) {
+    if (arrA.length !== arrB.length) return false;
+    for (let i = 0; i < arrA.length; i++) {
+        if (!deepEqual(arrA[i], arrB[i])) return false;
+    }
+    return true;
+}
+
+function isObject(value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+}
+
 
 
 
