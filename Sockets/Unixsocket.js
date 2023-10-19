@@ -138,34 +138,37 @@ function handleData(data) {
 function isObject(value) {
     return value && typeof value === 'object' && value.constructor === Object;
 }
-
 function deepEqual(object1, object2) {
+    // Check if either object is null or undefined before proceeding
+    if (object1 == null || object2 == null) {
+        return object1 === object2;
+    }
+
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
 
     if (keys1.length !== keys2.length) {
-        // console.log("Keys1", keys1)
-        // console.log("Keys2", keys2)
         return false;
     }
 
     for (const key of keys1) {
         const val1 = object1[key];
         const val2 = object2[key];
-        // console.log("Val1", val1)
-        // console.log("Val2", val2)
+
         const areObjects = isObject(val1) && isObject(val2);
         if (
             (areObjects && !deepEqual(val1, val2)) ||
             (!areObjects && val1 !== val2)
-
         ) {
-            console.log("Datas are not equal")
             return false;
         }
     }
-    console.log("Datas are equal")
+
     return true;
+}
+
+function isObject(value) {
+    return value && typeof value === 'object' && value.constructor === Object;
 }
 
 let previousDataMode = null;
