@@ -126,7 +126,7 @@ if (fs.existsSync(socketPath)) {
 }
 
 function handleData(data) {
-
+    console.log("Handle Data", data)
     if (data.mode === 9) {
         // Handle score data
     } else {
