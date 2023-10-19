@@ -205,7 +205,7 @@ const server = net.createServer((client) => {
             } else if (immediateModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 client.write(JSON.stringify(data) + '\n');
-            } else if (!deepEqual(data, previousData) && macroModes.includes(data?.Mode)) {
+            } else if (deepEqual(data, previousData) && macroModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 previousData = data;
                 console.log("+")
