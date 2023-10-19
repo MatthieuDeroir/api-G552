@@ -169,7 +169,7 @@ const server = net.createServer((client) => {
             }else if (immediateModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 client.write(JSON.stringify(data) + '\n');
-            }else if ((data?.Mode !== previousDataMode || (data?.Mode === previousDataMode && data !== previousData)) && macroModes.includes(data?.Mode)) {
+            }else if ((data?.Mode !== previousDataMode || (data?.Mode === previousDataMode && data.medias.length !== previousData.medias.length)) && macroModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
                 previousData = data;
                 console.log("+")
