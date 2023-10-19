@@ -175,6 +175,10 @@ class Game {
             case 0xAC:
                 toInsert = Frames._0xAC.build(_message);
                 break;
+            case 0xCC:
+                toInsert = Frames._0xCC.build(_message);
+                console.log(toInsert)
+                break;
             case 0x9F:
                 break;
             default:
