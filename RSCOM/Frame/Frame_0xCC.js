@@ -1,4 +1,4 @@
-import { nBytesToNumber } from '../Utils/nBytesToNumber';
+const nBytesToNumber = require('../Utils/nBytesToNumber');
 
 class Frame_0xCC {
     static build(_message) {
