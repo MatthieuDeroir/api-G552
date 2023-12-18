@@ -91,43 +91,45 @@ const signIn = async (req, res) => {
               }
 
               const activeSession = await activeSessionModel.getAll();
-              console.log(activeSession[0].last_activity);
+              console.log(activeSession);
               const inactivity = moment
-                .duration(moment(new Date()).diff(activeSession[0].last_activity))
+                .duration(
+                  moment(new Date()).diff(activeSession[0].last_activity)
+                )
                 .asHours();
-              console.log(inactivity);
+                console.log(inactivity, "inactivity");
+                console.log(activeSession[0].active_token, "activeSession[0].active_token");
               if (activeSession[0].activeToken !== null && inactivity < 2) {
-                console.log("tetst");
-
-              /*   await activeSessionModel.updateOne({
-                  active_token: null,
-                  last_activity: null,
-                }); */
+                
                 console.log("Un autre utilisateur est déjà connecté");
                 return res.status(409).json({
                   error: "Un autre utilisateur est déjà connecté",
                 });
-                
+              } else {
+
+                await activeSessionModel.updateOne({
+                  active_token: null,
+                  last_activity: null,
+                });
+                const secret = config.secret;
+                const accessToken = jwt.sign({ id: foundUser.id }, secret);
+
+                await userController.updateTokenAndActivity({
+                  id: foundUser.id,
+                  active_token: accessToken,
+                });
+
+                await activeSessionModel.updateOne({
+                  active_token: accessToken,
+                  userId: foundUser.id,
+                  last_activity: new Date(),
+                });
+
+                return res.status(200).send({
+                  accessToken: accessToken,
+                  user: foundUser,
+                });
               }
-
-              const secret = config.secret;
-              const accessToken = jwt.sign({ id: foundUser.id }, secret);
-
-              await userController.updateTokenAndActivity({
-                id: foundUser.id,
-                active_token: accessToken,
-              });
-
-              await activeSessionModel.updateOne({
-                active_token: accessToken,
-                userId: foundUser.id,
-                last_activity: new Date(),
-              });
-
-              return res.status(200).send({
-                accessToken: accessToken,
-                user: foundUser,
-              });
             } else {
               console.log("Invalid Password!");
               return res.status(401).send({
