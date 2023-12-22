@@ -6,7 +6,7 @@ const verification = require("../Middlewares/signUpCheck");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const fs = require("fs");
-const { log } = require("console");
+require("dotenv").config();
 
 const signUp = async (req, res) => {
   console.log(req.body);
@@ -103,7 +103,8 @@ const signIn = async (req, res) => {
                 
                 console.log("Un autre utilisateur est déjà connecté");
                 return res.status(409).json({
-                  error: "Un autre utilisateur est déjà connecté",
+                  error: "Une session est déjà active pour cet utilisateur.",
+                  isConnected: true,
                 });
               } else {
 

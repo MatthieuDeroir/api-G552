@@ -1,6 +1,5 @@
 const db = require("../Database/db");
 
-
 class Media {
   constructor() {
     this.createTable();
@@ -46,7 +45,7 @@ class Media {
     db.run(createTable);
   }
 
-  create(file, user_id,username) {
+  create(file, user_id, username) {
     console.log(file);
 
     const originalFileName = file.originalname;
@@ -55,7 +54,7 @@ class Media {
     const lastModified = Date.now();
     const size = file.size;
 
-    const path = "/medias/" + username +"/"+ fileName;
+    const path = "/medias/" + username + "/" + fileName;
     const format = file.mimetype.split("/")[1];
     const type = file.mimetype.split("/")[0];
 
@@ -175,7 +174,6 @@ class Media {
     });
   }
   getByUsername(username) {
-    console.log("tesr");
     return new Promise((resolve, reject) => {
       db.all(
         `SELECT *

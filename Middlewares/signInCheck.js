@@ -9,7 +9,6 @@ const checkToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const userController = new User();
   const activeSession = new ActiveSession();
-  console.log("authHeader", authHeader);
   if (!authHeader) {
     return res.status(200).send({ auth: false, message: "No token provided." });
   }

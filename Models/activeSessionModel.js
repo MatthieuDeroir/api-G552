@@ -66,7 +66,6 @@ class ActiveSession {
     });
   }
   logout() {
-    console.log("logout");
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE activeSessions SET userId = NULL ,activeToken = NULL, last_activity = NULL WHERE id = 1`,

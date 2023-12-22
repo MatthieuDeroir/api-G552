@@ -7,6 +7,7 @@ const cors = require("cors");
 const checkToken = require("./Middlewares/signInCheck");
 const Game = require("./RSCOM/Game");
 const MacroController = require("./Controllers/macroController");
+require("dotenv").config();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,9 +19,9 @@ app.listen(config.portAPI, () => {
 
 const webSocketSetup = require("./Sockets/Websocket.js");
 webSocketSetup(app);
-
+/* 
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
-unixSocketSetup.startServer();
+unixSocketSetup.startServer(); */
 
 const {SerialPortConnection, sharedEmitter} = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
