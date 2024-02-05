@@ -7,6 +7,8 @@ const cors = require("cors");
 const checkToken = require("./Middlewares/signInCheck");
 const Game = require("./RSCOM/Game");
 const MacroController = require("./Controllers/macroController");
+
+const User = require('./Models/userModel');
 require("dotenv").config();
 
 app.use(cors());
@@ -84,12 +86,14 @@ sharedEmitter.on("media", (media) => {
 
 const authRoutes = require("./Routes/authRoutes");
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
+const userRoutes = require("./Routes/userRoutes");
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/auth", authRoutes);
-//Uncomment this line to activate token check
+app.use("/users", userRoutes);
+
 app.use(checkToken);
 
-const userRoutes = require("./Routes/userRoutes");
+
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
 const eventmediaRoutes = require("./Routes/eventmediaRoutes");
@@ -101,7 +105,7 @@ const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
 
 app.use("/scores", scoringRoutes);
-app.use("/users", userRoutes);
+
 app.use("/medias", mediaRoutes);
 app.use("/events", eventRoutes);
 app.use("/eventmedias", eventmediaRoutes);
@@ -111,7 +115,7 @@ app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
 
-
+User.getInstance().createTable();
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
 });

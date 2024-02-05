@@ -27,23 +27,12 @@ const signUp = async (req, res) => {
         .json({ message: "Le nom d'utilisateur est déjà utilisé" });
     }
 
-    const passwordRequirements = await verification.checkPasswordRequirements(
-      user.password
-    );
-    console.log(passwordRequirements);
-    if (!passwordRequirements.result) {
-      console.log("Les exigences du mot de passe ne sont pas satisfaites");
-      return res.status(400).json({ message: passwordRequirements.message });
-    }
-
-    /*  const rolesVerified = await verification.verifyRoles(user.role);
-    if (!rolesVerified.result) {
-      console.log("Les rôles ne sont pas valides");
-      return res.status(400).json({ message: rolesVerified.message });
-    } */
+    
 
     console.log("signUp");
-    const newUser = new User();
+
+    const newUser = User.getInstance();
+    
     console.log(fs.existsSync(folderName));
     if (!fs.existsSync(folderName)) {
       console.log("Folder does not exist");
@@ -73,7 +62,8 @@ const signIn = async (req, res) => {
   };
 
   try {
-    const userController = new User();
+    const userController = User.getInstance();
+    console.log("userController", userController);
     const activeSessionModel = new ActiveSession();
     const foundUser = await userController.getByUsername(user.username);
     if (foundUser) {
@@ -151,21 +141,12 @@ const signIn = async (req, res) => {
 };
 const modifyPassword = async (req, res) => {
   console.log(req.body);
-  const newUser = new User();
+  const newUser = User.getInstance();
   const user = {
     id: req.params.id,
     newPassword: req.body.newPassword,
   };
   try {
-    const passwordRequirements = await verification.checkPasswordRequirements(
-      user.newPassword
-    );
-    console.log(passwordRequirements);
-    if (!passwordRequirements.result) {
-      console.log("Les exigences du mot de passe ne sont pas satisfaites");
-      return res.status(400).json({ message: passwordRequirements.message });
-    }
-
     await newUser
       .changePassword(user)
       .then((user) => {

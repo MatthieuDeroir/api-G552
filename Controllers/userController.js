@@ -1,7 +1,7 @@
 const User = require("../Models/userModel");
 class UserController {
   constructor() {
-    this.user = new User();
+    this.user = User.getInstance();
   }
   create = (req, res) => {
     this.user
@@ -59,7 +59,6 @@ class UserController {
   };
 
   getAll = (req, res) => {
-    console.log(this.user);
     this.user
       .getAll()
       .then((users) => {

@@ -27,6 +27,7 @@ class ModeController {
     }
 
     update = (req, res) => {
+        console.log(req.body, req.params.id);
         this.mode.update(req.body , req.params.id)
             .then(() => {
                 sharedEmitter.emit('mode-updated', req.body);
@@ -38,9 +39,11 @@ class ModeController {
     }
 
     getAll = (req, res) => {
+        console.log("getall");
         this.mode.getAll()
             .then((modes) => {
-                res.status(200).json(modes);
+                console.log(modes);
+                res.status(200).json(modes[0]);
             })
             .catch((err) => {
                 res.status(500).json({ message: err });

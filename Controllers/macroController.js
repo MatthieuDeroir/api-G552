@@ -9,8 +9,8 @@ const {logPlugin} = require("@babel/preset-env/lib/debug");
 
 class MacroController {
     constructor() {
-        this.activeSession = new ActiveSession();
-        this.user = new User();
+       /*  this.activeSession = new ActiveSession(); */
+    /*     this.user = new User(); */
         this.event = new Event();
         this.eventmedia = new EventMedia();
         this.media = new Media();
@@ -38,7 +38,7 @@ class MacroController {
 
         if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
-        const users = await this.user.getAll();
+       /*  const users = await this.user.getAll(); */
 
         // console.log("users", users)
 

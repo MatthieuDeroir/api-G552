@@ -16,41 +16,49 @@ class ActiveSession {
         `;
     db.run(createTable, (err) => {
       if (err) {
-        console.error(err);
+        console.error("Error creating activeSessions table:", err.message);
       } else {
-        // Vérifier si la table est vide
-        db.get(`SELECT COUNT(*) as count FROM activeSessions`, (err, row) => {
-          if (err) {
-            console.error(err);
-          } else {
-            // Si la table est vide, insérez la première ligne
-            if (row.count === 0) {
-              const firstRow = {
-                userId: null, // Utilisez les valeurs appropriées pour votre application
-                active_token: null,
-                last_activity: null,
-              };
+      
+        this.initializeTableIfEmpty();
+      }
+    });
+  }
 
-              db.run(
-                `INSERT INTO activeSessions (userId, activeToken, last_activity) VALUES (?, ?, ?)`,
-                [firstRow.userId, firstRow.activeToken, firstRow.last_activity],
-                (err) => {
-                  if (err) {
-                    console.error(err);
-                  } else {
-                    console.log("Première ligne insérée avec succès !");
-                  }
-                }
-              );
-            }
-          }
-        });
+  initializeTableIfEmpty() {
+    const checkTableEmptySql = `SELECT COUNT(id) AS count FROM activeSessions`;
+    db.get(checkTableEmptySql, (err, row) => {
+      if (err) {
+        console.error("Error checking activeSessions table:", err.message);
+      } else if (row.count === 0) {
+        // La table est vide, insérez une ligne initiale
+        this.insertInitialRow();
+      }
+    });
+  }
+
+  insertInitialRow() {
+    const insertSql = `
+      INSERT INTO activeSessions (userId, activeToken, last_activity)
+      VALUES (?, ?, ?)
+    `;
+    // Remplacez les valeurs ci-dessous par les valeurs initiales souhaitées
+    const userId = null;
+    const activeToken = null;
+    const lastActivity = null
+
+    db.run(insertSql, [userId, activeToken, lastActivity], (err) => {
+      if (err) {
+        console.error(
+          "Error inserting initial row into activeSessions table:",
+          err.message
+        );
+      } else {
+
       }
     });
   }
 
   async create(session) {
-
     return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO activeSessions (userId, activeToken, last_activity) VALUES (?, ?, ?)`,
@@ -69,7 +77,7 @@ class ActiveSession {
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE activeSessions SET userId = NULL ,activeToken = NULL, last_activity = NULL WHERE id = 1`,
-       
+
         (err) => {
           if (err) {
             reject(err);
@@ -94,16 +102,18 @@ class ActiveSession {
 
   async getFirst() {
     return new Promise((resolve, reject) => {
-      db.get(`SELECT * FROM activeSessions ORDER BY id ASC LIMIT 1`, (err, session) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(session);
+      db.get(
+        `SELECT * FROM activeSessions ORDER BY id ASC LIMIT 1`,
+        (err, session) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(session);
+          }
         }
-      });
+      );
     });
   }
-  
 
   getByUserId(userId) {
     console.log("getByUserId", userId);

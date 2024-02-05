@@ -7,8 +7,20 @@ const Scoring = require("./scoringModel");
 
 class User {
   constructor() {
-    this.createTable();
+    if (User.instance) {
+      throw new Error("Vous ne pouvez créer qu'une instance de User.");
+    }
+    User.instance = this;
   }
+
+  static getInstance() {
+    console.log("getInstance", User.instance);
+    if (!User.instance) {
+      User.instance = new User();
+    }
+    return User.instance;
+  }
+
 
   createTable() {
     const createTable = `
@@ -22,12 +34,57 @@ class User {
             language TEXT DEFAULT 'fr'
         )
         `;
-    db.run(createTable);
+    db.run(createTable, (err) => {
+      if (err) {
+        console.error("Error creating activeSessions table:", err.message);
+      } else {
+        console.log("initializeTableIfEmpty");
+        this.initializeTableIfEmpty();
+      }
+    });
   }
+
+  async initializeTableIfEmpty() {
+    const checkTableEmptySql = `SELECT COUNT(id) AS count FROM users`;
+    db.get(checkTableEmptySql, (err, row) => {
+      if (err) {
+        console.error("Error checking activeSessions table:", err.message);
+      } else if (row.count === 0) {
+        // La table est vide, insérez une ligne initiale
+        const sports = [
+          "Basketball",
+          "Handball",
+          "Volleyball",
+          "Tennis",
+          "Tennis de table",
+          "Badminton",
+          "Rink hockey",
+          "Futsal",
+          "Boxe",
+          "Roller hockey",
+          "Hockey sur glace",
+          "Floorball",
+          "Chronométré",
+          "Sport libre",
+          "Netball",
+        ];
+        sports.forEach((sport) => {
+          const user = {
+            username: sport,
+            password: sport,
+            role: "user",
+            language: "fr",
+          };
+
+          this.create(user);
+        });
+      }
+    });
+  }
+
   async create(user) {
     console.log("user", user);
     try {
-      
       const hash = await bcrypt.hash(user.password, 10);
       let userId;
 
@@ -46,7 +103,6 @@ class User {
           }
         );
       });
-
 
       console.log("newUser", userId);
 
@@ -72,50 +128,6 @@ class User {
           eventAuto: true,
         });
       })();
-
-      const scoreInitial = {
-        team1: 0,
-        team2: 0,
-        fauteTeam1: 0,
-        fauteTeam2: 0,
-        nomTeam1: 'Visiteur',
-        nomTeam2: 'Locaux'
-      };
-      if (user.username === "badminton") {
-        scoreInitial.option1 = 3;
-        scoreInitial.option2 = 21;
-        scoreInitial.option3 = 30;
-        scoreInitial.option4 = 0;
-        scoreInitial.option5 = 0;
-        scoreInitial.option7 = 'Visiteur';
-      }
-      if (user.username === "basketball") {
-        scoreInitial.option1 = 0;
-        scoreInitial.option2 = 0;
-        scoreInitial.option3 = 0;
-        scoreInitial.option4 = 0;
-        scoreInitial.option7 = 'Visiteur';
-      }
-
-      if (user.username === "volleyball") {
-        scoreInitial.option1 = 5;
-        scoreInitial.option2 = 25;
-        scoreInitial.option3 = 15;
-        scoreInitial.option4 = 0;
-        scoreInitial.option5 = 0;
-        scoreInitial.option7 = 'Visiteur';
-      }
-      if (user.username === "futsal") {
-        scoreInitial.option1 = 0;
-        scoreInitial.option2 = 0;
-      }
-      if (user.username === "handball") {
-        scoreInitial.option1 = 0;
-        scoreInitial.option2 = 0;
-      }
-      
-      const scoring = new Scoring();
-      await scoring.create(scoreInitial, userId);
 
       return;
     } catch (err) {
@@ -147,7 +159,7 @@ class User {
     });
   }
 
-  updateLanguage(language,id) {
+  updateLanguage(language, id) {
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE users SET language = ? WHERE id = ?`,
@@ -157,13 +169,11 @@ class User {
             console.log(err);
             reject(err);
           } else {
-
           }
         }
       );
     });
   }
-
 
   updateFirstLogin(userId) {
     console.log("updateFirstLogin", userId);
@@ -232,7 +242,7 @@ class User {
               err
             );
             reject(err);
-          } else {        
+          } else {
             resolve(user);
           }
         }
@@ -252,7 +262,6 @@ class User {
     });
   }
   getById(id) {
-
     return new Promise((resolve, reject) => {
       db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, user) => {
         if (err) {
