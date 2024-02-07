@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const Macro = require("./macroModel");
 const Param = require("./paramModel");
 const Veille = require("./veilleModel");
-const Scoring = require("./scoringModel");
+const fs = require("fs");
 
 class User {
   constructor() {
@@ -14,13 +14,12 @@ class User {
   }
 
   static getInstance() {
-    console.log("getInstance", User.instance);
+    console.log("getInstance");
     if (!User.instance) {
       User.instance = new User();
     }
     return User.instance;
   }
-
 
   createTable() {
     const createTable = `
@@ -38,7 +37,6 @@ class User {
       if (err) {
         console.error("Error creating activeSessions table:", err.message);
       } else {
-        console.log("initializeTableIfEmpty");
         this.initializeTableIfEmpty();
       }
     });
@@ -46,7 +44,9 @@ class User {
 
   async initializeTableIfEmpty() {
     const checkTableEmptySql = `SELECT COUNT(id) AS count FROM users`;
+
     db.get(checkTableEmptySql, (err, row) => {
+      console.log("row", row.count);
       if (err) {
         console.error("Error checking activeSessions table:", err.message);
       } else if (row.count === 0) {
@@ -75,9 +75,17 @@ class User {
             role: "user",
             language: "fr",
           };
+          const folderName = `${process.env.UPLOAD_PATH}${user.username}`;
+          if (!fs.existsSync(folderName)) {
+            console.log("Folder does not exist");
+            fs.mkdirSync(folderName);
+            console.log("Folder created");
+          }
 
           this.create(user);
         });
+      } else {
+        console.log("Table users already initialized");
       }
     });
   }

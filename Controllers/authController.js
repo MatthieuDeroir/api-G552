@@ -27,12 +27,10 @@ const signUp = async (req, res) => {
         .json({ message: "Le nom d'utilisateur est déjà utilisé" });
     }
 
-    
-
     console.log("signUp");
 
     const newUser = User.getInstance();
-    
+
     console.log(fs.existsSync(folderName));
     if (!fs.existsSync(folderName)) {
       console.log("Folder does not exist");
@@ -62,8 +60,9 @@ const signIn = async (req, res) => {
   };
 
   try {
+    console.log("userController", User.getInstance());
     const userController = User.getInstance();
-    console.log("userController", userController);
+
     const activeSessionModel = new ActiveSession();
     const foundUser = await userController.getByUsername(user.username);
     if (foundUser) {
@@ -87,17 +86,18 @@ const signIn = async (req, res) => {
                   moment(new Date()).diff(activeSession[0].last_activity)
                 )
                 .asHours();
-                console.log(inactivity, "inactivity");
-                console.log(activeSession[0].active_token, "activeSession[0].active_token");
+              console.log(inactivity, "inactivity");
+              console.log(
+                activeSession[0].active_token,
+                "activeSession[0].active_token"
+              );
               if (activeSession[0].activeToken !== null && inactivity < 2) {
-                
                 console.log("Un autre utilisateur est déjà connecté");
                 return res.status(409).json({
                   error: "Une session est déjà active pour cet utilisateur.",
                   isConnected: true,
                 });
               } else {
-
                 await activeSessionModel.updateOne({
                   active_token: null,
                   last_activity: null,
