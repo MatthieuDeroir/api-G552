@@ -103,6 +103,7 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 
 app.use("/scores", scoringRoutes);
 
@@ -114,6 +115,7 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
+app.use("/admin", adminRoutes);
 
 User.getInstance().createTable();
 app.get("/", (req, res) => {
