@@ -1,7 +1,7 @@
 const User = require("../Models/userModel");
 class UserController {
   constructor() {
-    this.user = new User();
+    this.user = User.getInstance();
   }
   create = (req, res) => {
     this.user
@@ -13,6 +13,17 @@ class UserController {
         res.status(500).json({ message: err });
       });
   };
+  updateLanguage  = (req, res) => {
+    console.log("updateLanguage", req.body);
+    this.user
+      .updateLanguage(req.body, req.params.id)
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err });
+      });
+  }
 
   update = (req, res) => {
     this.user
@@ -48,7 +59,6 @@ class UserController {
   };
 
   getAll = (req, res) => {
-    console.log(this.user);
     this.user
       .getAll()
       .then((users) => {

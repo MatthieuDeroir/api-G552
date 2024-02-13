@@ -10,6 +10,9 @@ const MacroController = require("./Controllers/macroController");
 const handleScoring = require("./RSCOM/scoringHandler");
 
 
+const User = require('./Models/userModel');
+require("dotenv").config();
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,9 +23,9 @@ app.listen(config.portAPI, () => {
 
 const webSocketSetup = require("./Sockets/Websocket.js");
 webSocketSetup(app);
-
+/* 
 const unixSocketSetup = require("./Sockets/Unixsocket.js");
-unixSocketSetup.startServer();
+unixSocketSetup.startServer(); */
 
 const {SerialPortConnection, sharedEmitter} = require("./RSCOM/SerialPorts/SerialPortConnection");
 const sp = new SerialPortConnection();
@@ -96,12 +99,14 @@ sharedEmitter.on("media", (media) => {
 
 const authRoutes = require("./Routes/authRoutes");
 const activeSessionsRoutes = require("./Routes/activeSessionsRoutes");
+const userRoutes = require("./Routes/userRoutes");
 app.use("/activeSessions", activeSessionsRoutes);
 app.use("/auth", authRoutes);
-//Uncomment this line to activate token check
+app.use("/users", userRoutes);
+
 app.use(checkToken);
 
-const userRoutes = require("./Routes/userRoutes");
+
 const scoringRoutes = require("./Routes/scoringRoutes");
 const mediaRoutes = require("./Routes/mediaRoutes");
 const eventmediaRoutes = require("./Routes/eventmediaRoutes");
@@ -111,9 +116,10 @@ const buttonRoutes = require("./Routes/buttonRoutes");
 const paramRoutes = require("./Routes/paramRoutes");
 const veilleRoutes = require("./Routes/veilleRoutes");
 const modeRoutes = require("./Routes/modeRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 
 app.use("/scores", scoringRoutes);
-app.use("/users", userRoutes);
+
 app.use("/medias", mediaRoutes);
 app.use("/events", eventRoutes);
 app.use("/eventmedias", eventmediaRoutes);
@@ -122,8 +128,9 @@ app.use("/buttons", buttonRoutes);
 app.use("/params", paramRoutes);
 app.use("/veilles", veilleRoutes);
 app.use("/mode", modeRoutes);
+app.use("/admin", adminRoutes);
 
-
+User.getInstance().createTable();
 app.get("/", (req, res) => {
     res.send(`Le serveur fonctionne sur le port ${config.portAPI}`);
 });

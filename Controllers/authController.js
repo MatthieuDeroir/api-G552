@@ -6,7 +6,7 @@ const verification = require("../Middlewares/signUpCheck");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const fs = require("fs");
-const { log } = require("console");
+require("dotenv").config();
 
 const signUp = async (req, res) => {
   console.log(req.body);
@@ -27,23 +27,10 @@ const signUp = async (req, res) => {
         .json({ message: "Le nom d'utilisateur est déjà utilisé" });
     }
 
-    const passwordRequirements = await verification.checkPasswordRequirements(
-      user.password
-    );
-    console.log(passwordRequirements);
-    if (!passwordRequirements.result) {
-      console.log("Les exigences du mot de passe ne sont pas satisfaites");
-      return res.status(400).json({ message: passwordRequirements.message });
-    }
-
-    /*  const rolesVerified = await verification.verifyRoles(user.role);
-    if (!rolesVerified.result) {
-      console.log("Les rôles ne sont pas valides");
-      return res.status(400).json({ message: rolesVerified.message });
-    } */
-
     console.log("signUp");
-    const newUser = new User();
+
+    const newUser = User.getInstance();
+
     console.log(fs.existsSync(folderName));
     if (!fs.existsSync(folderName)) {
       console.log("Folder does not exist");
@@ -73,11 +60,11 @@ const signIn = async (req, res) => {
   };
 
   try {
-    const userController = new User();
+    console.log("userController", User.getInstance());
+    const userController = User.getInstance();
+
     const activeSessionModel = new ActiveSession();
-    console.log(user.username);
     const foundUser = await userController.getByUsername(user.username);
-    console.log("foundUser", foundUser);
     if (foundUser) {
       bcrypt.compare(
         user.password,
@@ -93,43 +80,47 @@ const signIn = async (req, res) => {
               }
 
               const activeSession = await activeSessionModel.getAll();
-              console.log(activeSession[0].last_activity);
+              console.log(activeSession);
               const inactivity = moment
-                .duration(moment(new Date()).diff(activeSession[0].last_activity))
+                .duration(
+                  moment(new Date()).diff(activeSession[0].last_activity)
+                )
                 .asHours();
-              console.log(inactivity);
+              console.log(inactivity, "inactivity");
+              console.log(
+                activeSession[0].active_token,
+                "activeSession[0].active_token"
+              );
               if (activeSession[0].activeToken !== null && inactivity < 2) {
-                console.log("tetst");
-
-              /*   await activeSessionModel.updateOne({
-                  active_token: null,
-                  last_activity: null,
-                }); */
                 console.log("Un autre utilisateur est déjà connecté");
                 return res.status(409).json({
-                  error: "Un autre utilisateur est déjà connecté",
+                  error: "Une session est déjà active pour cet utilisateur.",
+                  isConnected: true,
                 });
-                
+              } else {
+                await activeSessionModel.updateOne({
+                  active_token: null,
+                  last_activity: null,
+                });
+                const secret = config.secret;
+                const accessToken = jwt.sign({ id: foundUser.id }, secret);
+
+                await userController.updateTokenAndActivity({
+                  id: foundUser.id,
+                  active_token: accessToken,
+                });
+
+                await activeSessionModel.updateOne({
+                  active_token: accessToken,
+                  userId: foundUser.id,
+                  last_activity: new Date(),
+                });
+
+                return res.status(200).send({
+                  accessToken: accessToken,
+                  user: foundUser,
+                });
               }
-
-              const secret = config.secret;
-              const accessToken = jwt.sign({ id: foundUser.id }, secret);
-
-              await userController.updateTokenAndActivity({
-                id: foundUser.id,
-                active_token: accessToken,
-              });
-
-              await activeSessionModel.updateOne({
-                active_token: accessToken,
-                userId: foundUser.id,
-                last_activity: new Date(),
-              });
-
-              return res.status(200).send({
-                accessToken: accessToken,
-                user: foundUser,
-              });
             } else {
               console.log("Invalid Password!");
               return res.status(401).send({
@@ -150,21 +141,12 @@ const signIn = async (req, res) => {
 };
 const modifyPassword = async (req, res) => {
   console.log(req.body);
-  const newUser = new User();
+  const newUser = User.getInstance();
   const user = {
     id: req.params.id,
     newPassword: req.body.newPassword,
   };
   try {
-    const passwordRequirements = await verification.checkPasswordRequirements(
-      user.newPassword
-    );
-    console.log(passwordRequirements);
-    if (!passwordRequirements.result) {
-      console.log("Les exigences du mot de passe ne sont pas satisfaites");
-      return res.status(400).json({ message: passwordRequirements.message });
-    }
-
     await newUser
       .changePassword(user)
       .then((user) => {

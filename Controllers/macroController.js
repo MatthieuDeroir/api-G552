@@ -9,8 +9,8 @@ const {logPlugin} = require("@babel/preset-env/lib/debug");
 
 class MacroController {
     constructor() {
-        this.activeSession = new ActiveSession();
-        this.user = new User();
+       /*  this.activeSession = new ActiveSession(); */
+    /*     this.user = new User(); */
         this.event = new Event();
         this.eventmedia = new EventMedia();
         this.media = new Media();

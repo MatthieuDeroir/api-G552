@@ -7,9 +7,8 @@ const moment = require('moment');
 const checkToken = async (req, res, next) => {
   const secret = config.secret;
   const authHeader = req.headers["authorization"];
-  const userController = new User();
+  const userController = User.getInstance();
   const activeSession = new ActiveSession();
-
   if (!authHeader) {
     return res.status(200).send({ auth: false, message: "No token provided." });
   }

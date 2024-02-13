@@ -64,12 +64,10 @@ insertFirstRow() {
   }
 
   update(mode, id) {
-    console.log(mode.eventId);
-
     return new Promise((resolve, reject) => {
       db.run(
         `UPDATE modes SET mode = ?, event_id = ? WHERE id = ?`,
-        [mode.mode, mode.eventId, id],
+        [mode.mode, mode.event_id, id],
         (err) => {
           if (err) {
             reject(err);
