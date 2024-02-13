@@ -38,18 +38,9 @@ class MacroController {
 
         if (now - lastActivity > TWO_HOURS) throw new Error("No user currently connected");
 
-       /*  const users = await this.user.getAll(); */
-
-        // console.log("users", users)
-
         const userId = activeSession.userId;
-        //TODO: Update when ActiveSession is fixed
-        // const userId = 3;
-        // console.log("userId", userId);
 
         let events = await this.event.getByUserId(userId);
-
-        // console.log("events", events)
 
 
         // 2. Récupérer les macros pour l'utilisateur actif et le bouton donné
@@ -112,12 +103,18 @@ class MacroController {
                 event: event,
                 medias: medias
             });
-        }
 
+        }
         // console.log("results", results)
 
         return results;
     }
+
+    catch(error) {
+        console.error(error.message);  // This will log the error message.
+        return 9;
+    }
+
 
     create = (req, res) => {
         this.macro.create(req.body)
@@ -153,7 +150,7 @@ class MacroController {
             });
     }
 
-    delete = (req, res) => {
+    deleteMacro = (req, res) => {
         this.macro.delete(req.params.id)
             .then(() => {
                 res.status(204).json();
@@ -192,8 +189,6 @@ class MacroController {
                 res.status(500).json({message: err});
             });
     }
-
-
 }
 
 module.exports = MacroController;

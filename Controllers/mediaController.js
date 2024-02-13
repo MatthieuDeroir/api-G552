@@ -31,6 +31,7 @@ class MediaController {
     this.delete = this.delete.bind(this);
   }
 
+
   create = (req, res) => {
     const username = req.params.user;
     this.upload.single("file")(req, res, (err) => {

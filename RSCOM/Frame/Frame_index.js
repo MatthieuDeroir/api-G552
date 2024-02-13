@@ -17,6 +17,7 @@ const Frame_0x93 = require('./Frame_0x93');
 const Frame_0x94 = require('./Frame_0x94');
 const Frame_0xA9 = require('./Frame_0xA9');
 const Frame_0xAC = require('./Frame_0xAC');
+const Frame_0xCC = require('./Frame_0xCC');
 
 const Frames = {
     _0x3A: Frame_0x3A, // Table Tennis
@@ -38,6 +39,7 @@ const Frames = {
     _0x94: Frame_0x94, // Rink Hockey
     _0xA9: Frame_0xA9, // Home Shirt Numbers Summary
     _0xAC: Frame_0xAC, // Guest Shirt Numbers Summary
+    _0xCC: Frame_0xCC, // Logo and Sleep Mode
 }
 
 module.exports = Frames;

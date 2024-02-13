@@ -54,7 +54,7 @@ class Frame_0x33 {
             Period: nBytesToNumber(_message[14]),
 
             Home: {
-                Points: nBytesToNumber(_message[9], _message[10]),
+                Points: Tools.Score(_message[8], _message[9], _message[10]),
                 Fouls: {
                     Team: Tools.B_TeamFouls(_message[15]).TeamFouls,
                     RS: Tools.B_TeamFouls(_message[15]).TeamFouls_RS,
@@ -68,7 +68,7 @@ class Frame_0x33 {
             },
 
             Guest: {
-                Points: nBytesToNumber(_message[12], _message[13]),
+                Points: Tools.Score(_message[11], _message[12], _message[13]),
                 Fouls: {
                     Team: Tools.B_TeamFouls(_message[16]).TeamFouls,
                     RS: Tools.B_TeamFouls(_message[16]).TeamFouls_RS,

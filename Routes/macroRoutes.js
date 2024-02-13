@@ -10,7 +10,7 @@ router.get('/:id', macroController.getById);
 router.get('/user/:id', macroController.getByUserId);
 router.get('/button/:id', macroController.getByButtonId);
 router.get('/event/:id', macroController.getByEventId);
-router.delete('/:id', macroController.delete);
+router.delete('/:id', macroController.deleteMacro);
 
 module.exports = router;
 

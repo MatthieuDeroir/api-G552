@@ -126,7 +126,7 @@ if (fs.existsSync(socketPath)) {
 }
 
 function handleData(data) {
-
+    console.log("Handle Data", data)
     if (data.mode === 9) {
         // Handle score data
     } else {
@@ -135,16 +135,67 @@ function handleData(data) {
     }
 }
 
+function deepEqual(a, b) {
+    if (a === b) return true;
+
+    if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
+        return false;
+    }
+
+    let keysA = Object.keys(a), keysB = Object.keys(b);
+
+    if (keysA.length !== keysB.length) return false;
+
+    for (let key of keysA) {
+        if (!keysB.includes(key)) return false;
+        if (Array.isArray(a[key]) && Array.isArray(b[key])) {
+            if (!arraysAreEqual(a[key], b[key])) return false;
+        } else if (typeof a[key] === 'object' && typeof b[key] === 'object') {
+            if (!deepEqual(a[key], b[key])) return false;
+        } else if (a[key] !== b[key]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function arraysAreEqual(arrA, arrB) {
+    if (arrA.length !== arrB.length) return false;
+    for (let i = 0; i < arrA.length; i++) {
+        if (!deepEqual(arrA[i], arrB[i])) return false;
+    }
+    return true;
+}
+
+function isObject(value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+}
+
+
+
+
 let previousDataMode = null;
+let previousData = null;
 
 const server = net.createServer((client) => {
 
     function onDataReceived(data) {
 
+        const scoreModes = [9];
+        const immediateModes = [0, 1, 2, 16, 17, 18, 19, 20];
+        const macroModes = [3, 4, 5, 6, 7, 8, 21];
+        const stopModes = [22, 23];
+        // console.log("Previous Data Mode", previousDataMode)
+        // console.log("Data Mode", data?.Mode)
+
         try {
             handleData(data);
 
-            if (data?.Mode === 9) {
+
+            if (scoreModes.includes(data?.Mode) || stopModes.includes(data?.Mode)) {
+                previousDataMode = data?.Mode;
+                previousData = data;
                 client.write(JSON.stringify(data) + '\n');
                 // console.log("Period", data.Period)
                 // console.log("Timer", data.Timer.Value)
@@ -156,15 +207,20 @@ const server = net.createServer((client) => {
                 // console.log("TimeOut", data.Guest.Timeout.Count)
 
                 // console.log('Sent score gameState', data)
-            }else if (data?.Mode === 0 || data?.Mode === 1 || data?.Mode === 2 || data?.Mode === 16 || data?.Mode === 17 || data?.Mode === 18 || data?.Mode === 19 || data?.Mode === 20) {
-                client.write(JSON.stringify(data) + '\n');
-            }else if (data?.Mode !== previousDataMode && (data?.Mode === 3 || data?.Mode === 4 || data?.Mode === 5 || data?.Mode === 6 || data?.Mode === 7 || data?.Mode === 8)) {
+            } else if (immediateModes.includes(data?.Mode)) {
                 previousDataMode = data?.Mode;
+                previousData = data;
+                client.write(JSON.stringify(data) + '\n');
+            } else if (!deepEqual(data, previousData) && macroModes.includes(data?.Mode)) {
+                previousDataMode = data?.Mode;
+                previousData = data;
                 console.log("+")
                 client.write(JSON.stringify(data) + '\n');
             }
+
         } catch (err) {
             console.error('Failed to send gameState', err);
+
         }
     }
 
@@ -200,6 +256,7 @@ module.exports = {
     },
     sendData: function (data) {
         // console.log('UNIX Socket is sending scoring')
+        // console.log(data)
         sharedEmitter.emit('data-received', data);
     },
     sendMedia: function (data) {
