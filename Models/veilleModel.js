@@ -30,6 +30,7 @@ class Veille {
     const checkTableEmpty = `SELECT COUNT(id) AS count FROM veille`;
     console.log("initializeTableIfEmpty", checkTableEmpty);
     db.get(checkTableEmpty, (err, row) => {
+      console.log("row1", row);
         if (err) {
             console.error(err.message);
             return;
