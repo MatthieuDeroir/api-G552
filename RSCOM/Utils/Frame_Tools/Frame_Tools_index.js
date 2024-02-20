@@ -5,6 +5,7 @@ const Chrono = require('./4_7_Chrono');
 const Chrono24s = require('./48_49_Chrono24s');
 const ShirtNumber = require('./4_35_ShirtNumber');
 const TeamName = require('./6_48_TeamName');
+const Score = require('./8_13_Score');
 const IndividualPoints = require('./11_47_IndividualPoints');
 const PenaltiesInProgress = require('./15_16_PenaltiesInProgress');
 const B_TeamFouls = require('./15_16_TeamFouls');
@@ -32,6 +33,7 @@ const Tools = {
     Chrono24s,
     ShirtNumber,
     TeamName,
+    Score,
     IndividualPoints,
     PenaltiesInProgress,
     B_TeamFouls,
